@@ -17,7 +17,7 @@
 
 ## 📋 Tentang Proyek
 
-**ASETRA** adalah aplikasi manajemen aset rumah sakit berbasis web yang dibangun sebagai proyek Capstone (Semester 6). Sistem ini membantu pihak rumah sakit dalam mengelola aset medis dan non-medis secara digital dan terintegrasi.
+**ASETRA** adalah aplikasi manajemen aset rumah sakit berbasis web untuk membantu pihak rumah sakit dalam mengelola aset medis dan non-medis secara digital dan terintegrasi.
 
 ### 🎯 Fitur Utama
 
@@ -115,6 +115,8 @@ JWT_SECRET=ganti_dengan_secret_key_yang_aman_dan_panjang
 
 Jalankan server backend:
 
+> **Catatan**: Pastikan Anda berada di direktori backend (`cd backend`) sebelum menjalankan perintah berikut.
+
 ```bash
 npm run dev
 ```
@@ -126,6 +128,8 @@ Backend berjalan di: **http://localhost:5000**
 ### 3. Setup Frontend
 
 Buka **terminal baru** (jangan tutup terminal backend):
+
+> **Catatan**: Pastikan Anda berada di direktori root folder project (`PT.AMK/`) sebelum menjalankan perintah berikut.
 
 ```bash
 # Dari root folder project (PT.AMK/)
@@ -280,15 +284,19 @@ mkdir backend/uploads    # Mac/Linux
 
 | Nama | Role |
 |------|------|
-| Arbi | Backend Developer |
-| *(Nama rekan)* | Frontend Developer |
+| Taufik Bagas Anjaya | Project Manager |
+| Adelia Rahma Saputri | UI/UX Designer |
+| Lina Sapitri | UI/UX Designer |
+| Faradis Putra Aditia Assagaf | Frontend Developer |
+| Yoga Pangestu | Frontend Developer |
+| M Yusuf Ardabili | Backend Developer |
+| Yoga Adi Pamungkas | QA Engineer |
+| Grahita Humaira Nasywa Putri | QA Engineer |
 
-> 📚 **Capstone Project — Semester 6**  
-> Program Studi: Sistem Informasi / Teknik Informatika
 
 ---
 
 <div align="center">
-  <p>Dibuat dengan ❤️ untuk sistem kesehatan yang lebih baik</p>
-  <p><strong>PT. AMK — ASETRA v1.0</strong></p>
+  <p>Dibuat dengan untuk sistem kesehatan yang lebih baik</p>
+  <p><strong>PT. AMK — ASETRA </strong></p>
 </div>
