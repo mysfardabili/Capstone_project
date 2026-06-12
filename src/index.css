@@ -1,0 +1,103 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --primary: #f97316; /* Orange 500 */
+  --primary-dark: #ea580c; /* Orange 600 */
+  --primary-light: #fed7aa; /* Orange 200 */
+  --primary-bg: #fff7ed; /* Orange 50 */
+  --bg-color: #f3f4f6; /* Gray 100 */
+  --bg-dark: #1e293b; /* Slate 800 */
+  --surface: #ffffff;
+  --text-main: #1f2937; /* Gray 800 */
+  --text-muted: #6b7280; /* Gray 500 */
+  --text-inverse: #ffffff;
+  --border: #e5e7eb; /* Gray 200 */
+  --danger: #ef4444;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --radius-md: 0.5rem;
+  --radius-lg: 1rem;
+  --radius-full: 9999px;
+  
+  /* Icon & Badge Colors */
+  --icon-bg-blue: #e0e7ff;
+  --icon-color-blue: #4f46e5;
+  --icon-bg-red: #fee2e2;
+  --icon-color-red: #ef4444;
+  --icon-bg-yellow: #fef3c7;
+  --icon-color-yellow: #f59e0b;
+  --icon-bg-green: #d1fae5;
+  --icon-color-green: #10b981;
+  --table-header: #ffffff;
+  --table-row-hover: #f9fafb;
+
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.dark-mode {
+  --bg-color: #0f172a; /* Slate 900 */
+  --surface: #1e293b; /* Slate 800 */
+  --text-main: #f1f5f9; /* Slate 100 */
+  --text-muted: #94a3b8; /* Slate 400 */
+  --border: #334155; /* Slate 700 */
+  --primary-bg: #431407; /* Orange 950/Darker */
+  --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+  
+  /* Icon & Badge Colors (Dark) */
+  --icon-bg-blue: rgba(79, 70, 229, 0.2);
+  --icon-color-blue: #818cf8;
+  --icon-bg-red: rgba(239, 68, 68, 0.2);
+  --icon-color-red: #f87171;
+  --icon-bg-yellow: rgba(245, 158, 11, 0.2);
+  --icon-color-yellow: #fbbf24;
+  --icon-bg-green: rgba(16, 185, 129, 0.2);
+  --icon-color-green: #34d399;
+  --table-header: #1e293b;
+  --table-row-hover: #0f172a;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  background: none;
+}
+
+input, textarea, select {
+  font-family: 'Inter', sans-serif;
+}
+
+/* Utilities */
+.flex { display: flex; }
+.flex-col { display: flex; flex-direction: column; }
+.items-center { align-items: center; }
+.justify-center { justify-content: center; }
+.justify-between { justify-content: space-between; }
+.w-full { width: 100%; }
+.h-full { height: 100%; }
+.min-h-screen { min-height: 100vh; }
+.text-center { text-align: center; }
