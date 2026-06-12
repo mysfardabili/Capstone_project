@@ -1,17 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Plus, Search, Edit2, Trash2, QrCode, Eye } from 'lucide-react';
+import { Plus, Search, Edit2, Trash2, QrCode, Eye, Loader2 } from 'lucide-react';
+import { api } from '../../services/api';
 import '../../components/SharedUI.css';
 import Toast from '../../components/Toast';
 import Pagination from '../../components/Pagination';
-
-const initialAssets = [
-  { id: 'AST-001', name: 'USG Machine Voluson E8', category: 'Alat Medis', room: 'Ruang Radiologi 1', serialNumber: 'SN-V8-001', price: 150000000, condition: 'Baik', status: 'Tersedia' },
-  { id: 'AST-002', name: 'Patient Monitor B40', category: 'Alat Medis', room: 'IGD Bed 3', serialNumber: 'SN-PM-042', price: 25000000, condition: 'Rusak', status: 'Tersedia' },
-  { id: 'AST-003', name: 'Kursi Roda Standar', category: 'Non-Medis', room: 'Lobi Utama', serialNumber: 'SN-KR-112', price: 1500000, condition: 'Baik', status: 'Tersedia' },
-  { id: 'AST-004', name: 'Defibrillator Zoll', category: 'Alat Medis', room: 'RSUD Kota Seberang', serialNumber: 'SN-DF-099', price: 85000000, condition: 'Baik', status: 'Dipinjam' },
-  { id: 'AST-005', name: 'Bed Pasien Elektrik', category: 'Fasilitas', room: 'Kamar Mawar 101', serialNumber: 'SN-BP-201', price: 12000000, condition: 'Baik', status: 'Tersedia' },
-];
 
 const formatRupiah = (number) => {
   return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(number);
@@ -19,33 +12,55 @@ const formatRupiah = (number) => {
 
 const Assets = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [assets, setAssets] = useState(initialAssets);
+  const [assets, setAssets] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [showToast, setShowToast] = useState(false);
   const [toastMsg, setToastMsg] = useState('');
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 3; // Menampilkan sedikit data agar pagination terlihat efeknya
+  const itemsPerPage = 5; // Tampilkan 5 per halaman agar serasi
 
-  const filteredAssets = assets.filter(asset => {
-    const term = (searchTerm || '').toLowerCase();
-    const assetName = (asset?.name || '').toLowerCase();
-    const assetId = (asset?.id || '').toLowerCase();
-    return assetName.includes(term) || assetId.includes(term);
-  });
+  useEffect(() => {
+    const fetchAssets = async () => {
+      setIsLoading(true);
+      try {
+        const data = await api.get(`/assets?search=${searchTerm}`);
+        setAssets(data);
+        setCurrentPage(1);
+      } catch (err) {
+        console.error('Failed to fetch assets:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    // Add small debounce logic
+    const delayDebounceFn = setTimeout(() => {
+      fetchAssets();
+    }, 300);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchTerm]);
 
   // Pagination Logic
-  const totalItems = filteredAssets.length;
-  const paginatedAssets = filteredAssets.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  const totalItems = assets.length;
+  const paginatedAssets = assets.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   const handleDelete = (asset) => {
     setDeleteTarget(asset);
   };
 
-  const confirmDelete = () => {
-    setAssets(prev => prev.filter(a => a.id !== deleteTarget.id));
-    setDeleteTarget(null);
-    setToastMsg(`Aset "${deleteTarget.name}" berhasil dihapus.`);
-    setShowToast(true);
+  const confirmDelete = async () => {
+    try {
+      await api.delete(`/assets/${deleteTarget.id}`);
+      setAssets(prev => prev.filter(a => a.id !== deleteTarget.id));
+      const deletedName = deleteTarget.name;
+      setDeleteTarget(null);
+      setToastMsg(`Aset "${deletedName}" berhasil dihapus.`);
+      setShowToast(true);
+    } catch (err) {
+      alert(`Gagal menghapus aset: ${err.message}`);
+    }
   };
 
   const handlePrintQR = (asset) => {
@@ -104,7 +119,16 @@ const Assets = () => {
         </div>
 
         <div className="table-wrapper">
-          {filteredAssets.length > 0 ? (
+          {isLoading ? (
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '4rem 0', gap: '1rem', color: 'var(--text-muted)' }}>
+              <Loader2 size={36} className="spin" style={{ color: 'var(--primary)' }} />
+              <span>Memuat data aset...</span>
+              <style>{`
+                .spin { animation: spin 1s linear infinite; }
+                @keyframes spin { 100% { transform: rotate(360deg); } }
+              `}</style>
+            </div>
+          ) : assets.length > 0 ? (
             <table className="data-table">
               <thead>
                 <tr>
@@ -122,7 +146,7 @@ const Assets = () => {
                 {paginatedAssets.map(asset => (
                   <tr key={asset.id}>
                     <td style={{ fontWeight: 500 }}>
-                      <Link to={`/dashboard/assets/detail/${asset.id}`} style={{ color: '#f97316', textDecoration: 'none' }}>{asset.id}</Link>
+                       <Link to={`/dashboard/assets/detail/${asset.id}`} style={{ color: '#f97316', textDecoration: 'none' }}>{asset.id}</Link>
                     </td>
                     <td>
                       <Link to={`/dashboard/assets/detail/${asset.id}`} style={{ color: 'inherit', textDecoration: 'none', fontWeight: 600 }}>{asset.name}</Link>
@@ -162,7 +186,7 @@ const Assets = () => {
               <p>Maaf, kami tidak dapat menemukan aset dengan kata kunci "{searchTerm}".</p>
             </div>
           )}
-          {filteredAssets.length > 0 && (
+          {!isLoading && assets.length > 0 && (
             <Pagination 
               totalItems={totalItems} 
               itemsPerPage={itemsPerPage} 

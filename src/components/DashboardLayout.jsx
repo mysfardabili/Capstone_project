@@ -9,6 +9,26 @@ const DashboardLayout = () => {
   const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [currentUser, setCurrentUser] = useState({ name: 'Admin', profilePicture: '' });
+
+  // Load user from localStorage (updated on profile save)
+  React.useEffect(() => {
+    const loadUser = () => {
+      const saved = localStorage.getItem('user');
+      if (saved) {
+        try { setCurrentUser(JSON.parse(saved)); } catch (e) {}
+      }
+    };
+    loadUser();
+    // Listen for profile updates (e.g., after Settings saves)
+    window.addEventListener('userProfileUpdated', loadUser);
+    return () => window.removeEventListener('userProfileUpdated', loadUser);
+  }, []);
+
+  const getUserInitials = (name) => {
+    if (!name) return 'AD';
+    return name.split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase();
+  };
 
   // Efek untuk dark mode
   React.useEffect(() => {
@@ -20,6 +40,8 @@ const DashboardLayout = () => {
   }, [isDarkMode]);
 
   const handleSignOut = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
     navigate('/login');
   };
 
@@ -109,7 +131,20 @@ const DashboardLayout = () => {
               className="action-icon" 
               onClick={() => navigate('/dashboard/settings')}
             />
-            <div className="user-avatar">AD</div>
+            <div 
+              className="user-avatar" 
+              onClick={() => navigate('/dashboard/settings')}
+              style={{ cursor: 'pointer', overflow: 'hidden', padding: currentUser.profilePicture ? 0 : undefined }}
+              title={currentUser.name || 'Profil'}
+            >
+              {currentUser.profilePicture ? (
+                <img 
+                  src={`http://localhost:5000${currentUser.profilePicture}`} 
+                  alt="Foto Profil" 
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} 
+                />
+              ) : getUserInitials(currentUser.name)}
+            </div>
           </div>
         </header>
 

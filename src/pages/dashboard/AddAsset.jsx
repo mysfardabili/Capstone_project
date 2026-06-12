@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Save, Loader2 } from 'lucide-react';
+import { api } from '../../services/api';
 import '../../components/SharedUI.css';
 import Toast from '../../components/Toast';
 
@@ -8,21 +9,30 @@ const AddAsset = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [showToast, setShowToast] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+    setErrorMsg('');
     
-    // Simulate API Call delay
-    setTimeout(() => {
+    try {
+      const form = e.currentTarget;
+      const formData = new FormData(form);
+      
+      await api.post('/assets', formData, true);
+      
       setIsLoading(false);
       setShowToast(true);
       
-      // Redirect after showing toast for a moment
       setTimeout(() => {
         navigate('/dashboard/assets');
       }, 1500);
-    }, 1000);
+    } catch (err) {
+      console.error(err);
+      setErrorMsg(err.message || 'Gagal menyimpan aset baru');
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -34,22 +44,28 @@ const AddAsset = () => {
       </div>
 
       <div className="form-container">
+        {errorMsg && (
+          <div style={{ color: '#ef4444', backgroundColor: '#fee2e2', padding: '0.75rem', borderRadius: '10px', marginBottom: '1.5rem', fontSize: '0.9rem', fontWeight: '500' }}>
+            {errorMsg}
+          </div>
+        )}
+
         <form onSubmit={handleSubmit}>
           <div className="form-row">
             <div className="form-group">
               <label>Nama Aset</label>
-              <input type="text" className="form-control" placeholder="Masukkan nama aset" required />
+              <input type="text" name="name" className="form-control" placeholder="Masukkan nama aset" required />
             </div>
             <div className="form-group">
               <label>Nomor Seri / SN</label>
-              <input type="text" className="form-control" placeholder="Masukkan nomor seri" />
+              <input type="text" name="serialNumber" className="form-control" placeholder="Masukkan nomor seri" />
             </div>
           </div>
 
           <div className="form-row">
             <div className="form-group">
               <label>Kondisi Fisik</label>
-              <select className="form-control" required defaultValue="">
+              <select name="condition" className="form-control" required defaultValue="">
                 <option value="" disabled>Pilih Kondisi</option>
                 <option value="Baik">Baik</option>
                 <option value="Rusak">Rusak</option>
@@ -58,8 +74,8 @@ const AddAsset = () => {
             </div>
             <div className="form-group">
               <label>Kategori Aset</label>
-              <select className="form-control" required>
-                <option value="">Pilih Kategori</option>
+              <select name="category" className="form-control" required defaultValue="">
+                <option value="" disabled>Pilih Kategori</option>
                 <option value="medis">Alat Medis</option>
                 <option value="non-medis">Non-Medis</option>
                 <option value="fasilitas">Fasilitas / Furnitur</option>
@@ -70,8 +86,8 @@ const AddAsset = () => {
           <div className="form-row">
             <div className="form-group">
               <label>Ruangan / Lokasi Awal</label>
-              <select className="form-control" required>
-                <option value="">Pilih Ruangan</option>
+              <select name="room" className="form-control" required defaultValue="">
+                <option value="" disabled>Pilih Ruangan</option>
                 <option value="igd">IGD</option>
                 <option value="radiologi">Ruang Radiologi</option>
                 <option value="operasi">Ruang Operasi</option>
@@ -80,42 +96,42 @@ const AddAsset = () => {
             </div>
             <div className="form-group">
               <label>Harga (Rp)</label>
-              <input type="number" className="form-control" placeholder="Masukkan harga aset" required />
+              <input type="number" name="price" className="form-control" placeholder="Masukkan harga aset" required />
             </div>
           </div>
           <div className="form-row">
             <div className="form-group">
               <label>Status Ketersediaan</label>
-              <select className="form-control" required defaultValue="Tersedia">
+              <select name="status" className="form-control" required defaultValue="Tersedia">
                 <option value="Tersedia">Tersedia</option>
                 <option value="Dipinjam">Dipinjam RS Lain</option>
               </select>
             </div>
             <div className="form-group">
               <label>Vendor / Supplier</label>
-              <input type="text" className="form-control" placeholder="Nama perusahaan penyedia" />
+              <input type="text" name="vendor" className="form-control" placeholder="Nama perusahaan penyedia" />
             </div>
           </div>
           
           <div className="form-row">
             <div className="form-group">
               <label>Tanggal Pembelian</label>
-              <input type="date" className="form-control" required />
+              <input type="date" name="purchaseDate" className="form-control" required />
             </div>
             <div className="form-group">
               <label>Masa Garansi Habis</label>
-              <input type="date" className="form-control" required />
+              <input type="date" name="warrantyEnd" className="form-control" required />
             </div>
           </div>
 
           <div className="form-group" style={{ marginBottom: '1.5rem' }}>
             <label>Foto Aset</label>
-            <input type="file" accept="image/*" className="form-control" style={{ padding: '0.5rem', background: '#f8fafc' }} />
+            <input type="file" name="image" accept="image/*" className="form-control" style={{ padding: '0.5rem', background: '#f8fafc' }} />
           </div>
 
           <div className="form-group" style={{ marginBottom: '1.5rem' }}>
             <label>Deskripsi Tambahan</label>
-            <textarea className="form-control" placeholder="Tuliskan spesifikasi atau catatan tambahan"></textarea>
+            <textarea name="description" className="form-control" placeholder="Tuliskan spesifikasi atau catatan tambahan"></textarea>
           </div>
 
           <div className="form-actions">

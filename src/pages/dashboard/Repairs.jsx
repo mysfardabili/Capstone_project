@@ -1,24 +1,56 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { AlertTriangle, Search, Eye, CheckCircle } from 'lucide-react';
+import { AlertTriangle, Search, Eye, CheckCircle, Loader2 } from 'lucide-react';
+import { api } from '../../services/api';
 import '../../components/SharedUI.css';
 import Toast from '../../components/Toast';
 
-const dummyRepairs = [
-  { id: 'REP-101', asset: 'AST-002 (Patient Monitor B40)', date: '10 Mei 2026', reporter: 'Ns. Siti', issue: 'Layar bergaris', priority: 'Tinggi', status: 'Dalam Pengerjaan' },
-  { id: 'REP-102', asset: 'AST-015 (Bed Pasien)', date: '08 Mei 2026', reporter: 'Ns. Budi', issue: 'Rem roda blong', priority: 'Sedang', status: 'Selesai' },
-  { id: 'REP-103', asset: 'AST-004 (Defibrillator)', date: '09 Mei 2026', reporter: 'Dr. Andi', issue: 'Baterai tidak mengisi', priority: 'Tinggi', status: 'Menunggu Teknisi' },
-];
-
 const Repairs = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [repairs, setRepairs] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [showToast, setShowToast] = useState(false);
   const [toastMsg, setToastMsg] = useState('');
 
-  const filteredRepairs = dummyRepairs.filter(rep => {
+  const fetchRepairs = async () => {
+    try {
+      const data = await api.get('/repairs');
+      setRepairs(data);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchRepairs();
+  }, []);
+
+  const handleCompleteRepair = async (id) => {
+    try {
+      await api.put(`/repairs/${id}`, { status: 'Completed', notes: 'Perbaikan diselesaikan oleh Admin.' });
+      setToastMsg(`Tiket ${id} ditandai selesai!`);
+      setShowToast(true);
+      fetchRepairs();
+    } catch (err) {
+      alert(`Gagal menyelesaikan perbaikan: ${err.message}`);
+    }
+  };
+
+  const filteredRepairs = repairs.filter(rep => {
     const term = (searchTerm || '').toLowerCase();
-    return rep.id.toLowerCase().includes(term) || rep.asset.toLowerCase().includes(term) || rep.reporter.toLowerCase().includes(term);
+    const idMatch = (rep.id || '').toLowerCase().includes(term);
+    const assetMatch = (rep.assetId || '').toLowerCase().includes(term) || (rep.asset?.name || '').toLowerCase().includes(term);
+    const reporterMatch = (rep.reporterName || '').toLowerCase().includes(term);
+    return idMatch || assetMatch || reporterMatch;
   });
+
+  const translateStatus = (status) => {
+    if (status === 'Completed') return 'Selesai';
+    if (status === 'In Progress') return 'Dalam Pengerjaan';
+    return 'Menunggu Teknisi';
+  };
 
   return (
     <div className="page-container">
@@ -46,58 +78,69 @@ const Repairs = () => {
         </div>
 
         <div className="table-wrapper">
-          <table className="data-table">
-            <thead>
-              <tr>
-                <th>ID Tiket</th>
-                <th>Aset Terkait</th>
-                <th>Tanggal Lapor</th>
-                <th>Pelapor</th>
-                <th>Masalah</th>
-                <th>Prioritas</th>
-                <th>Status</th>
-                <th>Aksi</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredRepairs.length > 0 ? filteredRepairs.map(rep => (
-                <tr key={rep.id}>
-                  <td style={{ fontWeight: 500 }}>{rep.id}</td>
-                  <td>{rep.asset}</td>
-                  <td>{rep.date}</td>
-                  <td>{rep.reporter}</td>
-                  <td>{rep.issue}</td>
-                  <td>
-                    <span className={`badge ${
-                      rep.priority === 'Tinggi' ? 'badge-danger' : 'badge-warning'
-                    }`}>
-                      {rep.priority}
-                    </span>
-                  </td>
-                  <td>
-                    <span className={`badge ${
-                      rep.status === 'Selesai' ? 'badge-success' : 
-                      rep.status === 'Dalam Pengerjaan' ? 'badge-primary' : 'badge-neutral'
-                    }`}>
-                      {rep.status}
-                    </span>
-                  </td>
-                  <td>
-                    <button className="action-btn" title="Detail Perbaikan" onClick={() => { setToastMsg(`Membuka detail tiket ${rep.id}...`); setShowToast(true); }}><Eye size={16} /></button>
-                    {rep.status !== 'Selesai' && (
-                      <button className="action-btn" title="Tandai Selesai" onClick={() => { setToastMsg(`Tiket ${rep.id} ditandai selesai!`); setShowToast(true); }}><CheckCircle size={16} color="var(--success)" /></button>
-                    )}
-                  </td>
-                </tr>
-              )) : (
+          {isLoading ? (
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '4rem 0', gap: '1rem', color: 'var(--text-muted)' }}>
+              <Loader2 size={36} className="spin" style={{ color: 'var(--primary)' }} />
+              <span>Memuat data perbaikan...</span>
+              <style>{`
+                .spin { animation: spin 1s linear infinite; }
+                @keyframes spin { 100% { transform: rotate(360deg); } }
+              `}</style>
+            </div>
+          ) : (
+            <table className="data-table">
+              <thead>
                 <tr>
-                  <td colSpan="8" style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-muted)' }}>
-                    Tidak ada tiket perbaikan yang sesuai dengan pencarian "{searchTerm}".
-                  </td>
+                  <th>ID Tiket</th>
+                  <th>Aset Terkait</th>
+                  <th>Tanggal Lapor</th>
+                  <th>Pelapor</th>
+                  <th>Masalah</th>
+                  <th>Prioritas</th>
+                  <th>Status</th>
+                  <th>Aksi</th>
                 </tr>
-              )}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {filteredRepairs.length > 0 ? filteredRepairs.map(rep => (
+                  <tr key={rep.id}>
+                    <td style={{ fontWeight: 500 }}>{rep.id}</td>
+                    <td>{rep.assetId} ({rep.asset?.name || 'Aset'})</td>
+                    <td>{new Date(rep.date).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })}</td>
+                    <td>{rep.reporterName}</td>
+                    <td>{rep.description}</td>
+                    <td>
+                      <span className={`badge ${
+                        rep.status === 'Pending' ? 'badge-danger' : 'badge-warning'
+                      }`}>
+                        {rep.status === 'Pending' ? 'Tinggi' : 'Sedang'}
+                      </span>
+                    </td>
+                    <td>
+                      <span className={`badge ${
+                        rep.status === 'Completed' ? 'badge-success' : 
+                        rep.status === 'In Progress' ? 'badge-primary' : 'badge-neutral'
+                      }`}>
+                        {translateStatus(rep.status)}
+                      </span>
+                    </td>
+                    <td>
+                      <Link to={`/dashboard/assets/detail/${rep.assetId}`} className="action-btn" title="Detail Aset"><Eye size={16} /></Link>
+                      {rep.status !== 'Completed' && (
+                        <button className="action-btn" title="Tandai Selesai" onClick={() => handleCompleteRepair(rep.id)}><CheckCircle size={16} color="var(--success)" /></button>
+                      )}
+                    </td>
+                  </tr>
+                )) : (
+                  <tr>
+                    <td colSpan="8" style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-muted)' }}>
+                      Tidak ada tiket perbaikan yang sesuai dengan pencarian "{searchTerm}".
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          )}
         </div>
       </div>
     </div>

@@ -1,24 +1,58 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronLeft, AlertTriangle, Scan, Search, MapPin, CalendarCheck, FileOutput, CheckCircle2, RotateCcw } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { ChevronLeft, AlertTriangle, Scan, Search, MapPin, CalendarCheck, FileOutput, CheckCircle2, RotateCcw, Loader2 } from 'lucide-react';
+import { api } from '../../services/api';
 
 const TechnicianScan = () => {
+  const navigate = useNavigate();
   const [scanState, setScanState] = useState('scanning'); // 'scanning', 'processing', 'result'
+  const [assets, setAssets] = useState([]);
+  const [scannedAsset, setScannedAsset] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchAssets = async () => {
+      try {
+        const data = await api.get('/assets');
+        setAssets(data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchAssets();
+  }, []);
 
   useEffect(() => {
     let timer;
     if (scanState === 'scanning') {
-      // Tunggu 3 detik lalu masuk mode processing
       timer = setTimeout(() => {
         setScanState('processing');
-      }, 3000);
+      }, 2000);
     } else if (scanState === 'processing') {
-      // Tunggu 1.2 detik lalu tampilkan hasil
-      timer = setTimeout(() => {
-        setScanState('result');
-      }, 1200);
+      timer = setTimeout(async () => {
+        // Select random asset from database
+        if (assets.length > 0) {
+          const randomIndex = Math.floor(Math.random() * assets.length);
+          const chosen = assets[randomIndex];
+          setIsLoading(true);
+          try {
+            // Get full detail including histories
+            const fullDetail = await api.get(`/assets/${chosen.id}`);
+            setScannedAsset(fullDetail);
+            setScanState('result');
+          } catch (err) {
+            console.error(err);
+            setScanState('scanning');
+          } finally {
+            setIsLoading(false);
+          }
+        } else {
+          setScanState('scanning');
+        }
+      }, 1000);
     }
     return () => clearTimeout(timer);
-  }, [scanState]);
+  }, [scanState, assets]);
 
   const renderScanning = () => (
     <div style={{ 
@@ -33,32 +67,23 @@ const TechnicianScan = () => {
       flexDirection: 'column',
       overflow: 'hidden'
     }}>
-      {/* Heavy dark blur overlay for depth */}
       <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(3px)' }}></div>
 
-      {/* Header */}
       <div style={{ position: 'relative', zIndex: 10, padding: '1.5rem', display: 'flex', alignItems: 'center', color: 'white' }}>
         <button style={{ background: 'none', border: 'none', color: 'white', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '1.1rem', fontWeight: '700' }}>
           <Scan size={24} color="#f97316" /> SCAN ASET
         </button>
       </div>
 
-      {/* Scanner Focus Area */}
       <div style={{ position: 'relative', zIndex: 10, flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-        
         {scanState === 'scanning' ? (
           <>
             <div className="scanner-frame">
-              {/* Corner accents */}
               <div className="scanner-corner top-left"></div>
               <div className="scanner-corner top-right"></div>
               <div className="scanner-corner bottom-left"></div>
               <div className="scanner-corner bottom-right"></div>
-              
-              {/* Clear center (no blur) */}
               <div style={{ position: 'absolute', inset: '0', backdropFilter: 'blur(0px)' }}></div>
-
-              {/* Animated Glow Line */}
               <div className="smooth-scan-line"></div>
               <div className="scanner-flare"></div>
             </div>
@@ -76,85 +101,113 @@ const TechnicianScan = () => {
             <p style={{ color: '#94a3b8', fontSize: '0.9rem' }}>Membaca data aset...</p>
           </div>
         )}
-
       </div>
     </div>
   );
 
-  const renderResult = () => (
-    <div style={{ animation: 'slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1)' }}>
-      <button 
-        onClick={() => setScanState('scanning')}
-        style={{ display: 'flex', alignItems: 'center', gap: '5px', background: 'none', border: 'none', color: '#64748b', fontWeight: '700', padding: 0, marginBottom: '1.5rem', cursor: 'pointer', fontSize: '1rem' }}
-      >
-        <RotateCcw size={18} /> Scan Ulang
-      </button>
+  const renderResult = () => {
+    if (!scannedAsset) return null;
 
-      {/* Modern Asset Card Identity */}
-      <div className="tech-card" style={{ padding: 0, marginBottom: '2rem', display: 'flex', flexDirection: 'column' }}>
-        <div style={{ height: '140px', overflow: 'hidden', position: 'relative' }}>
-          <img src="https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&q=80&w=800" alt="Asset" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-          <div style={{ position: 'absolute', bottom: '10px', right: '10px', background: 'rgba(255,255,255,0.9)', padding: '4px 10px', borderRadius: '12px', fontSize: '0.75rem', fontWeight: '800', color: '#0f172a' }}>
-            ID: AST-77291
+    const recentRepairs = scannedAsset.repairs || [];
+    const recentMutations = scannedAsset.mutations || [];
+    const activities = [
+      ...recentRepairs.map(r => ({
+        title: `Perbaikan: ${r.description}`,
+        notes: r.notes || 'Perbaikan selesai dilakukan.',
+        time: new Date(r.date).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }),
+        pic: r.technicianName || 'Teknisi',
+      })),
+      ...recentMutations.map(m => ({
+        title: `Mutasi Ruangan`,
+        notes: `Dipindahkan dari ${m.sourceLocation} ke ${m.targetLocation}.`,
+        time: new Date(m.date).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }),
+        pic: m.requesterName,
+      })),
+    ].sort((a, b) => new Date(b.time) - new Date(a.time));
+
+    return (
+      <div style={{ animation: 'slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1)' }}>
+        <button 
+          onClick={() => setScanState('scanning')}
+          style={{ display: 'flex', alignItems: 'center', gap: '5px', background: 'none', border: 'none', color: '#64748b', fontWeight: '700', padding: 0, marginBottom: '1.5rem', cursor: 'pointer', fontSize: '1rem' }}
+        >
+          <RotateCcw size={18} /> Scan Ulang
+        </button>
+
+        {/* Modern Asset Card Identity */}
+        <div className="tech-card" style={{ padding: 0, marginBottom: '2rem', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ height: '140px', overflow: 'hidden', position: 'relative' }}>
+            <img 
+              src={scannedAsset.img || "https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&q=80&w=800"} 
+              alt="Asset" 
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+            />
+            <div style={{ position: 'absolute', bottom: '10px', right: '10px', background: 'rgba(255,255,255,0.9)', padding: '4px 10px', borderRadius: '12px', fontSize: '0.75rem', fontWeight: '800', color: '#0f172a' }}>
+              ID: {scannedAsset.id}
+            </div>
           </div>
-        </div>
-        <div style={{ padding: '1.5rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-            <span className="task-badge badge-green">Berfungsi Baik</span>
-            <span style={{ fontSize: '0.75rem', fontWeight: '700', color: '#94a3b8' }}>ALAT MEDIS</span>
-          </div>
-          <h2 style={{ fontSize: '1.6rem', fontWeight: '800', margin: '0 0 1rem 0', color: '#0f172a', letterSpacing: '-0.5px' }}>Infusion Pump P-21</h2>
-          
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div style={{ padding: '8px', background: '#f8fafc', borderRadius: '10px' }}><MapPin size={18} color="#f97316" /></div>
-              <div>
-                <p style={{ margin: 0, fontSize: '0.7rem', color: '#64748b', fontWeight: '700' }}>LOKASI</p>
-                <p style={{ margin: 0, fontSize: '0.85rem', color: '#0f172a', fontWeight: '700' }}>ICU Bed 4</p>
+          <div style={{ padding: '1.5rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+              <span className={`task-badge ${scannedAsset.condition === 'Baik' ? 'badge-green' : 'badge-orange'}`}>
+                {scannedAsset.condition === 'Baik' ? 'Berfungsi Baik' : `Kondisi: ${scannedAsset.condition}`}
+              </span>
+              <span style={{ fontSize: '0.75rem', fontWeight: '700', color: '#94a3b8' }}>{scannedAsset.category.toUpperCase()}</span>
+            </div>
+            <h2 style={{ fontSize: '1.6rem', fontWeight: '800', margin: '0 0 1rem 0', color: '#0f172a', letterSpacing: '-0.5px' }}>{scannedAsset.name}</h2>
+            
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div style={{ padding: '8px', background: '#f8fafc', borderRadius: '10px' }}><MapPin size={18} color="#f97316" /></div>
+                <div>
+                  <p style={{ margin: 0, fontSize: '0.7rem', color: '#64748b', fontWeight: '700' }}>LOKASI</p>
+                  <p style={{ margin: 0, fontSize: '0.85rem', color: '#0f172a', fontWeight: '700' }}>{scannedAsset.room}</p>
+                </div>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div style={{ padding: '8px', background: '#f8fafc', borderRadius: '10px' }}><CalendarCheck size={18} color="#3b82f6" /></div>
+                <div>
+                  <p style={{ margin: 0, fontSize: '0.7rem', color: '#64748b', fontWeight: '700' }}>PEMBELIAN</p>
+                  <p style={{ margin: 0, fontSize: '0.85rem', color: '#0f172a', fontWeight: '700' }}>{scannedAsset.purchaseDate || '-'}</p>
+                </div>
               </div>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div style={{ padding: '8px', background: '#f8fafc', borderRadius: '10px' }}><CalendarCheck size={18} color="#3b82f6" /></div>
-              <div>
-                <p style={{ margin: 0, fontSize: '0.7rem', color: '#64748b', fontWeight: '700' }}>KALIBRASI</p>
-                <p style={{ margin: 0, fontSize: '0.85rem', color: '#0f172a', fontWeight: '700' }}>15 Okt '23</p>
-              </div>
-            </div>
           </div>
         </div>
-      </div>
 
-      <h3 style={{ fontSize: '1rem', fontWeight: '800', marginBottom: '1.2rem', color: '#0f172a', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Log Aktivitas Terkini</h3>
-      
-      {/* Activity Timeline */}
-      <div className="timeline-list" style={{ marginBottom: '2.5rem' }}>
-        <div className="timeline-card" style={{ padding: '1rem' }}>
-          <h4 style={{ margin: '0 0 6px 0', fontSize: '0.95rem', fontWeight: '800', color: '#0f172a' }}>Kalibrasi Rutin BioMed</h4>
-          <p style={{ margin: 0, fontSize: '0.8rem', color: '#64748b', lineHeight: '1.5' }}>Penyelarasan sensor tekanan standar dan pemeriksaan keamanan arus listrik. Lulus uji.</p>
-          <span style={{ display: 'inline-block', marginTop: '8px', fontSize: '0.7rem', fontWeight: '700', color: '#94a3b8' }}>15 Okt 2023 - Teknisi: Budi</span>
+        <h3 style={{ fontSize: '1rem', fontWeight: '800', marginBottom: '1.2rem', color: '#0f172a', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Log Aktivitas Terkini</h3>
+        
+        {/* Activity Timeline */}
+        <div className="timeline-list" style={{ marginBottom: '2.5rem' }}>
+          {activities.length > 0 ? (
+            activities.map((act, index) => (
+              <div className="timeline-card" style={{ padding: '1rem' }} key={index}>
+                <h4 style={{ margin: '0 0 6px 0', fontSize: '0.95rem', fontWeight: '800', color: '#0f172a' }}>{act.title}</h4>
+                <p style={{ margin: 0, fontSize: '0.8rem', color: '#64748b', lineHeight: '1.5' }}>{act.notes}</p>
+                <span style={{ display: 'inline-block', marginTop: '8px', fontSize: '0.7rem', fontWeight: '700', color: '#94a3b8' }}>
+                  {act.time} - Oleh: {act.pic}
+                </span>
+              </div>
+            ))
+          ) : (
+            <div style={{ textAlign: 'center', padding: '1.5rem', color: '#94a3b8', background: '#f8fafc', borderRadius: '16px' }}>Belum ada log aktivitas.</div>
+          )}
         </div>
-        <div className="timeline-card" style={{ padding: '1rem' }}>
-          <h4 style={{ margin: '0 0 6px 0', fontSize: '0.95rem', fontWeight: '800', color: '#0f172a' }}>Mutasi Ruangan</h4>
-          <p style={{ margin: 0, fontSize: '0.8rem', color: '#64748b', lineHeight: '1.5' }}>Dipindahkan dari Ruang IGD ke Ruang ICU Bed 4 atas instruksi dr. Andi.</p>
-          <span style={{ display: 'inline-block', marginTop: '8px', fontSize: '0.7rem', fontWeight: '700', color: '#94a3b8' }}>10 Sep 2023 - Admin: Rini</span>
-        </div>
-      </div>
 
-      <div style={{ display: 'flex', gap: '10px' }}>
-        <button className="btn-full" style={{ flex: 1, background: '#fef2f2', border: '2px solid #fecaca', color: '#ef4444', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' }}>
-          <AlertTriangle size={18} /> Lapor Rusak
-        </button>
-        <button className="btn-full" style={{ flex: 1, background: '#eff6ff', border: '2px solid #bfdbfe', color: '#3b82f6', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' }}>
-          <FileOutput size={18} /> Mutasi
-        </button>
+        <div style={{ display: 'flex', gap: '10px' }}>
+          <button onClick={() => navigate('/technician/repairs')} className="btn-full" style={{ flex: 1, background: '#fef2f2', border: '2px solid #fecaca', color: '#ef4444', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' }}>
+            <AlertTriangle size={18} /> Tugas Perbaikan
+          </button>
+          <button onClick={() => navigate('/technician')} className="btn-full" style={{ flex: 1, background: '#eff6ff', border: '2px solid #bfdbfe', color: '#3b82f6', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' }}>
+            Kembali Ke Dashboard
+          </button>
+        </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <>
       <style>{`
-        /* Smooth Scanner Animations */
         .scanner-frame {
           width: 260px;
           height: 260px;

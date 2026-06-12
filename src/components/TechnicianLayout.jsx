@@ -27,7 +27,11 @@ const TechnicianLayout = () => {
           
           {/* Tombol Kembali / Keluar */}
           <button 
-            onClick={() => navigate('/login')} 
+            onClick={() => {
+              localStorage.removeItem('token');
+              localStorage.removeItem('user');
+              navigate('/login');
+            }} 
             style={{ 
               background: 'none', border: 'none', cursor: 'pointer', 
               display: 'flex', alignItems: 'center', justifyContent: 'center',

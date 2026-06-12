@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { 
   ArrowLeft, FileText, Wrench, RefreshCw, Activity, 
-  MapPin, Box, Hash, Calendar, QrCode, Image as ImageIcon, Download
+  MapPin, Box, Hash, Calendar, QrCode, Image as ImageIcon, Download, Loader2
 } from 'lucide-react';
 import '../../components/SharedUI.css';
 import Toast from '../../components/Toast';
+
+import { api } from '../../services/api';
 
 const AssetDetail = () => {
   const { id } = useParams();
@@ -13,53 +15,80 @@ const AssetDetail = () => {
   const [activeTab, setActiveTab] = useState('info');
   const [showToast, setShowToast] = useState(false);
   const [toastMsg, setToastMsg] = useState('');
+  const [asset, setAsset] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const showNotification = (msg) => {
     setToastMsg(msg);
     setShowToast(true);
   };
 
-  const asset = {
-    id: id || 'AST-001',
-    name: 'USG Machine Voluson E8',
-    category: 'Alat Medis',
-    room: 'Ruang Radiologi 1',
-    serialNumber: 'SN-V8-001',
-    price: 150000000,
-    condition: 'Baik',
-    status: 'Tersedia',
-    purchaseDate: '2023-01-15',
-    vendor: 'PT Medika Prima',
-    warrantyEnd: '2025-01-15',
-    img: 'https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&q=80&w=400'
-  };
+  useEffect(() => {
+    const fetchAssetDetail = async () => {
+      try {
+        const data = await api.get(`/assets/${id}`);
+        setAsset(data);
+      } catch (err) {
+        console.error(err);
+        setError(err.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchAssetDetail();
+  }, [id]);
+
+  if (isLoading) {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '60vh', gap: '1rem', color: 'var(--text-muted)' }}>
+        <Loader2 size={40} className="spin" style={{ color: 'var(--primary)' }} />
+        <span>Memuat detail aset...</span>
+        <style>{`
+          .spin { animation: spin 1s linear infinite; }
+          @keyframes spin { 100% { transform: rotate(360deg); } }
+        `}</style>
+      </div>
+    );
+  }
+
+  if (error || !asset) {
+    return (
+      <div style={{ padding: '2rem', textAlign: 'center', color: '#ef4444' }}>
+        <h3>Gagal Memuat Detail Aset</h3>
+        <p>{error || 'Aset tidak ditemukan'}</p>
+        <button onClick={() => navigate(-1)} className="btn-primary" style={{ margin: '1rem auto' }}>Kembali</button>
+      </div>
+    );
+  }
 
   const formatRupiah = (number) => {
     return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(number);
   };
 
-  const mutationHistory = [
-    { id: 'M-05', date: '01 Feb 2024', from: 'Ruang Radiologi 1', to: 'Ruang Radiologi 2', by: 'Siti (Kepala Ruangan)' },
-    { id: 'M-04', date: '10 Jan 2024', from: 'Gudang Alat', to: 'Ruang Radiologi 1', by: 'Budi (Admin)' },
-    { id: 'M-03', date: '20 Nov 2023', from: 'Lab Sementara', to: 'Gudang Alat', by: 'Budi (Admin)' },
-    { id: 'M-02', date: '15 Nov 2023', from: 'Ruang Radiologi 1', to: 'Lab Sementara', by: 'Siti (Kepala Ruangan)' },
-    { id: 'M-01', date: '10 Okt 2023', from: 'Gudang Pusat', to: 'Ruang Radiologi 1', by: 'Budi (Admin)' }
-  ];
+  const mutationHistory = (asset.mutations || []).map(m => ({
+    id: m.id,
+    date: new Date(m.date).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }),
+    from: m.sourceLocation,
+    to: m.targetLocation,
+    by: m.requesterName,
+  }));
 
-  const repairHistory = [
-    { id: 'R-05', date: '20 Mei 2024', issue: 'Pembersihan filter rutin', technician: 'Andi', status: 'Selesai' },
-    { id: 'R-04', date: '15 Apr 2024', issue: 'Kalibrasi ulang sensor', technician: 'Tono', status: 'Selesai' },
-    { id: 'R-03', date: '02 Apr 2024', issue: 'Update firmware sistem', technician: 'Rudi', status: 'Selesai' },
-    { id: 'R-02', date: '12 Mar 2024', issue: 'Kabel power longgar', technician: 'Andi', status: 'Selesai' },
-    { id: 'R-01', date: '05 Jan 2024', issue: 'Layar berkedip saat dinyalakan', technician: 'Tono', status: 'Selesai' }
-  ];
+  const repairHistory = (asset.repairs || []).map(r => ({
+    id: r.id,
+    date: new Date(r.date).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }),
+    issue: r.description,
+    technician: r.technicianName || 'Belum ditunjuk',
+    status: r.status === 'Completed' ? 'Selesai' : r.status === 'In Progress' ? 'Diproses' : 'Menunggu',
+  }));
 
-  const calibrationHistory = [
-    { id: 'C-04', date: '22 Jan 2025', result: 'Menunggu', nextDue: '22 Jan 2026', agency: 'PT Kalibrasi Medika' },
-    { id: 'C-03', date: '22 Jan 2024', result: 'Lulus', nextDue: '22 Jan 2025', agency: 'PT Kalibrasi Medika' },
-    { id: 'C-02', date: '20 Jan 2023', result: 'Lulus', nextDue: '20 Jan 2024', agency: 'BMKG / internal' },
-    { id: 'C-01', date: '15 Jan 2022', result: 'Lulus', nextDue: '15 Jan 2023', agency: 'BMKG / internal' }
-  ];
+  const calibrationHistory = (asset.calibrations || []).map(c => ({
+    id: c.id,
+    date: c.calibrationDate ? new Date(c.calibrationDate).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }) : 'Menunggu',
+    result: c.status,
+    nextDue: new Date(c.nextCalibrationDate).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }),
+    agency: c.vendor,
+  }));
 
   return (
     <div className="page-container" style={{ paddingBottom: '3rem', height: 'auto', minHeight: '100%' }}>
@@ -119,7 +148,7 @@ const AssetDetail = () => {
         </div>
         <div className="btn-action-group">
           <button className="btn-outline" onClick={() => showNotification(`QR Code untuk ${asset.name} (${asset.id}) sedang disiapkan...`)}><QrCode size={18} /> Cetak QR</button>
-          <button className="btn-primary" onClick={() => navigate(`/dashboard/repairs/add`)}><Wrench size={18} /> Lapor Kerusakan</button>
+          <button className="btn-primary" onClick={() => navigate(`/dashboard/repairs/add?assetId=${asset.id}`)}><Wrench size={18} /> Lapor Kerusakan</button>
         </div>
       </div>
 
