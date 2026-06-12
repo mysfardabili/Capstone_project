@@ -11,17 +11,35 @@ const getHeaders = () => {
   return headers;
 };
 
+/**
+ * Handle 401 Unauthorized globally:
+ * Token expired atau tidak valid → hapus data dan redirect ke /login
+ */
+const handleUnauthorized = () => {
+  localStorage.removeItem('token');
+  localStorage.removeItem('user');
+  window.location.href = '/login';
+};
+
+const handleResponse = async (response) => {
+  if (response.status === 401) {
+    handleUnauthorized();
+    throw new Error('Sesi Anda telah habis. Silakan login kembali.');
+  }
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.message || 'Terjadi kesalahan pada server');
+  }
+  return response.json();
+};
+
 export const api = {
   get: async (endpoint) => {
     const response = await fetch(`${API_BASE}${endpoint}`, {
       method: 'GET',
       headers: getHeaders(),
     });
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || 'Gagal mengambil data dari server');
-    }
-    return response.json();
+    return handleResponse(response);
   },
 
   post: async (endpoint, data, isMultipart = false) => {
@@ -35,12 +53,7 @@ export const api = {
       headers: headers,
       body: isMultipart ? data : JSON.stringify(data),
     });
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || 'Gagal mengirim data ke server');
-    }
-    return response.json();
+    return handleResponse(response);
   },
 
   put: async (endpoint, data, isMultipart = false) => {
@@ -54,12 +67,7 @@ export const api = {
       headers: headers,
       body: isMultipart ? data : JSON.stringify(data),
     });
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || 'Gagal memperbarui data di server');
-    }
-    return response.json();
+    return handleResponse(response);
   },
 
   delete: async (endpoint) => {
@@ -67,10 +75,6 @@ export const api = {
       method: 'DELETE',
       headers: getHeaders(),
     });
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || 'Gagal menghapus data di server');
-    }
-    return response.json();
+    return handleResponse(response);
   },
 };

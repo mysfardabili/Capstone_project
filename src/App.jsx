@@ -4,6 +4,7 @@ import Login from './pages/Login';
 import DashboardLayout from './components/DashboardLayout';
 import DashboardHome from './pages/DashboardHome';
 import NotFound from './pages/NotFound';
+import ProtectedRoute from './components/ProtectedRoute';
 
 // Fitur Dashboard
 import Assets from './pages/dashboard/Assets';
@@ -38,7 +39,15 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />
         
-        <Route path="/dashboard" element={<DashboardLayout />}>
+        {/* 🔒 Admin-only routes */}
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute allowedRoles={['admin']}>
+              <DashboardLayout />
+            </ProtectedRoute>
+          }
+        >
           <Route index element={<DashboardHome />} />
           
           {/* Rute Fitur Sidebar */}
@@ -63,7 +72,15 @@ function App() {
           <Route path="settings" element={<Settings />} />
         </Route>
 
-        <Route path="/technician" element={<TechnicianLayout />}>
+        {/* 🔒 Technician-only routes */}
+        <Route
+          path="/technician"
+          element={
+            <ProtectedRoute allowedRoles={['technician']}>
+              <TechnicianLayout />
+            </ProtectedRoute>
+          }
+        >
           <Route index element={<TechnicianDashboard />} />
           <Route path="repairs" element={<TechnicianRepairs />} />
           <Route path="scan" element={<TechnicianScan />} />

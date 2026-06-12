@@ -53,7 +53,7 @@ const TechnicianRepairs = () => {
     setIsLoading(true);
 
     try {
-      const statusToSend = jobStatus === 'Completed' ? 'Completed' : 'Completed'; // For simulation we mark it finished, or can mark status
+      const statusToSend = 'Selesai'; // DB ENUM: Pending | Proses | Selesai
       await api.put(`/repairs/${selectedItem.id}`, {
         status: statusToSend,
         notes: notes || 'Perbaikan selesai dilakukan oleh teknisi.',
@@ -151,7 +151,7 @@ const TechnicianRepairs = () => {
                 <h3 className="task-title">{item.asset?.name || 'Aset'}</h3>
                 <p className="task-id">ID: {item.assetId} (Tiket: {item.id})</p>
               </div>
-              <span className={`task-badge ${item.status === 'In Progress' ? 'badge-grey' : 'badge-orange'}`}>
+              <span className={`task-badge ${(item.status === 'Proses' || item.status === 'In Progress') ? 'badge-grey' : 'badge-orange'}`}>
                 {getStatusLabel(item.status)}
               </span>
             </div>

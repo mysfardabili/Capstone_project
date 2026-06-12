@@ -22,9 +22,11 @@ const Login = () => {
       // Store token and user data
       localStorage.setItem('token', response.token);
       localStorage.setItem('user', JSON.stringify({
+        id: response.id,
         name: response.name,
         email: response.email,
-        role: response.role
+        role: response.role,
+        profilePicture: response.profilePicture || null,
       }));
 
       if (response.role === 'technician') {

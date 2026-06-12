@@ -126,10 +126,18 @@ const Calibration = () => {
                         </span>
                       </td>
                       <td>
-                        {cal.certificateNumber ? (
-                          <button className="btn-outline" style={{ padding: '0.2rem 0.5rem', fontSize: '0.8rem' }} onClick={() => { setToastMsg(`Mengunduh sertifikat ${cal.certificateNumber}...`); setShowToast(true); }}>
-                            <Download size={14} /> {cal.certificateNumber}
-                          </button>
+                        {cal.certificateUrl ? (
+                          <a 
+                            href={`http://localhost:5000${cal.certificateUrl}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn-outline"
+                            style={{ padding: '0.2rem 0.5rem', fontSize: '0.8rem', display: 'inline-flex', alignItems: 'center', gap: '4px', textDecoration: 'none' }}
+                          >
+                            <Download size={14} /> {cal.certificateNumber || 'Unduh'}
+                          </a>
+                        ) : cal.certificateNumber ? (
+                          <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 500 }}>{cal.certificateNumber}</span>
                         ) : (
                           <span style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Belum ada</span>
                         )}

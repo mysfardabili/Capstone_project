@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { RefreshCw, Search, Eye, Check, Loader2 } from 'lucide-react';
+import { RefreshCw, Search, Eye, Check, X, Loader2 } from 'lucide-react';
 import { api } from '../../services/api';
 import '../../components/SharedUI.css';
 import Toast from '../../components/Toast';
@@ -35,6 +35,17 @@ const Mutation = () => {
       fetchMutations();
     } catch (err) {
       alert(`Gagal menyetujui mutasi: ${err.message}`);
+    }
+  };
+
+  const handleRejectMutation = async (id) => {
+    try {
+      await api.put(`/mutations/${id}`, { status: 'Rejected' });
+      setToastMsg(`Mutasi ${id} berhasil ditolak.`);
+      setShowToast(true);
+      fetchMutations();
+    } catch (err) {
+      alert(`Gagal menolak mutasi: ${err.message}`);
     }
   };
 
@@ -139,7 +150,10 @@ const Mutation = () => {
                       <td>
                         <Link to={`/dashboard/assets/detail/${mut.assetId}`} className="action-btn" title="Detail Aset"><Eye size={16} /></Link>
                         {mut.status === 'Pending' && (
-                          <button className="action-btn" title="Setujui Mutasi" onClick={() => handleApproveMutation(mut.id)}><Check size={16} color="var(--success)" /></button>
+                          <>
+                            <button className="action-btn" title="Setujui Mutasi" onClick={() => handleApproveMutation(mut.id)}><Check size={16} color="var(--success)" /></button>
+                            <button className="action-btn" title="Tolak Mutasi" onClick={() => handleRejectMutation(mut.id)}><X size={16} color="var(--danger)" /></button>
+                          </>
                         )}
                       </td>
                     </tr>

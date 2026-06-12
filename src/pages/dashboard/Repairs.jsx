@@ -29,7 +29,7 @@ const Repairs = () => {
 
   const handleCompleteRepair = async (id) => {
     try {
-      await api.put(`/repairs/${id}`, { status: 'Completed', notes: 'Perbaikan diselesaikan oleh Admin.' });
+      await api.put(`/repairs/${id}`, { status: 'Selesai', notes: 'Perbaikan diselesaikan oleh Admin.' });
       setToastMsg(`Tiket ${id} ditandai selesai!`);
       setShowToast(true);
       fetchRepairs();
@@ -47,8 +47,8 @@ const Repairs = () => {
   });
 
   const translateStatus = (status) => {
-    if (status === 'Completed') return 'Selesai';
-    if (status === 'In Progress') return 'Dalam Pengerjaan';
+    if (status === 'Selesai' || status === 'Completed') return 'Selesai';
+    if (status === 'Proses' || status === 'In Progress') return 'Dalam Pengerjaan';
     return 'Menunggu Teknisi';
   };
 
@@ -118,15 +118,15 @@ const Repairs = () => {
                     </td>
                     <td>
                       <span className={`badge ${
-                        rep.status === 'Completed' ? 'badge-success' : 
-                        rep.status === 'In Progress' ? 'badge-primary' : 'badge-neutral'
+                        (rep.status === 'Selesai' || rep.status === 'Completed') ? 'badge-success' : 
+                        (rep.status === 'Proses' || rep.status === 'In Progress') ? 'badge-primary' : 'badge-neutral'
                       }`}>
                         {translateStatus(rep.status)}
                       </span>
                     </td>
                     <td>
                       <Link to={`/dashboard/assets/detail/${rep.assetId}`} className="action-btn" title="Detail Aset"><Eye size={16} /></Link>
-                      {rep.status !== 'Completed' && (
+                      {(rep.status !== 'Selesai' && rep.status !== 'Completed') && (
                         <button className="action-btn" title="Tandai Selesai" onClick={() => handleCompleteRepair(rep.id)}><CheckCircle size={16} color="var(--success)" /></button>
                       )}
                     </td>

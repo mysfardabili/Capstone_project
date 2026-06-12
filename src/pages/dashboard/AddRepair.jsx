@@ -13,6 +13,10 @@ const AddRepair = () => {
   const [showToast, setShowToast] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
+  // Get current user name for reporterName field
+  const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
+  const reporterName = currentUser.name || 'Admin';
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -72,6 +76,9 @@ const AddRepair = () => {
               </select>
             </div>
           </div>
+
+          {/* Hidden field: reporterName auto-filled from logged in user */}
+          <input type="hidden" name="reporterName" value={reporterName} />
 
           <div className="form-group" style={{ marginBottom: '1.5rem' }}>
             <label>Deskripsi Kerusakan</label>

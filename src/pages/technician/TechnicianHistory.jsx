@@ -12,8 +12,8 @@ const TechnicianHistory = () => {
     const fetchHistory = async () => {
       try {
         const data = await api.get('/repairs');
-        // Filter only completed repairs
-        const completed = data.filter(r => r.status === 'Completed');
+        // Filter only completed repairs — DB uses 'Selesai'
+        const completed = data.filter(r => r.status === 'Selesai' || r.status === 'Completed');
         setHistory(completed);
       } catch (err) {
         console.error(err);
@@ -26,8 +26,26 @@ const TechnicianHistory = () => {
 
   const filteredHistory = history.filter(item => {
     const term = (searchTerm || '').toLowerCase();
-    if (!term) return true;
+    const dateStr = item.completionDate || item.date || '';
+    const itemDate = new Date(dateStr);
+    const now = new Date();
 
+    // Date range filter
+    if (activeFilter === 'Hari Ini') {
+      const today = now.toISOString().split('T')[0];
+      if (dateStr.split('T')[0] !== today) return false;
+    } else if (activeFilter === 'Minggu Ini') {
+      const weekAgo = new Date(now);
+      weekAgo.setDate(now.getDate() - 7);
+      if (itemDate < weekAgo) return false;
+    } else if (activeFilter === 'Bulan Ini') {
+      const monthAgo = new Date(now);
+      monthAgo.setDate(now.getDate() - 30);
+      if (itemDate < monthAgo) return false;
+    }
+
+    // Search filter
+    if (!term) return true;
     return (
       (item.asset?.name || '').toLowerCase().includes(term) ||
       (item.assetId || '').toLowerCase().includes(term) ||

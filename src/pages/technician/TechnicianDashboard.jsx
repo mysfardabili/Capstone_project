@@ -32,8 +32,8 @@ const TechnicianDashboard = () => {
           api.get('/calibrations'),
         ]);
 
-        const completedList = repairsData.filter(r => r.status === 'Completed');
-        const pendingList = repairsData.filter(r => r.status !== 'Completed');
+        const completedList = repairsData.filter(r => r.status === 'Selesai' || r.status === 'Completed');
+        const pendingList = repairsData.filter(r => r.status !== 'Selesai' && r.status !== 'Completed');
         const waitingCalibrations = calibrationsData.filter(c => c.status === 'Menunggu');
 
         // Find most urgent repair (the latest Pending repair)
