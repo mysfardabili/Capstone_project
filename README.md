@@ -297,6 +297,5 @@ mkdir backend/uploads    # Mac/Linux
 ---
 
 <div align="center">
-  <p>Dibuat dengan untuk sistem kesehatan yang lebih baik</p>
   <p><strong>PT. AMK — ASETRA </strong></p>
 </div>
