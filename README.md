@@ -15,27 +15,27 @@
 
 ---
 
-## 📋 Tentang Proyek
+## Tentang Proyek
 
 **ASETRA** adalah aplikasi manajemen aset rumah sakit berbasis web untuk membantu pihak rumah sakit dalam mengelola aset medis dan non-medis secara digital dan terintegrasi.
 
-### 🎯 Fitur Utama
+### Fitur Utama
 
 | Fitur | Deskripsi |
 |-------|-----------|
-| 🔐 **Autentikasi** | Login dengan JWT Token, role-based access (Admin & Teknisi) |
-| 📦 **Manajemen Aset** | CRUD aset lengkap dengan upload foto & dokumen PDF |
-| 🔧 **Laporan Perbaikan** | Sistem tiket kerusakan dari lapor hingga selesai |
-| 📋 **Pengajuan Aset** | Workflow permintaan aset baru dengan approve/reject |
-| 🔄 **Mutasi Aset** | Pemindahan aset antar ruangan/rumah sakit |
-| 📅 **Kalibrasi** | Penjadwalan dan tracking kalibrasi dengan upload sertifikat PDF |
-| 🔔 **Notifikasi** | Notifikasi real-time untuk kalibrasi jatuh tempo & perbaikan mendesak |
-| 📊 **Dashboard** | Statistik ringkasan, grafik aktivitas, dan laporan mendatang |
-| 📱 **Dashboard Teknisi** | Antarmuka mobile-first khusus untuk teknisi lapangan |
+| **Autentikasi** | Login dengan JWT Token, role-based access (Admin & Teknisi) |
+| **Manajemen Aset** | CRUD aset lengkap dengan upload foto & dokumen PDF |
+| **Laporan Perbaikan** | Sistem tiket kerusakan dari lapor hingga selesai |
+| **Pengajuan Aset** | Workflow permintaan aset baru dengan approve/reject |
+| **Mutasi Aset** | Pemindahan aset antar ruangan/rumah sakit |
+| **Kalibrasi** | Penjadwalan dan tracking kalibrasi dengan upload sertifikat PDF |
+| **Notifikasi** | Notifikasi real-time untuk kalibrasi jatuh tempo & perbaikan mendesak |
+| **Dashboard** | Statistik ringkasan, grafik aktivitas, dan laporan mendatang |
+| **Dashboard Teknisi** | Antarmuka mobile-first khusus untuk teknisi lapangan |
 
 ---
 
-## 🏗️ Arsitektur Sistem
+## Arsitektur Sistem
 
 ```
 PT.AMK/
@@ -63,7 +63,7 @@ PT.AMK/
 
 ---
 
-## ⚙️ Teknologi
+## Teknologi
 
 ### Frontend
 - **React 18** + **Vite 5** — UI framework & build tool
@@ -82,7 +82,7 @@ PT.AMK/
 
 ---
 
-## 🚀 Cara Menjalankan
+## Cara Menjalankan
 
 ### Prasyarat
 - [Node.js](https://nodejs.org/) versi **18 atau lebih baru**
@@ -123,7 +123,7 @@ npm run dev
 
 Backend berjalan di: **http://localhost:5000**
 
-> ℹ️ **Auto Seed:** Database SQLite (`database.sqlite`) dibuat otomatis saat pertama kali dijalankan, lengkap dengan data demo (aset, pengguna, perbaikan, kalibrasi, dll).
+> **Auto Seed:** Database SQLite (`database.sqlite`) dibuat otomatis saat pertama kali dijalankan, lengkap dengan data demo (aset, pengguna, perbaikan, kalibrasi, dll).
 
 ### 3. Setup Frontend
 
@@ -141,7 +141,7 @@ Frontend berjalan di: **http://localhost:5173**
 
 ---
 
-## 👤 Akun Demo
+## Akun Demo
 
 | Role | Email | Password |
 |------|-------|----------|
@@ -150,7 +150,7 @@ Frontend berjalan di: **http://localhost:5173**
 
 ---
 
-## 🔌 API Endpoints
+## API Endpoints
 
 Base URL: `http://localhost:5000/api`
 
@@ -209,7 +209,7 @@ Base URL: `http://localhost:5000/api`
 
 ---
 
-## 🔒 Sistem Role & Otorisasi
+## Sistem Role & Otorisasi
 
 ASETRA menggunakan **Role-Based Access Control (RBAC)** di dua lapisan:
 
@@ -227,7 +227,7 @@ Authorization: Bearer <JWT_TOKEN>
 
 ---
 
-## 📁 Model Database
+## Model Database
 
 | Model | Kolom Penting |
 |-------|--------------|
@@ -241,7 +241,7 @@ Authorization: Bearer <JWT_TOKEN>
 
 ---
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 **Database error saat start?**
 ```bash
@@ -269,7 +269,7 @@ mkdir backend/uploads    # Mac/Linux
 
 ---
 
-## 📸 Preview Aplikasi
+## Preview Aplikasi
 
 | Halaman | Deskripsi |
 |---------|-----------|
@@ -280,7 +280,7 @@ mkdir backend/uploads    # Mac/Linux
 
 ---
 
-## 👥 Tim Pengembang
+## Tim Pengembang
 
 | Nama | Role |
 |------|------|
