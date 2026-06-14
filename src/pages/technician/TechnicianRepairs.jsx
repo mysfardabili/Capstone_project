@@ -56,10 +56,14 @@ const TechnicianRepairs = () => {
       const statusToSend = 'Selesai'; // DB ENUM: Pending | Proses | Selesai
       await api.put(`/repairs/${selectedItem.id}`, {
         status: statusToSend,
-        notes: notes || 'Perbaikan selesai dilakukan oleh teknisi.',
+        notes: notes || (jobStatus === 'Completed' ? 'Perbaikan selesai dilakukan oleh teknisi.' : 'Perbaikan gagal, aset diafkir.'),
+        assetCondition: jobStatus === 'Completed' ? 'Baik' : 'Rusak',
       });
 
-      setToastMsg(`Tugas perbaikan ${selectedItem.id} berhasil diselesaikan!`);
+      setToastMsg(jobStatus === 'Completed' 
+        ? `Tugas perbaikan ${selectedItem.id} berhasil diselesaikan!` 
+        : `Tugas perbaikan ${selectedItem.id} selesai dengan kondisi afkir.`
+      );
       setShowToast(true);
       
       setView('list');

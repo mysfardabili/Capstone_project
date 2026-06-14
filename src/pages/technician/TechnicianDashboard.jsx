@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { ClipboardList, CheckCircle, AlertTriangle, CalendarDays, Zap, Loader2 } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { ClipboardList, CheckCircle, AlertTriangle, CalendarDays, Zap, Loader2, X, MapPin } from 'lucide-react';
 import { api } from '../../services/api';
 
 const TechnicianDashboard = () => {
+  const navigate = useNavigate();
   const [userName, setUserName] = useState('Teknisi');
   const [stats, setStats] = useState({
     pending: 0,
@@ -12,6 +13,8 @@ const TechnicianDashboard = () => {
     urgentItem: null,
   });
   const [isLoading, setIsLoading] = useState(true);
+  const [showCalibrationModal, setShowCalibrationModal] = useState(false);
+  const [calibrationItems, setCalibrationItems] = useState([]);
 
   useEffect(() => {
     // Load username from localStorage
@@ -35,6 +38,9 @@ const TechnicianDashboard = () => {
         const completedList = repairsData.filter(r => r.status === 'Selesai' || r.status === 'Completed');
         const pendingList = repairsData.filter(r => r.status !== 'Selesai' && r.status !== 'Completed');
         const waitingCalibrations = calibrationsData.filter(c => c.status === 'Menunggu');
+
+        // Save calibration items for the modal
+        setCalibrationItems(waitingCalibrations);
 
         // Find most urgent repair (the latest Pending repair)
         const urgent = pendingList.find(r => r.status === 'Pending') || pendingList[0] || null;
@@ -124,8 +130,14 @@ const TechnicianDashboard = () => {
           <ClipboardList size={80} color="#2563eb" className="tech-icon-large" style={{ right: '10px', bottom: '-20px' }} />
         </div>
 
-        {/* Small Card Left */}
-        <div className="tech-card tech-card-orange" style={{ padding: '1rem' }}>
+        {/* Small Card Left - CLICKABLE: navigates to history */}
+        <div 
+          className="tech-card tech-card-orange" 
+          style={{ padding: '1rem', cursor: 'pointer', transition: 'transform 0.2s, box-shadow 0.2s' }}
+          onClick={() => navigate('/technician/history')}
+          onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.03)'; e.currentTarget.style.boxShadow = '0 8px 25px rgba(249,115,22,0.2)'; }}
+          onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = ''; }}
+        >
           <div className="tech-card-header" style={{ flexDirection: 'column', gap: '10px' }}>
             <h3 className="tech-card-title" style={{ fontSize: '0.85rem' }}>Selesai</h3>
             <p className="tech-card-number" style={{ fontSize: '2rem' }}>{stats.completed}</p>
@@ -133,8 +145,14 @@ const TechnicianDashboard = () => {
           <CheckCircle size={60} color="#f97316" className="tech-icon-large" style={{ right: '-15px', bottom: '-15px' }} />
         </div>
 
-        {/* Small Card Right */}
-        <div className="tech-card tech-card-red" style={{ padding: '1rem' }}>
+        {/* Small Card Right - CLICKABLE: opens calibration modal */}
+        <div 
+          className="tech-card tech-card-red" 
+          style={{ padding: '1rem', cursor: 'pointer', transition: 'transform 0.2s, box-shadow 0.2s' }}
+          onClick={() => setShowCalibrationModal(true)}
+          onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.03)'; e.currentTarget.style.boxShadow = '0 8px 25px rgba(239,68,68,0.2)'; }}
+          onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = ''; }}
+        >
           <div className="tech-card-header" style={{ flexDirection: 'column', gap: '10px' }}>
             <h3 className="tech-card-title" style={{ fontSize: '0.85rem' }}>Kalibrasi</h3>
             <p className="tech-card-number" style={{ fontSize: '2rem' }}>{stats.calibrations}</p>
@@ -144,6 +162,58 @@ const TechnicianDashboard = () => {
 
       </div>
 
+      {/* Calibration Modal */}
+      {showCalibrationModal && (
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(4px)', animation: 'fadeIn 0.2s ease-in-out' }}
+          onClick={() => setShowCalibrationModal(false)}
+        >
+          <div 
+            style={{ background: 'white', borderRadius: '24px', padding: '1.5rem', maxWidth: '400px', width: '90%', maxHeight: '80vh', overflow: 'auto', boxShadow: '0 20px 60px rgba(0,0,0,0.15)', animation: 'slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1)' }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
+              <h3 style={{ margin: 0, fontSize: '1.2rem', fontWeight: '800', color: '#0f172a' }}>Kalibrasi Menunggu</h3>
+              <button onClick={() => setShowCalibrationModal(false)} style={{ background: '#f1f5f9', border: 'none', borderRadius: '12px', padding: '8px', cursor: 'pointer', display: 'flex' }}>
+                <X size={18} color="#64748b" />
+              </button>
+            </div>
+
+            {calibrationItems.length === 0 ? (
+              <div style={{ textAlign: 'center', padding: '2rem 1rem', color: '#94a3b8' }}>
+                <CalendarDays size={40} style={{ opacity: 0.3, marginBottom: '0.75rem' }} />
+                <p style={{ margin: 0, fontWeight: '600' }}>Tidak ada kalibrasi menunggu</p>
+              </div>
+            ) : (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                {calibrationItems.map(cal => (
+                  <div key={cal.id} style={{ background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '16px', padding: '1rem' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '6px' }}>
+                      <h4 style={{ margin: 0, fontSize: '0.95rem', fontWeight: '800', color: '#0f172a' }}>{cal.asset?.name || 'Aset'}</h4>
+                      <span style={{ fontSize: '0.7rem', fontWeight: '700', padding: '3px 8px', borderRadius: '8px', background: '#ef4444', color: 'white' }}>Menunggu</span>
+                    </div>
+                    <p style={{ margin: '0 0 4px 0', fontSize: '0.8rem', color: '#64748b' }}>ID: {cal.assetId} (Tiket: {cal.id})</p>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.8rem', color: '#ef4444', fontWeight: '700' }}>
+                      <CalendarDays size={14} />
+                      <span>Jadwal: {cal.nextCalibrationDate ? new Date(cal.nextCalibrationDate).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }) : '-'}</span>
+                    </div>
+                    {cal.asset?.room && (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.8rem', color: '#64748b', marginTop: '4px' }}>
+                        <MapPin size={14} />
+                        <span>{cal.asset.room}</span>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      <style>{`
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+      `}</style>
     </div>
   );
 };

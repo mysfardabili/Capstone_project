@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
+import { Outlet, Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { LayoutDashboard, Package, ClipboardList, PenTool, RefreshCw, LogOut, Search, Bell, Settings, Menu, Moon, Sun } from 'lucide-react';
+import { api } from '../services/api';
 import './DashboardLayout.css';
-import Toast from './Toast';
 
 const DashboardLayout = () => {
   const location = useLocation();
@@ -10,13 +10,47 @@ const DashboardLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [currentUser, setCurrentUser] = useState({ name: 'Admin', profilePicture: '' });
+  const [searchParams] = useSearchParams();
+  const querySearch = searchParams.get('search') || '';
+  const [searchVal, setSearchVal] = useState(querySearch);
+  const [prevQuerySearch, setPrevQuerySearch] = useState(querySearch);
+
+  if (querySearch !== prevQuerySearch) {
+    setSearchVal(querySearch);
+    setPrevQuerySearch(querySearch);
+  }
+
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  // Fetch unread notifications count when pathname changes
+  React.useEffect(() => {
+    let active = true;
+    const fetchUnreadCount = async () => {
+      try {
+        const data = await api.get('/notifications');
+        const count = data.filter(n => !n.isRead).length;
+        if (active) {
+          setUnreadCount(count);
+        }
+      } catch (err) {
+        console.error('Failed to fetch unread count:', err);
+      }
+    };
+    fetchUnreadCount();
+    return () => { active = false; };
+  }, [location.pathname]);
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    navigate(`/dashboard/assets?search=${encodeURIComponent(searchVal)}`);
+  };
 
   // Load user from localStorage (updated on profile save)
   React.useEffect(() => {
     const loadUser = () => {
       const saved = localStorage.getItem('user');
       if (saved) {
-        try { setCurrentUser(JSON.parse(saved)); } catch (e) {}
+        try { setCurrentUser(JSON.parse(saved)); } catch { /* ignore invalid JSON */ }
       }
     };
     loadUser();
@@ -60,30 +94,30 @@ const DashboardLayout = () => {
 
   return (
     <div className="dashboard-container">
-      
+
       {/* Sidebar Overlay for Mobile */}
       {isSidebarOpen && (
-        <div 
+        <div
           style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 999 }}
           onClick={() => setIsSidebarOpen(false)}
         />
       )}
-      
+
       {/* Sidebar */}
       <aside className={`dashboard-sidebar ${isSidebarOpen ? 'open' : ''}`}>
         <div className="sidebar-header" style={{ padding: '1.5rem', justifyContent: 'center' }}>
-          <img 
-            src="/asetra-putih.png" 
-            alt="Logo ASETRA" 
-            style={{ width: '100%', maxWidth: '160px', objectFit: 'contain' }} 
+          <img
+            src="/asetra-putih.png"
+            alt="Logo ASETRA"
+            style={{ width: '100%', maxWidth: '160px', objectFit: 'contain' }}
           />
         </div>
-        
+
         <nav className="sidebar-nav">
           {navItems.map((item) => (
-            <Link 
-              key={item.path} 
-              to={item.path} 
+            <Link
+              key={item.path}
+              to={item.path}
               className={`nav-item ${location.pathname === item.path ? 'active' : ''}`}
             >
               {item.icon}
@@ -109,39 +143,46 @@ const DashboardLayout = () => {
             </button>
             <h1 className="topbar-title">Dashboard</h1>
           </div>
-          
-          <div className="topbar-search">
+
+          <form onSubmit={handleSearchSubmit} className="topbar-search">
             <Search size={18} />
-            <input type="text" placeholder="Search by asset id" />
-          </div>
+            <input
+              type="text"
+              placeholder="Search by asset id"
+              value={searchVal}
+              onChange={(e) => setSearchVal(e.target.value)}
+            />
+          </form>
 
           <div className="topbar-actions" style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
             <button onClick={() => setIsDarkMode(!isDarkMode)} style={{ cursor: 'pointer', padding: '5px', borderRadius: '50%', background: 'var(--bg-color)' }}>
               {isDarkMode ? <Sun size={20} color="#f59e0b" /> : <Moon size={20} color="var(--text-muted)" />}
             </button>
-            <div 
+            <div
               style={{ position: 'relative', cursor: 'pointer' }}
               onClick={() => navigate('/dashboard/notifications')}
             >
               <Bell size={22} className="action-icon" />
-              <div style={{ position: 'absolute', top: 0, right: 0, width: '10px', height: '10px', background: 'var(--danger)', borderRadius: '50%', border: '2px solid var(--surface)' }}></div>
+              {unreadCount > 0 && (
+                <div style={{ position: 'absolute', top: 0, right: 0, width: '10px', height: '10px', background: 'var(--danger)', borderRadius: '50%', border: '2px solid var(--surface)' }}></div>
+              )}
             </div>
-            <Settings 
-              size={22} 
-              className="action-icon" 
-              onClick={() => navigate('/dashboard/settings')}
+            <Settings
+              size={22}
+              className="action-icon"
+              onClick={() => navigate('/dashboard/settings?tab=preferences')}
             />
-            <div 
-              className="user-avatar" 
-              onClick={() => navigate('/dashboard/settings')}
+            <div
+              className="user-avatar"
+              onClick={() => navigate('/dashboard/settings?tab=profile')}
               style={{ cursor: 'pointer', overflow: 'hidden', padding: currentUser.profilePicture ? 0 : undefined }}
               title={currentUser.name || 'Profil'}
             >
               {currentUser.profilePicture ? (
-                <img 
-                  src={`http://localhost:5000${currentUser.profilePicture}`} 
-                  alt="Foto Profil" 
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} 
+                <img
+                  src={`http://localhost:5000${currentUser.profilePicture}`}
+                  alt="Foto Profil"
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }}
                 />
               ) : getUserInitials(currentUser.name)}
             </div>

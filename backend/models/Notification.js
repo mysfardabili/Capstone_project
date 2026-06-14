@@ -8,7 +8,7 @@ const Notification = sequelize.define('Notification', {
     primaryKey: true,
   },
   type: {
-    type: DataTypes.ENUM('info', 'warning', 'danger'),
+    type: DataTypes.STRING,
     defaultValue: 'info',
     allowNull: false,
   },
@@ -25,6 +25,10 @@ const Notification = sequelize.define('Notification', {
     type: DataTypes.DATE,
     allowNull: false,
     defaultValue: DataTypes.NOW,
+  },
+  relatedId: {
+    type: DataTypes.STRING,
+    allowNull: true,
   },
 });
 

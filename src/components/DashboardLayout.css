@@ -170,7 +170,8 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background-color: #ef4444; /* Red as in reference */
+  background-color: #ef4444;
+  /* Red as in reference */
   color: white;
   display: flex;
   align-items: center;
@@ -203,7 +204,7 @@
     transform: translateX(-100%);
     box-shadow: var(--shadow-lg);
   }
-  
+
   .dashboard-sidebar.open {
     transform: translateX(0);
   }
@@ -213,18 +214,19 @@
   }
 
   .topbar-search {
-    display: none; /* Hide search on small screens for simplicity */
+    display: none;
+    /* Hide search on small screens for simplicity */
   }
 
   .dashboard-content {
     padding: 1rem;
   }
-  
+
   .table-wrapper {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
   }
-  
+
   .form-row {
     flex-direction: column;
     gap: 1rem;

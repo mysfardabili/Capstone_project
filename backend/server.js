@@ -61,8 +61,8 @@ const PORT = process.env.PORT || 5000;
 
 const startServer = async () => {
   try {
-    // Sync models to DB (checks if tables exist, creates them if not)
-    await sequelize.sync({ alter: true }); // Set to true to alter tables if schema changes
+    // Sync models to DB (alter ensures schema changes are applied)
+    await sequelize.sync({ alter: true });
     console.log('Database connected & synchronized.');
     
     // Run seeder

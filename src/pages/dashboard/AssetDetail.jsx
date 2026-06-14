@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { 
-  ArrowLeft, FileText, Wrench, RefreshCw, Activity, 
+import {
+  ArrowLeft, FileText, Wrench, RefreshCw, Activity,
   MapPin, Box, Hash, Calendar, QrCode, Image as ImageIcon, Download, Loader2
 } from 'lucide-react';
 import '../../components/SharedUI.css';
@@ -141,7 +141,7 @@ const AssetDetail = () => {
       {/* Header with Back Button */}
       <div className="page-header" style={{ marginBottom: '1.5rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          <Link to="/dashboard/assets" className="btn-outline" style={{ padding: '8px', border: 'none', background: '#f1f5f9', borderRadius: '10px' }}>
+          <Link to="/dashboard/assets" className="btn-outline" style={{ padding: '8px', border: 'none', borderRadius: '10px' }}>
             <ArrowLeft size={20} />
           </Link>
           <h1 className="page-title" style={{ margin: 0 }}>Detail Aset</h1>
@@ -163,18 +163,18 @@ const AssetDetail = () => {
             </div>
           )}
         </div>
-        
+
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', width: '100%' }}>
           <div className="badge-container">
             <span className={`badge ${asset.status === 'Tersedia' ? 'badge-success' : 'badge-warning'}`} style={{ fontSize: '0.9rem', padding: '6px 14px' }}>{asset.status}</span>
             <span className={`badge ${asset.condition === 'Baik' ? 'badge-success' : asset.condition === 'Rusak' ? 'badge-danger' : 'badge-warning'}`} style={{ fontSize: '0.9rem', padding: '6px 14px' }}>{asset.condition}</span>
           </div>
-          <h2 style={{ fontSize: '2.4rem', fontWeight: 800, margin: '0 0 0.8rem 0', color: '#0f172a', lineHeight: 1.2 }}>{asset.name}</h2>
+          <h2 className='page-title' style={{ fontSize: '2.4rem', margin: '0 0 0.8rem 0', lineHeight: 1.2 }}>{asset.name}</h2>
           <p className="meta-info">
-            <Hash size={20} color="#cbd5e1"/> <strong style={{ color: '#475569' }}>{asset.id}</strong> &nbsp;|&nbsp; 
-            <Box size={20} color="#cbd5e1"/> <strong style={{ color: '#475569' }}>{asset.category}</strong>
+            <Hash size={20} color="#cbd5e1" /> <strong style={{ color: '#475569' }}>{asset.id}</strong> &nbsp;|&nbsp;
+            <Box size={20} color="#cbd5e1" /> <strong style={{ color: '#475569' }}>{asset.category}</strong>
           </p>
-          
+
           <div className="loc-serial-wrapper">
             <div className="info-card-small">
               <p style={{ margin: 0, fontSize: '0.85rem', color: '#64748b', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '1px' }}>Lokasi Saat Ini</p>
@@ -198,10 +198,10 @@ const AssetDetail = () => {
           { id: 'perbaikan', icon: <Wrench size={18} />, label: 'Riwayat Perbaikan' },
           { id: 'kalibrasi', icon: <Activity size={18} />, label: 'Histori Kalibrasi' }
         ].map((tab) => (
-          <button 
+          <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            style={{ 
+            style={{
               padding: '1rem 1.5rem', background: 'none', border: 'none', cursor: 'pointer',
               fontWeight: activeTab === tab.id ? 700 : 500,
               color: activeTab === tab.id ? '#f97316' : '#64748b',
@@ -219,31 +219,31 @@ const AssetDetail = () => {
         {activeTab === 'info' && (
           <div className="detail-info-grid">
             <div>
-              <h3 style={{ borderBottom: '1px solid #e2e8f0', paddingBottom: '0.5rem', marginBottom: '1.5rem', color: '#0f172a' }}>Detail Pembelian</h3>
+              <h3 className='page-title' style={{ borderBottom: '1px solid #e2e8f0', paddingBottom: '0.5rem', marginBottom: '1.5rem' }}>Detail Pembelian</h3>
               <div style={{ display: 'grid', gridTemplateColumns: '150px 1fr', gap: '1.2rem', marginBottom: '1rem' }}>
                 <span style={{ color: '#64748b' }}>Harga Beli</span>
                 <span style={{ fontWeight: 600, color: '#1e293b' }}>{formatRupiah(asset.price)}</span>
-                
+
                 <span style={{ color: '#64748b' }}>Tanggal Beli</span>
                 <span style={{ fontWeight: 600, color: '#1e293b' }}>{asset.purchaseDate}</span>
-                
+
                 <span style={{ color: '#64748b' }}>Vendor / Supplier</span>
                 <span style={{ fontWeight: 600, color: '#1e293b' }}>{asset.vendor}</span>
-                
+
                 <span style={{ color: '#64748b' }}>Garansi Habis</span>
                 <span style={{ fontWeight: 600, color: '#1e293b' }}>{asset.warrantyEnd}</span>
               </div>
             </div>
             <div>
-              <h3 style={{ borderBottom: '1px solid #e2e8f0', paddingBottom: '0.5rem', marginBottom: '1.5rem', color: '#0f172a' }}>Dokumen Tambahan</h3>
+              <h3 className='page-title' style={{ borderBottom: '1px solid #e2e8f0', paddingBottom: '0.5rem', marginBottom: '1.5rem' }}>Dokumen Tambahan</h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1rem', border: '1px solid #e2e8f0', borderRadius: '12px', background: '#f8fafc' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontWeight: 500 }}><FileText size={20} color="#f97316"/> Manual Book.pdf</div>
-                  <button className="btn-outline" style={{ padding: '6px 14px', fontSize: '0.85rem', background: '#fff' }} onClick={() => showNotification('Mengunduh Manual Book.pdf...')}><Download size={14}/> Unduh</button>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1rem', border: '1px solid #e2e8f0', borderRadius: '12px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontWeight: 500 }}><FileText size={20} color="#f97316" /> Manual Book.pdf</div>
+                  <button className="btn-outline" style={{ padding: '6px 14px', fontSize: '0.85rem' }} onClick={() => showNotification('Mengunduh Manual Book.pdf...')}><Download size={14} /> Unduh</button>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1rem', border: '1px solid #e2e8f0', borderRadius: '12px', background: '#f8fafc' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontWeight: 500 }}><FileText size={20} color="#f97316"/> Invoice Pembelian.pdf</div>
-                  <button className="btn-outline" style={{ padding: '6px 14px', fontSize: '0.85rem', background: '#fff' }} onClick={() => showNotification('Mengunduh Invoice Pembelian.pdf...')}><Download size={14}/> Unduh</button>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1rem', border: '1px solid #e2e8f0', borderRadius: '12px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontWeight: 500 }}><FileText size={20} color="#f97316" /> Invoice Pembelian.pdf</div>
+                  <button className="btn-outline" style={{ padding: '6px 14px', fontSize: '0.85rem' }} onClick={() => showNotification('Mengunduh Invoice Pembelian.pdf...')}><Download size={14} /> Unduh</button>
                 </div>
               </div>
             </div>
@@ -268,7 +268,7 @@ const AssetDetail = () => {
                     <td style={{ fontWeight: 600, color: '#0f172a' }}>{mut.id}</td>
                     <td>{mut.date}</td>
                     <td>{mut.from}</td>
-                    <td style={{ fontWeight: 600 }}><MapPin size={14} color="#f97316" style={{ display: 'inline', marginRight: '4px' }}/> {mut.to}</td>
+                    <td style={{ fontWeight: 600 }}><MapPin size={14} color="#f97316" style={{ display: 'inline', marginRight: '4px' }} /> {mut.to}</td>
                     <td>{mut.by}</td>
                   </tr>
                 ))}
@@ -323,7 +323,7 @@ const AssetDetail = () => {
                     <td>{cal.date}</td>
                     <td>{cal.agency}</td>
                     <td><span className="badge badge-success">{cal.result}</span></td>
-                    <td style={{ fontWeight: 700, color: '#f97316' }}><Calendar size={14} style={{ display: 'inline', marginRight: '4px', verticalAlign: 'text-bottom' }}/> {cal.nextDue}</td>
+                    <td style={{ fontWeight: 700, color: '#f97316' }}><Calendar size={14} style={{ display: 'inline', marginRight: '4px', verticalAlign: 'text-bottom' }} /> {cal.nextDue}</td>
                   </tr>
                 ))}
               </tbody>

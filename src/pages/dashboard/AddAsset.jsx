@@ -15,16 +15,16 @@ const AddAsset = () => {
     e.preventDefault();
     setIsLoading(true);
     setErrorMsg('');
-    
+
     try {
       const form = e.currentTarget;
       const formData = new FormData(form);
-      
+
       await api.post('/assets', formData, true);
-      
+
       setIsLoading(false);
       setShowToast(true);
-      
+
       setTimeout(() => {
         navigate('/dashboard/assets');
       }, 1500);
@@ -39,7 +39,7 @@ const AddAsset = () => {
     <div className="page-container">
       {showToast && <Toast message="Aset berhasil ditambahkan!" onClose={() => setShowToast(false)} />}
       <div className="page-header" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-        <button className="btn-back" onClick={() => navigate(-1)}><ArrowLeft size={24} /></button>
+        <button className="btn-outline" onClick={() => navigate(-1)}><ArrowLeft size={24} /></button>
         <h1 className="page-title" style={{ margin: 0 }}>Tambah Aset Baru</h1>
       </div>
 
@@ -112,7 +112,7 @@ const AddAsset = () => {
               <input type="text" name="vendor" className="form-control" placeholder="Nama perusahaan penyedia" />
             </div>
           </div>
-          
+
           <div className="form-row">
             <div className="form-group">
               <label>Tanggal Pembelian</label>
@@ -126,7 +126,7 @@ const AddAsset = () => {
 
           <div className="form-group" style={{ marginBottom: '1.5rem' }}>
             <label>Foto Aset</label>
-            <input type="file" name="image" accept="image/*" className="form-control" style={{ padding: '0.5rem', background: '#f8fafc' }} />
+            <input type="file" name="image" accept="image/*" className="form-control" style={{ padding: '0.5rem' }} />
           </div>
 
           <div className="form-group" style={{ marginBottom: '1.5rem' }}>

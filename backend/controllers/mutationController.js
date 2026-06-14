@@ -30,7 +30,7 @@ export const createMutation = async (req, res) => {
 
     // Generate MUT-001...
     const lastMut = await Mutation.findOne({
-      order: [['createdAt', 'DESC']],
+      order: [['id', 'DESC']],
     });
     let nextNum = 1;
     if (lastMut && lastMut.id.startsWith('MUT-')) {

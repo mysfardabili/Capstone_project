@@ -31,7 +31,7 @@ export const createCalibration = async (req, res) => {
 
     // Generate CAL-001...
     const lastCal = await Calibration.findOne({
-      order: [['createdAt', 'DESC']],
+      order: [['id', 'DESC']],
     });
     let nextNum = 1;
     if (lastCal && lastCal.id.startsWith('CAL-')) {

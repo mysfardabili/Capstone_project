@@ -160,9 +160,10 @@ const seedDatabase = async () => {
 
     // Seed Notifications
     await Notification.bulkCreate([
-      { type: 'danger', message: 'Kalibrasi Defibrillator Zoll jatuh tempo dalam 2 hari!', date: new Date(Date.now() - 3600000) },
-      { type: 'warning', message: 'Laporan kerusakan baru untuk Patient Monitor (AST-002) oleh Ns. Siti.', date: new Date(Date.now() - 7200000 * 2) },
-      { type: 'info', message: 'Pengajuan Mutasi Bed Pasien dari Kamar Mawar 101 telah dikirim.', date: new Date(Date.now() - 7200000 * 5) },
+      { type: 'danger', message: 'Kalibrasi Defibrillator Zoll jatuh tempo dalam 2 hari!', date: new Date(Date.now() - 3600000), relatedId: 'C-05' },
+      { type: 'warning', message: 'Laporan kerusakan baru untuk Patient Monitor (AST-002) oleh Ns. Siti.', date: new Date(Date.now() - 7200000 * 2), relatedId: 'R-06' },
+      { type: 'mutation', message: 'Mutasi Bed Pasien Elektrik dari Kamar Mawar 101 ke Kamar Melati 202.', date: new Date(Date.now() - 7200000 * 5), relatedId: 'M-06' },
+      { type: 'info', message: 'Pengajuan aset baru Kursi Roda Pasien telah dikirim.', date: new Date(Date.now() - 7200000 * 8), relatedId: 'REQ-001' },
     ]);
 
     console.log('Database seeded successfully!');

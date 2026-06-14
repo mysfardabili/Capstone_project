@@ -1,5 +1,6 @@
 import Repair from '../models/Repair.js';
 import Asset from '../models/Asset.js';
+import Notification from '../models/Notification.js';
 
 // @desc    Get all repairs
 // @route   GET /api/repairs
@@ -30,7 +31,7 @@ export const createRepair = async (req, res) => {
 
     // Generate REP-001...
     const lastRepair = await Repair.findOne({
-      order: [['createdAt', 'DESC']],
+      order: [['id', 'DESC']],
     });
     let nextNum = 1;
     if (lastRepair && lastRepair.id.startsWith('REP-')) {
@@ -61,6 +62,14 @@ export const createRepair = async (req, res) => {
     asset.condition = 'Rusak';
     await asset.save();
 
+    // Auto-create notification for technicians
+    await Notification.create({
+      type: 'warning',
+      message: `Laporan kerusakan baru: ${asset.name} (${assetId}) - ${description}`,
+      date: new Date(),
+      relatedId: id,
+    });
+
     res.status(201).json(newRepair);
   } catch (error) {
     res.status(500).json({ message: 'Gagal membuat laporan perbaikan', error: error.message });
@@ -72,7 +81,7 @@ export const createRepair = async (req, res) => {
 // @access  Private
 export const updateRepair = async (req, res) => {
   const { id } = req.params;
-  const { status, notes, technicianName } = req.body;
+  const { status, notes, technicianName, assetCondition } = req.body;
 
   try {
     const repair = await Repair.findByPk(id);
@@ -99,7 +108,7 @@ export const updateRepair = async (req, res) => {
     if (mappedStatus === 'Selesai') {
       repair.completionDate = new Date().toISOString().split('T')[0];
       if (asset) {
-        asset.condition = 'Baik';
+        asset.condition = assetCondition || 'Baik';
         await asset.save();
       }
     } else if (mappedStatus === 'Proses') {
@@ -122,7 +131,7 @@ export const updateRepair = async (req, res) => {
 // @access  Private
 export const updateRepairStatus = async (req, res) => {
   const { id } = req.params;
-  const { status, notes, technicianName } = req.body;
+  const { status, notes, technicianName, assetCondition } = req.body;
 
   try {
     const repair = await Repair.findByPk(id);
@@ -149,7 +158,7 @@ export const updateRepairStatus = async (req, res) => {
     if (mappedStatus === 'Selesai') {
       repair.completionDate = new Date().toISOString().split('T')[0];
       if (asset) {
-        asset.condition = 'Baik';
+        asset.condition = assetCondition || 'Baik';
         await asset.save();
       }
     } else if (mappedStatus === 'Proses') {

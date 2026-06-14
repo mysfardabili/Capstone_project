@@ -46,7 +46,7 @@ const AddRequest = () => {
     <div className="page-container">
       {showToast && <Toast message="Pengajuan berhasil diajukan!" onClose={() => setShowToast(false)} />}
       <div className="page-header" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-        <button className="btn-back" onClick={() => navigate(-1)}><ArrowLeft size={24} /></button>
+        <button className="btn-outline" onClick={() => navigate(-1)}><ArrowLeft size={24} /></button>
         <h1 className="page-title" style={{ margin: 0 }}>Buat Pengajuan Permintaan Aset</h1>
       </div>
 

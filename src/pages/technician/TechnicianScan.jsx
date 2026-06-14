@@ -255,6 +255,38 @@ const TechnicianScan = () => {
     </div>
   );
 
+  // ─── State for creating repair from scan ────────────────────────────────────
+  const [showRepairModal, setShowRepairModal] = useState(false);
+  const [repairDescription, setRepairDescription] = useState('');
+  const [repairPriority, setRepairPriority] = useState('sedang');
+  const [isSubmittingRepair, setIsSubmittingRepair] = useState(false);
+  const [repairSuccess, setRepairSuccess] = useState(false);
+
+  const handleCreateRepairFromScan = async () => {
+    if (!scannedAsset || !repairDescription.trim()) return;
+    setIsSubmittingRepair(true);
+    try {
+      const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
+      const formData = new FormData();
+      formData.append('assetId', scannedAsset.id);
+      formData.append('description', repairDescription.trim());
+      formData.append('priority', repairPriority);
+      formData.append('reporterName', currentUser.name || 'Teknisi');
+
+      await api.post('/repairs', formData, true);
+      setRepairSuccess(true);
+      setRepairDescription('');
+      setTimeout(() => {
+        setShowRepairModal(false);
+        setRepairSuccess(false);
+      }, 2000);
+    } catch (err) {
+      alert(`Gagal membuat laporan perbaikan: ${err.message}`);
+    } finally {
+      setIsSubmittingRepair(false);
+    }
+  };
+
   // ─── Render: Result ──────────────────────────────────────────────────────────
   const renderResult = () => {
     if (!scannedAsset) return null;
@@ -348,13 +380,101 @@ const TechnicianScan = () => {
         </div>
 
         <div style={{ display: 'flex', gap: '10px' }}>
-          <button onClick={() => navigate('/technician/repairs')} className="btn-full" style={{ flex: 1, background: '#fef2f2', border: '2px solid #fecaca', color: '#ef4444', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' }}>
+          <button onClick={() => setShowRepairModal(true)} className="btn-full" style={{ flex: 1, background: '#fef2f2', border: '2px solid #fecaca', color: '#ef4444', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' }}>
             <AlertTriangle size={18} /> Tugas Perbaikan
           </button>
           <button onClick={() => navigate('/technician')} className="btn-full" style={{ flex: 1, background: '#eff6ff', border: '2px solid #bfdbfe', color: '#3b82f6', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' }}>
             Dashboard
           </button>
         </div>
+
+        {/* Repair Creation Modal */}
+        {showRepairModal && (
+          <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(4px)', animation: 'fadeIn 0.2s ease-in-out' }}
+            onClick={() => { if (!isSubmittingRepair) setShowRepairModal(false); }}
+          >
+            <div 
+              style={{ background: 'white', borderRadius: '24px', padding: '1.5rem', maxWidth: '400px', width: '90%', boxShadow: '0 20px 60px rgba(0,0,0,0.15)', animation: 'slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1)' }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {repairSuccess ? (
+                <div style={{ textAlign: 'center', padding: '2rem 1rem' }}>
+                  <CheckCircle2 size={48} color="#10b981" style={{ marginBottom: '1rem' }} />
+                  <h3 style={{ margin: '0 0 0.5rem 0', fontWeight: '800', color: '#065f46' }}>Laporan Terkirim!</h3>
+                  <p style={{ margin: 0, color: '#059669', fontSize: '0.9rem' }}>Laporan perbaikan berhasil dibuat untuk {scannedAsset.name}.</p>
+                </div>
+              ) : (
+                <>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
+                    <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: '800', color: '#0f172a' }}>Buat Laporan Perbaikan</h3>
+                    <button onClick={() => setShowRepairModal(false)} style={{ background: '#f1f5f9', border: 'none', borderRadius: '12px', padding: '8px', cursor: 'pointer', display: 'flex' }}>
+                      <X size={18} color="#64748b" />
+                    </button>
+                  </div>
+
+                  <div style={{ background: '#fff7ed', borderRadius: '12px', padding: '0.75rem', marginBottom: '1.25rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <AlertTriangle size={20} color="#f97316" />
+                    <div>
+                      <p style={{ margin: 0, fontSize: '0.85rem', fontWeight: '700', color: '#0f172a' }}>{scannedAsset.name}</p>
+                      <p style={{ margin: 0, fontSize: '0.75rem', color: '#64748b' }}>ID: {scannedAsset.id} | {scannedAsset.room}</p>
+                    </div>
+                  </div>
+
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                    <div>
+                      <label style={{ fontSize: '0.8rem', fontWeight: '800', display: 'block', marginBottom: '6px', color: '#475569' }}>DESKRIPSI KERUSAKAN</label>
+                      <textarea
+                        value={repairDescription}
+                        onChange={(e) => setRepairDescription(e.target.value)}
+                        placeholder="Jelaskan kerusakan yang ditemukan..."
+                        style={{ width: '100%', minHeight: '80px', padding: '0.75rem', borderRadius: '12px', border: '2px solid #e2e8f0', fontSize: '0.9rem', resize: 'none', outline: 'none', fontFamily: 'inherit', boxSizing: 'border-box' }}
+                      />
+                    </div>
+                    <div>
+                      <label style={{ fontSize: '0.8rem', fontWeight: '800', display: 'block', marginBottom: '6px', color: '#475569' }}>PRIORITAS</label>
+                      <select
+                        value={repairPriority}
+                        onChange={(e) => setRepairPriority(e.target.value)}
+                        style={{ width: '100%', padding: '0.75rem', borderRadius: '12px', border: '2px solid #e2e8f0', fontSize: '0.9rem', outline: 'none', fontFamily: 'inherit', background: 'white' }}
+                      >
+                        <option value="rendah">Rendah</option>
+                        <option value="sedang">Sedang</option>
+                        <option value="tinggi">Tinggi (Cito)</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={handleCreateRepairFromScan}
+                    disabled={!repairDescription.trim() || isSubmittingRepair}
+                    style={{
+                      width: '100%', marginTop: '1.25rem', padding: '0.85rem',
+                      background: '#ef4444', color: 'white', border: 'none',
+                      borderRadius: '14px', fontSize: '0.95rem', fontWeight: '800',
+                      cursor: !repairDescription.trim() || isSubmittingRepair ? 'not-allowed' : 'pointer',
+                      opacity: !repairDescription.trim() || isSubmittingRepair ? 0.6 : 1,
+                      display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+                      transition: 'opacity 0.2s',
+                    }}
+                  >
+                    {isSubmittingRepair ? (
+                      <><Loader2 size={18} style={{ animation: 'spin 1s linear infinite' }} /> Mengirim...</>
+                    ) : (
+                      <><AlertTriangle size={18} /> Kirim Laporan Perbaikan</>
+                    )}
+                  </button>
+
+                  <button
+                    onClick={() => { setShowRepairModal(false); navigate('/technician/repairs'); }}
+                    style={{ width: '100%', marginTop: '0.5rem', padding: '0.7rem', background: 'none', border: '1.5px solid #e2e8f0', borderRadius: '14px', fontSize: '0.85rem', fontWeight: '700', color: '#64748b', cursor: 'pointer' }}
+                  >
+                    Lihat Daftar Tugas Perbaikan
+                  </button>
+                </>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     );
   };
@@ -392,6 +512,7 @@ const TechnicianScan = () => {
           z-index: 15; border-radius: 4px;
         }
         @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes spin { 100% { transform: rotate(360deg); } }
         /* Override html5-qrcode default styles */
         #qr-reader { border: none !important; }

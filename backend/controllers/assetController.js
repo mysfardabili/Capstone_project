@@ -98,7 +98,7 @@ export const createAsset = async (req, res) => {
     // Handle automated ID generation if not provided
     if (!id) {
       const lastAsset = await Asset.findOne({
-        order: [['createdAt', 'DESC']],
+        order: [['id', 'DESC']],
       });
       let nextNum = 1;
       if (lastAsset && lastAsset.id.startsWith('AST-')) {

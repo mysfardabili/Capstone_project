@@ -1,10 +1,27 @@
-import React from 'react';
-import { Outlet, NavLink, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Outlet, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { LayoutDashboard, Wrench, ScanLine, History, User, Bell, LogOut } from 'lucide-react';
+import { api } from '../services/api';
 import './TechnicianMobile.css';
 
 const TechnicianLayout = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  useEffect(() => {
+    const fetchUnreadCount = async () => {
+      try {
+        const data = await api.get('/notifications');
+        const count = data.filter(n => !n.isRead).length;
+        setUnreadCount(count);
+      } catch (err) {
+        console.error('Failed to fetch notifications count:', err);
+      }
+    };
+    fetchUnreadCount();
+  }, [location.pathname]);
+
   return (
     <div className="tech-container">
       {/* Topbar */}
@@ -16,14 +33,23 @@ const TechnicianLayout = () => {
         />
         
         <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '15px' }}>
-          <div style={{ position: 'relative' }}>
+          <button
+            onClick={() => navigate('/technician/notifications')}
+            style={{
+              background: 'none', border: 'none', cursor: 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              padding: '8px', borderRadius: '12px', position: 'relative'
+            }}
+          >
             <Bell size={24} color="#64748b" />
-            <span style={{
-              position: 'absolute', top: 0, right: 0,
-              width: '8px', height: '8px', backgroundColor: '#ef4444',
-              borderRadius: '50%', border: '2px solid white'
-            }}></span>
-          </div>
+            {unreadCount > 0 && (
+              <span style={{
+                position: 'absolute', top: '6px', right: '6px',
+                width: '8px', height: '8px', backgroundColor: '#ef4444',
+                borderRadius: '50%', border: '2px solid white'
+              }}></span>
+            )}
+          </button>
           
           {/* Tombol Kembali / Keluar */}
           <button 

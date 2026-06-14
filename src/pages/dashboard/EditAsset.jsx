@@ -32,7 +32,7 @@ const EditAsset = () => {
     const fetchAsset = async () => {
       try {
         const data = await api.get(`/assets/${id}`);
-        
+
         // Map database readable categories and rooms to form select option values
         const catMap = {
           'Alat Medis': 'medis',
@@ -80,9 +80,9 @@ const EditAsset = () => {
     try {
       const form = e.currentTarget;
       const formData = new FormData(form);
-      
+
       await api.put(`/assets/${id}`, formData, true);
-      
+
       setIsLoading(false);
       setShowToast(true);
 
@@ -220,7 +220,7 @@ const EditAsset = () => {
 
           <div className="form-group" style={{ marginBottom: '1.5rem' }}>
             <label>Foto Aset</label>
-            <input type="file" name="image" accept="image/*" className="form-control" style={{ padding: '0.5rem', background: '#f8fafc' }} />
+            <input type="file" name="image" accept="image/*" className="form-control" style={{ padding: '0.5rem' }}/>
           </div>
 
           <div className="form-group" style={{ marginBottom: '1.5rem' }}>

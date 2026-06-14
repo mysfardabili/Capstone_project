@@ -29,6 +29,7 @@ import TechnicianRepairs from './pages/technician/TechnicianRepairs';
 import TechnicianScan from './pages/technician/TechnicianScan';
 import TechnicianHistory from './pages/technician/TechnicianHistory';
 import TechnicianProfile from './pages/technician/TechnicianProfile';
+import TechnicianNotifications from './pages/technician/TechnicianNotifications';
 
 import './App.css';
 
@@ -86,6 +87,7 @@ function App() {
           <Route path="scan" element={<TechnicianScan />} />
           <Route path="history" element={<TechnicianHistory />} />
           <Route path="profile" element={<TechnicianProfile />} />
+          <Route path="notifications" element={<TechnicianNotifications />} />
         </Route>
 
         <Route path="*" element={<NotFound />} />

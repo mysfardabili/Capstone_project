@@ -23,7 +23,7 @@ export const createRequest = async (req, res) => {
 
     // Auto ID generation REQ-001...
     const lastRequest = await Request.findOne({
-      order: [['createdAt', 'DESC']],
+      order: [['id', 'DESC']],
     });
     let nextNum = 1;
     if (lastRequest && lastRequest.id.startsWith('REQ-')) {

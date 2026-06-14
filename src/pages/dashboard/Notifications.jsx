@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Bell, AlertTriangle, CheckCircle, Package, RefreshCw, Clock, Loader2 } from 'lucide-react';
 import { api } from '../../services/api';
 import '../../components/SharedUI.css';
 import Toast from '../../components/Toast';
 
 const Notifications = () => {
+  const navigate = useNavigate();
   const [notifications, setNotifications] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showToast, setShowToast] = useState(false);
@@ -32,6 +34,19 @@ const Notifications = () => {
       setNotifications(prev => prev.map(n => n.id === id ? { ...n, isRead: true } : n));
     } catch (err) {
       console.error(err);
+    }
+  };
+
+  const handleNotificationClick = async (notif) => {
+    if (!notif.isRead) {
+      await handleMarkAsRead(notif.id);
+    }
+    if (notif.type === 'warning') {
+      navigate('/dashboard/repairs');
+    } else if (notif.type === 'danger') {
+      navigate('/dashboard/calibration');
+    } else if (notif.type === 'mutation') {
+      navigate('/dashboard/mutation');
     }
   };
 
@@ -119,7 +134,7 @@ const Notifications = () => {
             {notifications.map(notif => (
               <div 
                 key={notif.id} 
-                onClick={() => !notif.isRead && handleMarkAsRead(notif.id)}
+                onClick={() => handleNotificationClick(notif)}
                 style={{ 
                   display: 'flex', 
                   gap: '1rem', 
@@ -128,7 +143,7 @@ const Notifications = () => {
                   borderRadius: 'var(--radius-md)',
                   background: notif.isRead ? 'transparent' : 'var(--table-row-hover)',
                   transition: 'all 0.2s',
-                  cursor: notif.isRead ? 'default' : 'pointer'
+                  cursor: 'pointer'
                 }}
               >
                 <div style={{ 

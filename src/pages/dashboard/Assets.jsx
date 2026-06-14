@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 import { Plus, Search, Edit2, Trash2, QrCode, Eye, Loader2 } from 'lucide-react';
 import { api } from '../../services/api';
 import '../../components/SharedUI.css';
@@ -11,7 +11,10 @@ const formatRupiah = (number) => {
 };
 
 const Assets = () => {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const querySearch = searchParams.get('search') || '';
+  const [searchTerm, setSearchTerm] = useState(querySearch);
+  const [prevQuerySearch, setPrevQuerySearch] = useState(querySearch);
   const [assets, setAssets] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showToast, setShowToast] = useState(false);
@@ -19,6 +22,12 @@ const Assets = () => {
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5; // Tampilkan 5 per halaman agar serasi
+
+  // Sync state if query parameter changes from outside (like topbar search)
+  if (querySearch !== prevQuerySearch) {
+    setSearchTerm(querySearch);
+    setPrevQuerySearch(querySearch);
+  }
 
   useEffect(() => {
     const fetchAssets = async () => {
@@ -33,14 +42,19 @@ const Assets = () => {
         setIsLoading(false);
       }
     };
-    
+
     // Add small debounce logic
     const delayDebounceFn = setTimeout(() => {
       fetchAssets();
+      if (searchTerm) {
+        setSearchParams({ search: searchTerm }, { replace: true });
+      } else {
+        setSearchParams({}, { replace: true });
+      }
     }, 300);
 
     return () => clearTimeout(delayDebounceFn);
-  }, [searchTerm]);
+  }, [searchTerm, setSearchParams]);
 
   // Pagination Logic
   const totalItems = assets.length;
@@ -97,7 +111,7 @@ const Assets = () => {
           <Link to="/dashboard/assets/add?type=baru" className="btn-primary">
             <Plus size={18} /> Tambah Barang Baru
           </Link>
-          <Link to="/dashboard/assets/add?type=lama" className="btn-outline" style={{ backgroundColor: 'white' }}>
+          <Link to="/dashboard/assets/add?type=lama" className="btn-primary">
             <Plus size={18} /> Tambah Barang Lama
           </Link>
         </div>
@@ -107,10 +121,10 @@ const Assets = () => {
         <div className="table-controls">
           <div style={{ position: 'relative' }}>
             <Search size={16} color="var(--text-muted)" style={{ position: 'absolute', left: '10px', top: '10px' }} />
-            <input 
-              type="text" 
-              className="search-input" 
-              placeholder="Cari nama aset atau ID..." 
+            <input
+              type="text"
+              className="search-input"
+              placeholder="Cari nama aset atau ID..."
               style={{ paddingLeft: '2rem' }}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -146,7 +160,7 @@ const Assets = () => {
                 {paginatedAssets.map(asset => (
                   <tr key={asset.id}>
                     <td style={{ fontWeight: 500 }}>
-                       <Link to={`/dashboard/assets/detail/${asset.id}`} style={{ color: '#f97316', textDecoration: 'none' }}>{asset.id}</Link>
+                      <Link to={`/dashboard/assets/detail/${asset.id}`} style={{ color: '#f97316', textDecoration: 'none' }}>{asset.id}</Link>
                     </td>
                     <td>
                       <Link to={`/dashboard/assets/detail/${asset.id}`} style={{ color: 'inherit', textDecoration: 'none', fontWeight: 600 }}>{asset.name}</Link>
@@ -160,10 +174,9 @@ const Assets = () => {
                       </span>
                     </td>
                     <td>
-                      <span className={`badge ${
-                        asset.condition === 'Baik' ? 'badge-success' : 
+                      <span className={`badge ${asset.condition === 'Baik' ? 'badge-success' :
                         asset.condition === 'Rusak' ? 'badge-danger' : 'badge-warning'
-                      }`}>
+                        }`}>
                         {asset.condition}
                       </span>
                     </td>
@@ -187,11 +200,11 @@ const Assets = () => {
             </div>
           )}
           {!isLoading && assets.length > 0 && (
-            <Pagination 
-              totalItems={totalItems} 
-              itemsPerPage={itemsPerPage} 
-              currentPage={currentPage} 
-              onPageChange={setCurrentPage} 
+            <Pagination
+              totalItems={totalItems}
+              itemsPerPage={itemsPerPage}
+              currentPage={currentPage}
+              onPageChange={setCurrentPage}
             />
           )}
         </div>

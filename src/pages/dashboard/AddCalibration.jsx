@@ -33,7 +33,7 @@ const AddCalibration = () => {
     try {
       const form = e.currentTarget;
       const formData = new FormData(form);
-      
+
       const calibrationDate = formData.get('calibrationDate');
       // Calculate next calibration date (1 year later)
       const executionDate = new Date(calibrationDate);
@@ -76,7 +76,7 @@ const AddCalibration = () => {
     <div className="page-container">
       {showToast && <Toast message="Data kalibrasi berhasil disimpan!" onClose={() => setShowToast(false)} />}
       <div className="page-header" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-        <button className="btn-back" onClick={() => navigate(-1)}><ArrowLeft size={24} /></button>
+        <button className="btn-outline" onClick={() => navigate(-1)}><ArrowLeft size={24} /></button>
         <h1 className="page-title" style={{ margin: 0 }}>Catat Kalibrasi Baru</h1>
       </div>
 
@@ -125,7 +125,7 @@ const AddCalibration = () => {
 
           <div className="form-group">
             <label>Upload Sertifikat (PDF) - Opsional</label>
-            <div 
+            <div
               style={{
                 border: '2px dashed var(--border-color)',
                 borderRadius: '8px',
@@ -136,8 +136,8 @@ const AddCalibration = () => {
                 position: 'relative'
               }}
             >
-              <input 
-                type="file" 
+              <input
+                type="file"
                 accept=".pdf"
                 onChange={handleFileChange}
                 style={{
@@ -145,7 +145,7 @@ const AddCalibration = () => {
                   top: 0, left: 0, width: '100%', height: '100%',
                   opacity: 0,
                   cursor: 'pointer'
-                }} 
+                }}
               />
               <UploadCloud size={32} color="var(--primary)" style={{ marginBottom: '10px' }} />
               <p style={{ margin: 0, fontWeight: 500 }}>

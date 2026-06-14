@@ -1,13 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Save, User, Shield, BellRing, Loader2 } from 'lucide-react';
 import { api } from '../../services/api';
 import '../../components/SharedUI.css';
 import Toast from '../../components/Toast';
 
 const Settings = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const tabParam = searchParams.get('tab') || 'profile';
+  const [activeTab, setActiveTab] = useState(tabParam);
+  const [prevTabParam, setPrevTabParam] = useState(tabParam);
+
+  if (tabParam !== prevTabParam) {
+    setActiveTab(tabParam);
+    setPrevTabParam(tabParam);
+  }
+
   const [showToast, setShowToast] = useState(false);
   const [toastMsg, setToastMsg] = useState('Pengaturan berhasil disimpan!');
-  const [activeTab, setActiveTab] = useState('profile');
   const [isLoading, setIsLoading] = useState(false);
   const [isFetching, setIsFetching] = useState(true);
 
@@ -50,6 +60,7 @@ const Settings = () => {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchProfile();
   }, []);
 
@@ -60,7 +71,7 @@ const Settings = () => {
       const form = e.currentTarget;
       const formData = new FormData(form);
       const updatedUser = await api.put('/users/profile', formData, true);
-      
+
       setAdminUser(prev => ({
         ...prev,
         name: updatedUser.name,
@@ -113,7 +124,7 @@ const Settings = () => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const res = await api.put('/users/preferences', {
+      await api.put('/users/preferences', {
         emailNewRequest: adminUser.emailNewRequest,
         emailCalibrationDue: adminUser.emailCalibrationDue,
         weeklyReport: adminUser.weeklyReport,
@@ -153,7 +164,7 @@ const Settings = () => {
   return (
     <div className="page-container">
       {showToast && <Toast message={toastMsg} onClose={() => setShowToast(false)} />}
-      
+
       <div className="page-header">
         <h2 className="page-title">Pengaturan</h2>
       </div>
@@ -164,9 +175,9 @@ const Settings = () => {
           <div className="card" style={{ padding: '1rem' }}>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
               <li>
-                <button 
-                  onClick={() => setActiveTab('profile')}
-                  style={{ 
+                <button
+                  onClick={() => setSearchParams({ tab: 'profile' }, { replace: true })}
+                  style={{
                     width: '100%', textAlign: 'left', padding: '0.75rem 1rem', borderRadius: 'var(--radius-md)',
                     background: activeTab === 'profile' ? 'var(--primary-bg)' : 'transparent',
                     color: activeTab === 'profile' ? 'var(--primary)' : 'var(--text-main)',
@@ -179,9 +190,9 @@ const Settings = () => {
                 </button>
               </li>
               <li>
-                <button 
-                  onClick={() => setActiveTab('security')}
-                  style={{ 
+                <button
+                  onClick={() => setSearchParams({ tab: 'security' }, { replace: true })}
+                  style={{
                     width: '100%', textAlign: 'left', padding: '0.75rem 1rem', borderRadius: 'var(--radius-md)',
                     background: activeTab === 'security' ? 'var(--primary-bg)' : 'transparent',
                     color: activeTab === 'security' ? 'var(--primary)' : 'var(--text-main)',
@@ -194,9 +205,9 @@ const Settings = () => {
                 </button>
               </li>
               <li>
-                <button 
-                  onClick={() => setActiveTab('preferences')}
-                  style={{ 
+                <button
+                  onClick={() => setSearchParams({ tab: 'preferences' }, { replace: true })}
+                  style={{
                     width: '100%', textAlign: 'left', padding: '0.75rem 1rem', borderRadius: 'var(--radius-md)',
                     background: activeTab === 'preferences' ? 'var(--primary-bg)' : 'transparent',
                     color: activeTab === 'preferences' ? 'var(--primary)' : 'var(--text-main)',
@@ -215,7 +226,7 @@ const Settings = () => {
         {/* Content Settings */}
         <div style={{ flex: 1 }}>
           <div className="form-container" style={{ maxWidth: '100%' }}>
-            
+
             {activeTab === 'profile' && (
               <form onSubmit={handleProfileSubmit}>
                 <h3 style={{ marginBottom: '1.5rem', color: 'var(--text-main)' }}>Profil Pengguna</h3>
@@ -227,10 +238,10 @@ const Settings = () => {
                   </div>
                   <div style={{ position: 'relative' }}>
                     <button type="button" className="btn-outline">Ubah Foto</button>
-                    <input 
-                      type="file" 
-                      name="profilePicture" 
-                      accept="image/*" 
+                    <input
+                      type="file"
+                      name="profilePicture"
+                      accept="image/*"
                       style={{ position: 'absolute', left: 0, top: 0, opacity: 0, width: '100%', height: '100%', cursor: 'pointer' }}
                       onChange={(e) => {
                         if (e.target.files && e.target.files[0]) {
@@ -245,13 +256,13 @@ const Settings = () => {
                 <div className="form-row">
                   <div className="form-group">
                     <label>Nama Lengkap</label>
-                    <input 
-                      type="text" 
-                      name="name" 
-                      className="form-control" 
-                      value={adminUser.name} 
-                      onChange={(e) => setAdminUser(prev => ({ ...prev, name: e.target.value }))} 
-                      required 
+                    <input
+                      type="text"
+                      name="name"
+                      className="form-control"
+                      value={adminUser.name}
+                      onChange={(e) => setAdminUser(prev => ({ ...prev, name: e.target.value }))}
+                      required
                     />
                   </div>
                   <div className="form-group">
@@ -263,24 +274,24 @@ const Settings = () => {
                 <div className="form-row">
                   <div className="form-group">
                     <label>Email</label>
-                    <input 
-                      type="email" 
-                      name="email" 
-                      className="form-control" 
-                      value={adminUser.email} 
-                      onChange={(e) => setAdminUser(prev => ({ ...prev, email: e.target.value }))} 
-                      required 
+                    <input
+                      type="email"
+                      name="email"
+                      className="form-control"
+                      value={adminUser.email}
+                      onChange={(e) => setAdminUser(prev => ({ ...prev, email: e.target.value }))}
+                      required
                     />
                   </div>
                   <div className="form-group">
                     <label>Nomor Telepon</label>
-                    <input 
-                      type="text" 
-                      name="phone" 
-                      className="form-control" 
-                      placeholder="Masukkan nomor telepon" 
-                      value={adminUser.phone} 
-                      onChange={(e) => setAdminUser(prev => ({ ...prev, phone: e.target.value }))} 
+                    <input
+                      type="text"
+                      name="phone"
+                      className="form-control"
+                      placeholder="Masukkan nomor telepon"
+                      value={adminUser.phone}
+                      onChange={(e) => setAdminUser(prev => ({ ...prev, phone: e.target.value }))}
                     />
                   </div>
                 </div>
@@ -302,35 +313,35 @@ const Settings = () => {
                 <h3 style={{ marginBottom: '1.5rem', color: 'var(--text-main)' }}>Ubah Password</h3>
                 <div className="form-group" style={{ marginBottom: '1.5rem' }}>
                   <label>Password Saat Ini</label>
-                  <input 
-                    type="password" 
-                    className="form-control" 
-                    placeholder="Masukkan password saat ini" 
-                    value={passwords.currentPassword} 
-                    onChange={(e) => setPasswords(prev => ({ ...prev, currentPassword: e.target.value }))} 
-                    required 
+                  <input
+                    type="password"
+                    className="form-control"
+                    placeholder="Masukkan password saat ini"
+                    value={passwords.currentPassword}
+                    onChange={(e) => setPasswords(prev => ({ ...prev, currentPassword: e.target.value }))}
+                    required
                   />
                 </div>
                 <div className="form-group" style={{ marginBottom: '1.5rem' }}>
                   <label>Password Baru</label>
-                  <input 
-                    type="password" 
-                    className="form-control" 
-                    placeholder="Masukkan password baru" 
-                    value={passwords.newPassword} 
-                    onChange={(e) => setPasswords(prev => ({ ...prev, newPassword: e.target.value }))} 
-                    required 
+                  <input
+                    type="password"
+                    className="form-control"
+                    placeholder="Masukkan password baru"
+                    value={passwords.newPassword}
+                    onChange={(e) => setPasswords(prev => ({ ...prev, newPassword: e.target.value }))}
+                    required
                   />
                 </div>
                 <div className="form-group" style={{ marginBottom: '1.5rem' }}>
                   <label>Konfirmasi Password Baru</label>
-                  <input 
-                    type="password" 
-                    className="form-control" 
-                    placeholder="Ketik ulang password baru" 
-                    value={passwords.confirmPassword} 
-                    onChange={(e) => setPasswords(prev => ({ ...prev, confirmPassword: e.target.value }))} 
-                    required 
+                  <input
+                    type="password"
+                    className="form-control"
+                    placeholder="Ketik ulang password baru"
+                    value={passwords.confirmPassword}
+                    onChange={(e) => setPasswords(prev => ({ ...prev, confirmPassword: e.target.value }))}
+                    required
                   />
                 </div>
                 <div className="form-actions">
@@ -348,32 +359,32 @@ const Settings = () => {
             {activeTab === 'preferences' && (
               <form onSubmit={handlePreferencesSubmit}>
                 <h3 style={{ marginBottom: '1.5rem', color: 'var(--text-main)' }}>Preferensi Notifikasi</h3>
-                
+
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '2rem' }}>
                   <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer' }}>
-                    <input 
-                      type="checkbox" 
-                      checked={adminUser.emailNewRequest} 
-                      onChange={(e) => setAdminUser(prev => ({ ...prev, emailNewRequest: e.target.checked }))} 
-                      style={{ width: '18px', height: '18px' }} 
+                    <input
+                      type="checkbox"
+                      checked={adminUser.emailNewRequest}
+                      onChange={(e) => setAdminUser(prev => ({ ...prev, emailNewRequest: e.target.checked }))}
+                      style={{ width: '18px', height: '18px' }}
                     />
                     <span style={{ color: 'var(--text-main)' }}>Notifikasi Email untuk Permintaan Baru</span>
                   </label>
                   <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer' }}>
-                    <input 
-                      type="checkbox" 
-                      checked={adminUser.emailCalibrationDue} 
-                      onChange={(e) => setAdminUser(prev => ({ ...prev, emailCalibrationDue: e.target.checked }))} 
-                      style={{ width: '18px', height: '18px' }} 
+                    <input
+                      type="checkbox"
+                      checked={adminUser.emailCalibrationDue}
+                      onChange={(e) => setAdminUser(prev => ({ ...prev, emailCalibrationDue: e.target.checked }))}
+                      style={{ width: '18px', height: '18px' }}
                     />
                     <span style={{ color: 'var(--text-main)' }}>Notifikasi Email untuk Jadwal Kalibrasi (H-7)</span>
                   </label>
                   <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer' }}>
-                    <input 
-                      type="checkbox" 
-                      checked={adminUser.weeklyReport} 
-                      onChange={(e) => setAdminUser(prev => ({ ...prev, weeklyReport: e.target.checked }))} 
-                      style={{ width: '18px', height: '18px' }} 
+                    <input
+                      type="checkbox"
+                      checked={adminUser.weeklyReport}
+                      onChange={(e) => setAdminUser(prev => ({ ...prev, weeklyReport: e.target.checked }))}
+                      style={{ width: '18px', height: '18px' }}
                     />
                     <span style={{ color: 'var(--text-main)' }}>Laporan Rekapitulasi Mingguan via Email</span>
                   </label>
