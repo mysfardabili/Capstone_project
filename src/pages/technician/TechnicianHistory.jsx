@@ -79,7 +79,7 @@ const TechnicianHistory = () => {
         {['Hari Ini', 'Minggu Ini', 'Bulan Ini'].map(filter => (
           <button 
             key={filter} 
-            className={`bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 px-4 py-2 rounded-[20px] text-sm font-bold whitespace-nowrap transition-all duration-200 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-700 ${activeFilter === filter ? 'bg-orange-500 text-white border-orange-500 shadow-[0_4px_10px_rgba(249,115,22,0.2)] hover:bg-orange-500' : ''}`}
+            className={`border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 px-4 py-2 rounded-[20px] text-sm font-bold whitespace-nowrap transition-all duration-200 cursor-pointer ${activeFilter === filter ? 'bg-orange-500 text-white border-orange-500 shadow-[0_4px_10px_rgba(249,115,22,0.2)] hover:bg-orange-500 dark:bg-orange-500' : 'bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700'}`}
             onClick={() => setActiveFilter(filter)}
           >
             {filter}

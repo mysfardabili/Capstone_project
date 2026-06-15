@@ -61,11 +61,11 @@ const Calibration = () => {
 
       <div className="bg-surface rounded-xl shadow-custom-sm border border-border overflow-hidden flex flex-col">
         <div className="px-4 md:px-6 py-4 flex flex-col md:flex-row justify-between gap-3 border-b border-border bg-gray-50 dark:bg-gray-800/50">
-          <div className="relative w-full md:w-auto">
+          <div className="relative w-full">
             <Search size={16} className="text-text-muted absolute left-[10px] top-[10px]" />
             <input 
               type="text" 
-              className="px-4 py-2 border border-gray-200 dark:border-gray-600 rounded-custom-md w-full md:w-[250px] text-sm outline-none focus:border-orange-500 focus:shadow-[0_0_0_2px_rgba(249,115,22,0.2)] pl-8" 
+              className="px-4 py-2 border border-gray-200 dark:border-gray-600 rounded-custom-md w-full text-sm outline-none focus:border-orange-500 focus:shadow-[0_0_0_2px_rgba(249,115,22,0.2)] pl-8 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-400" 
               placeholder="Cari nama aset..." 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -115,10 +115,12 @@ const Calibration = () => {
                         </div>
                       </td>
                       <td className="px-6 py-4 text-sm border-b border-border text-text-main align-middle">
-                        <span className={`px-3 py-1 rounded-[2rem] text-xs font-semibold inline-block ${
-                          statusLabel === 'Aman' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                        <span className={`px-3 py-1 rounded-[2rem] text-xs font-semibold inline-flex items-center gap-1 ${
+                          statusLabel === 'Aman' ? 'bg-green-100 text-green-800' : 
+                          statusLabel === 'Jatuh Tempo' ? 'bg-yellow-100 text-yellow-800' :
+                          statusLabel === 'Kadaluarsa' ? 'bg-red-100 text-red-800' : 'bg-red-100 text-red-800'
                         }`}>
-                          {statusLabel === 'Aman' ? <CheckCircle size={12} className="mr-1"/> : <AlertTriangle size={12} className="mr-1"/>}
+                          {statusLabel === 'Aman' ? <CheckCircle size={14} /> : <AlertTriangle size={14} />}
                           {statusLabel}
                         </span>
                       </td>

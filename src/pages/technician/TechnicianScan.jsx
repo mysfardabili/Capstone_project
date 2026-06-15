@@ -140,12 +140,12 @@ const TechnicianScan = () => {
   const renderScanView = () => (
     <div style={{
       position: 'relative',
-      height: 'calc(100vh - 120px)',
+      minHeight: 'calc(100vh - 120px)',
       margin: '-1.5rem',
       backgroundColor: '#000',
       display: 'flex',
       flexDirection: 'column',
-      overflow: 'hidden',
+      overflowY: 'auto',
     }}>
       {/* Background blur (hanya saat idle, bukan saat kamera aktif) */}
       {scanState !== 'camera' && (

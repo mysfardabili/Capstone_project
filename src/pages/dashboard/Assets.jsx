@@ -122,11 +122,11 @@ const Assets = () => {
 
       <div className="bg-surface rounded-xl shadow-custom-sm border border-border overflow-hidden flex flex-col">
         <div className="px-4 md:px-6 py-4 flex flex-col md:flex-row justify-between gap-3 border-b border-border bg-gray-50 dark:bg-gray-800/50">
-          <div className="relative">
-            <Search size={16} className="absolute left-[10px] top-[10px] text-slate-400" />
+          <div className="relative w-full">
+            <Search size={16} className="absolute left-[10px] top-[10px] text-text-muted" />
             <input
               type="text"
-              className="pl-8 pr-4 py-2 border border-gray-200 dark:border-gray-600 rounded-custom-md w-full md:w-[250px] text-sm outline-none focus:border-orange-500 focus:shadow-[0_0_0_2px_rgba(249,115,22,0.2)]"
+              className="pl-8 pr-4 py-2 border border-gray-200 dark:border-gray-600 rounded-custom-md w-full text-sm outline-none focus:border-orange-500 focus:shadow-[0_0_0_2px_rgba(249,115,22,0.2)] dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-400"
               placeholder="Cari nama aset atau ID..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}

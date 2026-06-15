@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Activity, ArrowLeft } from 'lucide-react';
+import { Activity, ArrowLeft, Moon, Sun } from 'lucide-react';
 import { api } from '../services/api';
 
 const Login = () => {
@@ -9,6 +9,22 @@ const Login = () => {
   const [errorMsg, setErrorMsg] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
+
+  const [isDark, setIsDark] = useState(() => {
+    const saved = localStorage.getItem('theme');
+    if (saved) return saved === 'dark';
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+  });
+
+  useEffect(() => {
+    if (isDark) {
+      document.body.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.body.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    }
+  }, [isDark]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -42,9 +58,16 @@ const Login = () => {
 
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 to-orange-200 p-3 md:p-4">
-      <div className="bg-white/95 backdrop-blur-[10px] p-6 md:p-12 rounded-custom-lg shadow-custom-lg w-full max-w-[450px] border border-white/50">
-        <div className="text-center mb-8">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 to-orange-200 dark:from-slate-900 dark:to-slate-800 p-3 md:p-4">
+      <div className="bg-white/95 dark:bg-slate-800/95 backdrop-blur-[10px] p-6 md:p-12 rounded-custom-lg shadow-custom-lg w-full max-w-[450px] border border-white/50 dark:border-slate-700/50">
+        <div className="text-center mb-8 relative">
+          <button
+            onClick={() => setIsDark(!isDark)}
+            className="absolute top-0 right-0 bg-gray-100 dark:bg-slate-700 p-2 rounded-full flex items-center justify-center transition-colors border-none cursor-pointer"
+            title={isDark ? 'Mode Terang' : 'Mode Gelap'}
+          >
+            {isDark ? <Sun size={16} className="text-amber-400" /> : <Moon size={16} className="text-stone-600" />}
+          </button>
           <div className="flex justify-center mb-4">
             <img 
               src="/asetra-oren.png" 
@@ -57,7 +80,7 @@ const Login = () => {
         </div>
         
         {errorMsg && (
-          <div className="text-red-500 bg-red-100 p-3 rounded-[10px] mb-4 text-sm text-center font-medium">
+          <div className="text-red-500 bg-red-100 dark:text-red-400 dark:bg-red-900/30 p-3 rounded-[10px] mb-4 text-sm text-center font-medium">
             {errorMsg}
           </div>
         )}

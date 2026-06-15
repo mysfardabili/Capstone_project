@@ -82,7 +82,7 @@ const AssetDetail = () => {
     date: new Date(r.date).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }),
     issue: r.description,
     technician: r.technicianName || 'Belum ditunjuk',
-    status: r.status === 'Completed' ? 'Selesai' : r.status === 'In Progress' ? 'Diproses' : 'Menunggu',
+    status: r.status === 'Selesai' || r.status === 'Completed' ? 'Selesai' : r.status === 'Proses' || r.status === 'In Progress' ? 'Diproses' : 'Menunggu',
   }));
 
   const calibrationHistory = (asset.calibrations || []).map(c => ({
