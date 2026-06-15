@@ -10,6 +10,12 @@ const Calibration = sequelize.define('Calibration', {
   assetId: {
     type: DataTypes.STRING,
     allowNull: false,
+    references: {
+      model: 'Assets',
+      key: 'id',
+    },
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
   },
   calibrationDate: {
     type: DataTypes.DATEONLY,

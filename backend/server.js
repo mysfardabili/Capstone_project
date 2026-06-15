@@ -61,9 +61,20 @@ const PORT = process.env.PORT || 5000;
 
 const startServer = async () => {
   try {
-    // Sync models to DB (alter ensures schema changes are applied)
-    await sequelize.sync({ alter: true });
-    console.log('Database connected & synchronized.');
+    // Sync models to DB - use force: true in development to avoid alter issues with SQLite
+    const isProduction = process.env.NODE_ENV === 'production';
+    
+    try {
+      await sequelize.sync({ force: !isProduction, alter: isProduction });
+      console.log('Database connected & synchronized.');
+    } catch (syncError) {
+      console.warn('Sync error, attempting recovery...');
+      console.error('Error details:', syncError.message);
+      
+      // If still failing, force recreate
+      await sequelize.sync({ force: true });
+      console.log('Database recreated successfully.');
+    }
     
     // Run seeder
     await seedDatabase();
@@ -73,6 +84,7 @@ const startServer = async () => {
     });
   } catch (error) {
     console.error('Database connection failed:', error.message);
+    console.error(error);
     process.exit(1);
   }
 };

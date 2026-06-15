@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Bell, AlertTriangle, CheckCircle, Package, RefreshCw, Clock, Loader2 } from 'lucide-react';
 import { api } from '../../services/api';
-import '../../components/SharedUI.css';
 import Toast from '../../components/Toast';
 
 const Notifications = () => {
@@ -30,7 +29,6 @@ const Notifications = () => {
   const handleMarkAsRead = async (id) => {
     try {
       await api.put(`/notifications/${id}/read`, {});
-      // Update local state
       setNotifications(prev => prev.map(n => n.id === id ? { ...n, isRead: true } : n));
     } catch (err) {
       console.error(err);
@@ -103,69 +101,53 @@ const Notifications = () => {
   };
 
   return (
-    <div className="page-container">
+    <div className="flex flex-col gap-6 h-full">
       {showToast && <Toast message={toastMsg} onClose={() => setShowToast(false)} />}
       
-      <div className="page-header">
-        <h2 className="page-title">Notifikasi {unreadCount > 0 && <span style={{ background: 'var(--danger)', color: 'white', fontSize: '0.9rem', padding: '2px 8px', borderRadius: '12px', marginLeft: '8px' }}>{unreadCount} Baru</span>}</h2>
-        <button className="btn-outline" onClick={markAllAsRead} disabled={unreadCount === 0}>
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 md:gap-0">
+        <h2 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-gray-100">Notifikasi {unreadCount > 0 && <span className="bg-red-500 text-white text-sm px-2 py-0.5 rounded-full ml-2">{unreadCount} Baru</span>}</h2>
+        <button className="bg-transparent text-gray-800 dark:text-gray-100 border border-gray-200 dark:border-gray-600 px-5 py-[0.6rem] rounded-custom-md font-semibold text-sm inline-flex items-center gap-2 no-underline hover:bg-gray-100 dark:hover:bg-gray-700 transition-all justify-center w-full md:w-auto" onClick={markAllAsRead} disabled={unreadCount === 0}>
           <CheckCircle size={18} /> Tandai Semua Dibaca
         </button>
       </div>
 
-      <div className="card" style={{ padding: '1.5rem' }}>
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-custom-sm border border-gray-200 dark:border-gray-700 overflow-hidden flex flex-col p-6">
         {isLoading ? (
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '4rem 0', gap: '1rem', color: 'var(--text-muted)' }}>
-            <Loader2 size={36} className="spin" style={{ color: 'var(--primary)' }} />
+          <div className="flex flex-col items-center justify-center py-16 gap-4 text-gray-500 dark:text-gray-400">
+            <Loader2 size={36} className="animate-spin text-orange-500" />
             <span>Memuat notifikasi...</span>
-            <style>{`
-              .spin { animation: spin 1s linear infinite; }
-              @keyframes spin { 100% { transform: rotate(360deg); } }
-            `}</style>
           </div>
         ) : notifications.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-muted)' }}>
-            <Bell size={48} style={{ opacity: 0.5, marginBottom: '1rem' }} />
-            <h3>Belum Ada Notifikasi</h3>
+          <div className="text-center p-12 text-gray-500 dark:text-gray-400">
+            <Bell size={48} className="opacity-50 mb-4" />
+            <h3 className="font-semibold text-lg text-gray-800 dark:text-gray-100">Belum Ada Notifikasi</h3>
             <p>Anda belum memiliki notifikasi baru saat ini.</p>
           </div>
         ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          <div className="flex flex-col gap-4">
             {notifications.map(notif => (
               <div 
                 key={notif.id} 
                 onClick={() => handleNotificationClick(notif)}
-                style={{ 
-                  display: 'flex', 
-                  gap: '1rem', 
-                  padding: '1rem', 
-                  border: '1px solid var(--border)', 
-                  borderRadius: 'var(--radius-md)',
-                  background: notif.isRead ? 'transparent' : 'var(--table-row-hover)',
-                  transition: 'all 0.2s',
-                  cursor: 'pointer'
-                }}
+                className={`flex gap-4 p-4 border border-gray-200 dark:border-gray-700 rounded-custom-md transition-all cursor-pointer ${notif.isRead ? '' : 'bg-[var(--table-row-hover)]'}`}
               >
-                <div style={{ 
-                  background: getBg(notif.type), 
-                  width: '40px', height: '40px', 
-                  borderRadius: '50%', 
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  flexShrink: 0
-                }}>
+                <div 
+                  style={{ background: getBg(notif.type) }}
+                  className="w-10 h-10 rounded-full flex items-center justify-center shrink-0"
+                >
                   {getIcon(notif.type)}
                 </div>
-                <div style={{ flex: 1 }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
-                    <h4 style={{ margin: 0, fontSize: '1rem', color: 'var(--text-main)', fontWeight: notif.isRead ? 500 : 700 }}>{getTitle(notif.type)}</h4>
-                    <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <div className="flex-1">
+                  <div className="flex justify-between mb-1">
+                    <h4 className={`m-0 text-base ${notif.isRead ? 'font-medium' : 'font-bold'} text-gray-800 dark:text-gray-100`}>{getTitle(notif.type)}</h4>
+                    <span className="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1">
                       <Clock size={12} /> {formatTimeDiff(notif.date)}
                     </span>
                   </div>
-                  <p style={{ margin: 0, fontSize: '0.875rem', color: 'var(--text-muted)' }}>{notif.message}</p>
+                  <p className="m-0 text-sm text-gray-500 dark:text-gray-400">{notif.message}</p>
                 </div>
                 {!notif.isRead && (
-                  <div style={{ width: '10px', height: '10px', background: 'var(--primary)', borderRadius: '50%', alignSelf: 'center' }}></div>
+                  <div className="w-2.5 h-2.5 bg-orange-500 rounded-full self-center"></div>
                 )}
               </div>
             ))}

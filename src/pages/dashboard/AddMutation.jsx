@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { RefreshCw, ArrowLeft, Loader2 } from 'lucide-react';
 import { api } from '../../services/api';
-import '../../components/SharedUI.css';
 import Toast from '../../components/Toast';
 
 const AddMutation = () => {
@@ -69,56 +68,54 @@ const AddMutation = () => {
   };
 
   return (
-    <div className="page-container">
+    <div className="flex flex-col gap-6 h-full">
       {showToast && <Toast message="Pengajuan mutasi berhasil dikirim!" onClose={() => setShowToast(false)} />}
-      <div className="page-header" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-        <button className="btn-outline" onClick={() => navigate(-1)}><ArrowLeft size={24} /></button>
-        <h1 className="page-title" style={{ margin: 0 }}>Form Pengajuan Mutasi Aset</h1>
+      <div className="flex justify-between items-center gap-4">
+        <button className="bg-transparent text-gray-800 dark:text-gray-100 border border-gray-200 dark:border-gray-600 px-5 py-[0.6rem] rounded-custom-md font-semibold text-sm inline-flex items-center gap-2 no-underline hover:bg-gray-100 dark:hover:bg-gray-700 transition-all" onClick={() => navigate(-1)}><ArrowLeft size={24} /></button>
+        <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100 m-0">Form Pengajuan Mutasi Aset</h1>
       </div>
 
-      <div className="form-container">
+      <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-custom-sm border border-gray-200 dark:border-gray-700 max-w-[800px]">
         {errorMsg && (
-          <div style={{ color: '#ef4444', backgroundColor: '#fee2e2', padding: '0.75rem', borderRadius: '10px', marginBottom: '1.5rem', fontSize: '0.9rem', fontWeight: '500' }}>
+          <div className="text-red-500 bg-red-100 p-3 rounded-[10px] mb-6 text-[0.9rem] font-medium">
             {errorMsg}
           </div>
         )}
 
         <form onSubmit={handleSubmit}>
-          <div className="form-row">
-            <div className="form-group">
-              <label>ID Aset / Scan QR</label>
+          <div className="flex flex-col md:flex-row gap-6 mb-6">
+            <div className="flex flex-col gap-2 flex-1">
+              <label className="text-sm font-semibold text-gray-800 dark:text-gray-100">ID Aset / Scan QR</label>
               <input 
                 type="text" 
                 value={assetId}
                 onChange={(e) => setAssetId(e.target.value)}
-                className="form-control" 
+                className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]" 
                 placeholder="Contoh: AST-001" 
                 required 
               />
             </div>
-            <div className="form-group">
-              <label>Penanggung Jawab Pemindahan</label>
-              <input type="text" name="requesterName" className="form-control" placeholder="Nama petugas/perawat" required />
+            <div className="flex flex-col gap-2 flex-1">
+              <label className="text-sm font-semibold text-gray-800 dark:text-gray-100">Penanggung Jawab Pemindahan</label>
+              <input type="text" name="requesterName" className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]" placeholder="Nama petugas/perawat" required />
             </div>
           </div>
 
-          <div className="form-row">
-            <div className="form-group">
-              <label>Lokasi Asal (Otomatis)</label>
+          <div className="flex flex-col md:flex-row gap-6 mb-6">
+            <div className="flex flex-col gap-2 flex-1">
+              <label className="text-sm font-semibold text-gray-800 dark:text-gray-100">Lokasi Asal (Otomatis)</label>
               <input 
                 type="text" 
-                className="form-control" 
+                className={`w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-white dark:bg-gray-800 transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)] ${
+                  sourceLocation === 'Aset tidak ditemukan' ? 'text-red-500 font-bold' : 'text-gray-800 dark:text-gray-100'
+                }`} 
                 value={sourceLocation} 
                 disabled 
-                style={{
-                  color: sourceLocation === 'Aset tidak ditemukan' ? '#ef4444' : 'inherit',
-                  fontWeight: sourceLocation === 'Aset tidak ditemukan' ? 'bold' : 'normal'
-                }}
               />
             </div>
-            <div className="form-group">
-              <label>Lokasi Tujuan</label>
-              <select name="targetLocation" className="form-control" required defaultValue="">
+            <div className="flex flex-col gap-2 flex-1">
+              <label className="text-sm font-semibold text-gray-800 dark:text-gray-100">Lokasi Tujuan</label>
+              <select name="targetLocation" className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]" required defaultValue="">
                 <option value="" disabled>Pilih Ruangan Tujuan</option>
                 <option value="IGD">IGD</option>
                 <option value="Ruang Radiologi 1">Radiologi 1</option>
@@ -131,14 +128,14 @@ const AddMutation = () => {
             </div>
           </div>
 
-          <div className="form-group" style={{ marginBottom: '1.5rem' }}>
-            <label>Alasan Mutasi</label>
-            <textarea name="notes" className="form-control" placeholder="Jelaskan alasan pemindahan (misal: permintaan dokter bedah, perbaikan ruangan, dll)" required></textarea>
+          <div className="flex flex-col gap-2 flex-1 mb-6">
+            <label className="text-sm font-semibold text-gray-800 dark:text-gray-100">Alasan Mutasi</label>
+            <textarea name="notes" className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]" placeholder="Jelaskan alasan pemindahan (misal: permintaan dokter bedah, perbaikan ruangan, dll)" required></textarea>
           </div>
 
-          <div className="form-actions">
-            <Link to="/dashboard/mutation" className="btn-outline">Batal</Link>
-            <button type="submit" className="btn-primary" disabled={isLoading || sourceLocation === 'Aset tidak ditemukan' || !sourceLocation}>
+          <div className="flex justify-end gap-4 mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
+            <Link to="/dashboard/mutation" className="bg-transparent text-gray-800 dark:text-gray-100 border border-gray-200 dark:border-gray-600 px-5 py-[0.6rem] rounded-custom-md font-semibold text-sm inline-flex items-center gap-2 no-underline hover:bg-gray-100 dark:hover:bg-gray-700 transition-all">Batal</Link>
+            <button type="submit" className="bg-orange-500 text-white px-5 py-[0.6rem] rounded-custom-md font-semibold text-sm inline-flex items-center gap-2 no-underline hover:bg-orange-600 transition-colors disabled:opacity-70" disabled={isLoading || sourceLocation === 'Aset tidak ditemukan' || !sourceLocation}>
               {isLoading ? (
                 <><Loader2 size={18} className="spin" /> Mengajukan...</>
               ) : (

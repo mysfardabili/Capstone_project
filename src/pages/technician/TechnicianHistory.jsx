@@ -12,7 +12,6 @@ const TechnicianHistory = () => {
     const fetchHistory = async () => {
       try {
         const data = await api.get('/repairs');
-        // Filter only completed repairs — DB uses 'Selesai'
         const completed = data.filter(r => r.status === 'Selesai' || r.status === 'Completed');
         setHistory(completed);
       } catch (err) {
@@ -30,7 +29,6 @@ const TechnicianHistory = () => {
     const itemDate = new Date(dateStr);
     const now = new Date();
 
-    // Date range filter
     if (activeFilter === 'Hari Ini') {
       const today = now.toISOString().split('T')[0];
       if (dateStr.split('T')[0] !== today) return false;
@@ -44,7 +42,6 @@ const TechnicianHistory = () => {
       if (itemDate < monthAgo) return false;
     }
 
-    // Search filter
     if (!term) return true;
     return (
       (item.asset?.name || '').toLowerCase().includes(term) ||
@@ -75,15 +72,14 @@ const TechnicianHistory = () => {
 
   return (
     <div style={{ animation: 'fadeIn 0.3s ease-in-out' }}>
-      <h2 style={{ margin: '0 0 4px 0', fontSize: '1.5rem', fontWeight: '800', color: '#0f172a', letterSpacing: '-0.5px' }}>Riwayat Pekerjaan</h2>
-      <p style={{ margin: '0 0 1.5rem 0', color: '#64748b', fontSize: '0.9rem' }}>Rekam jejak tugas yang telah Anda selesaikan.</p>
+      <h2 className="m-0 mb-1 text-2xl font-extrabold text-slate-900 dark:text-white tracking-[-0.5px]">Riwayat Pekerjaan</h2>
+      <p className="m-0 mb-6 text-slate-500 dark:text-slate-400 text-sm">Rekam jejak tugas yang telah Anda selesaikan.</p>
 
-      {/* Quick Filter Pills */}
-      <div className="filter-pills">
+      <div className="flex gap-[10px] overflow-x-auto pb-2 mb-4 scrollbar-hide md:flex-wrap md:overflow-visible">
         {['Hari Ini', 'Minggu Ini', 'Bulan Ini'].map(filter => (
           <button 
             key={filter} 
-            className={`pill-btn ${activeFilter === filter ? 'active' : ''}`}
+            className={`bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 px-4 py-2 rounded-[20px] text-sm font-bold whitespace-nowrap transition-all duration-200 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-700 ${activeFilter === filter ? 'bg-orange-500 text-white border-orange-500 shadow-[0_4px_10px_rgba(249,115,22,0.2)] hover:bg-orange-500' : ''}`}
             onClick={() => setActiveFilter(filter)}
           >
             {filter}
@@ -91,21 +87,22 @@ const TechnicianHistory = () => {
         ))}
       </div>
 
-      <div className="search-bar-container">
-        <div className="search-bar">
-          <Search size={18} color="#94a3b8" />
+      <div className="flex gap-3 mb-6">
+        <div className="flex-1 flex items-center bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl px-4 shadow-[0_4px_15px_rgba(0,0,0,0.02)] transition-colors duration-300 focus-within:border-orange-500 focus-within:shadow-[0_4px_15px_rgba(249,115,22,0.1)]">
+          <Search size={18} className="text-slate-400 shrink-0" />
           <input 
             type="text" 
             placeholder="Cari aset atau ID..." 
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
+            className="border-none outline-none p-3 w-full text-sm bg-transparent font-inherit text-slate-900 dark:text-white placeholder:text-slate-400"
           />
         </div>
       </div>
 
       {isLoading ? (
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '4rem 0', gap: '1rem', color: '#94a3b8' }}>
-          <Loader2 size={32} className="spin" style={{ color: 'var(--primary)' }} />
+        <div className="flex flex-col items-center justify-center py-16 gap-4 text-slate-400">
+          <Loader2 size={32} className="spin text-orange-500" />
           <span>Memuat riwayat pekerjaan...</span>
           <style>{`
             .spin { animation: spin 1s linear infinite; }
@@ -113,31 +110,31 @@ const TechnicianHistory = () => {
           `}</style>
         </div>
       ) : (
-        <div style={{ marginTop: '2rem' }}>
+        <div className="mt-8">
           {['HARI INI', 'KEMARIN', 'SEBELUMNYA'].map(groupName => {
             const tasks = groupedTasks[groupName] || [];
             if (tasks.length === 0) return null;
 
             return (
-              <div key={groupName} style={{ marginBottom: '2rem' }}>
-                <h3 style={{ fontSize: '0.9rem', color: '#64748b', fontWeight: '700', margin: '0 0 1rem 0' }}>{groupName}</h3>
-                <div className="timeline-list">
+              <div key={groupName} className="mb-8">
+                <h3 className="text-sm text-slate-500 dark:text-slate-400 font-bold m-0 mb-4">{groupName}</h3>
+                <div className="flex flex-col gap-[1.2rem] relative pl-5 before:content-[''] before:absolute before:top-0 before:bottom-0 before:left-[6px] before:w-[2px] before:bg-slate-200 dark:before:bg-slate-700 before:rounded-[2px]">
                   {tasks.map((item, idx) => (
-                    <div key={idx} className="timeline-card">
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
-                        <h4 style={{ margin: 0, fontSize: '1.1rem', fontWeight: '800', color: '#0f172a' }}>{item.asset?.name || 'Aset'}</h4>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#10b981', backgroundColor: '#f0fdf4', padding: '4px 8px', borderRadius: '12px', fontSize: '0.7rem', fontWeight: '700' }}>
+                    <div key={idx} className="bg-white dark:bg-slate-800 rounded-2xl p-5 shadow-[0_4px_15px_rgba(0,0,0,0.03)] border border-slate-50 dark:border-slate-700 relative before:content-[''] before:absolute before:top-5 before:left-[-20px] before:w-[14px] before:h-[14px] before:bg-emerald-500 before:border-3 before:border-white dark:before:border-slate-800 before:rounded-full before:shadow-[0_0_0_2px_#e2e8f0] dark:before:shadow-[0_0_0_2px_#334155] before:z-[2]">
+                      <div className="flex justify-between items-start mb-2">
+                        <h4 className="m-0 text-lg font-extrabold text-slate-900 dark:text-white">{item.asset?.name || 'Aset'}</h4>
+                        <div className="flex items-center gap-1 text-emerald-600 bg-green-50 dark:bg-green-900/30 px-2 py-1 rounded-xl text-[0.7rem] font-bold">
                           <CheckCircle size={12} /> Selesai
                         </div>
                       </div>
-                      <p style={{ margin: '0 0 8px 0', fontSize: '0.8rem', color: '#64748b', fontWeight: '500' }}>ID: {item.assetId} (Tiket: {item.id})</p>
-                      <p style={{ margin: '0 0 12px 0', fontSize: '0.85rem', color: '#0f172a' }}><strong>Tindakan:</strong> {item.notes}</p>
+                      <p className="m-0 mb-2 text-sm text-slate-500 dark:text-slate-400 font-medium">ID: {item.assetId} (Tiket: {item.id})</p>
+                      <p className="m-0 mb-3 text-sm text-slate-900 dark:text-slate-200"><strong>Tindakan:</strong> {item.notes}</p>
                       
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '15px', fontSize: '0.8rem', color: '#94a3b8' }}>
-                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <div className="flex items-center gap-4 text-sm text-slate-400">
+                        <span className="flex items-center gap-1">
                           <Clock size={14} /> {item.completionDate || item.date}
                         </span>
-                        <span>Pelapor: <strong>{item.reporterName}</strong></span>
+                        <span>Pelapor: <strong className="text-slate-600 dark:text-slate-300">{item.reporterName}</strong></span>
                       </div>
                     </div>
                   ))}
@@ -147,9 +144,9 @@ const TechnicianHistory = () => {
           })}
 
           {filteredHistory.length === 0 && (
-            <div style={{ textAlign: 'center', padding: '3rem 1rem', color: '#94a3b8', background: '#f8fafc', borderRadius: '16px', border: '1px dashed #cbd5e1' }}>
-              <Search size={32} style={{ marginBottom: '10px', opacity: 0.5 }} />
-              <p style={{ margin: 0, fontWeight: 600 }}>Tidak ada riwayat pekerjaan ditemukan</p>
+            <div className="text-center p-12 text-slate-400 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-dashed border-slate-300 dark:border-slate-700">
+              <Search size={32} className="mb-[10px] opacity-50 mx-auto" />
+              <p className="m-0 font-semibold">Tidak ada riwayat pekerjaan ditemukan</p>
             </div>
           )}
         </div>

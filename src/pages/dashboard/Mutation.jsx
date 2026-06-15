@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { RefreshCw, Search, Eye, Check, X, Loader2 } from 'lucide-react';
 import { api } from '../../services/api';
-import '../../components/SharedUI.css';
 import Toast from '../../components/Toast';
 
 const Mutation = () => {
@@ -73,34 +72,33 @@ const Mutation = () => {
   };
 
   return (
-    <div className="page-container">
+    <div className="flex flex-col gap-6 h-full">
       {showToast && <Toast message={toastMsg} onClose={() => setShowToast(false)} />}
-      <div className="page-header">
-        <h1 className="page-title">Mutasi & Peminjaman Aset</h1>
-        <Link to="/dashboard/mutation/add" className="btn-primary">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 md:gap-0">
+        <h1 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-gray-100">Mutasi & Peminjaman Aset</h1>
+        <Link to="/dashboard/mutation/add" className="bg-orange-500 text-white px-5 py-[0.6rem] rounded-custom-md font-semibold text-sm inline-flex items-center gap-2 no-underline hover:bg-orange-600 transition-colors disabled:opacity-70 justify-center w-full md:w-auto">
           <RefreshCw size={18} /> Ajukan Mutasi Baru
         </Link>
       </div>
 
-      <div className="card">
-        <div className="table-controls">
-          <div style={{ position: 'relative' }}>
-            <Search size={16} color="var(--text-muted)" style={{ position: 'absolute', left: '10px', top: '10px' }} />
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-custom-sm border border-gray-200 dark:border-gray-700 overflow-hidden flex flex-col">
+        <div className="px-4 md:px-6 py-4 flex flex-col md:flex-row justify-between gap-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
+          <div className="relative w-full md:w-auto">
+            <Search size={16} className="text-gray-500 dark:text-gray-400 absolute left-[10px] top-[10px]" />
             <input 
               type="text" 
-              className="search-input" 
+              className="px-4 py-2 border border-gray-200 dark:border-gray-600 rounded-custom-md w-full md:w-[250px] text-sm outline-none focus:border-orange-500 focus:shadow-[0_0_0_2px_rgba(249,115,22,0.2)] pl-8" 
               placeholder="Cari ID mutasi atau aset..." 
-              style={{ paddingLeft: '2rem' }}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
         </div>
 
-        <div className="table-wrapper">
+        <div className="overflow-x-auto">
           {isLoading ? (
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '4rem 0', gap: '1rem', color: 'var(--text-muted)' }}>
-              <Loader2 size={36} className="spin" style={{ color: 'var(--primary)' }} />
+            <div className="flex flex-col items-center justify-center py-16 gap-4 text-gray-500 dark:text-gray-400">
+              <Loader2 size={36} className="spin text-orange-500" />
               <span>Memuat data mutasi...</span>
               <style>{`
                 .spin { animation: spin 1s linear infinite; }
@@ -108,18 +106,18 @@ const Mutation = () => {
               `}</style>
             </div>
           ) : (
-            <table className="data-table">
+            <table className="w-full border-collapse text-left">
               <thead>
                 <tr>
-                  <th>ID Mutasi</th>
-                  <th>Tipe</th>
-                  <th>Aset Terkait</th>
-                  <th>Lokasi Asal</th>
-                  <th>Lokasi Tujuan</th>
-                  <th>Tanggal Pengajuan</th>
-                  <th>Penanggung Jawab</th>
-                  <th>Status</th>
-                  <th>Aksi</th>
+                  <th className="bg-white dark:bg-gray-800 px-6 py-4 font-semibold text-sm text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">ID Mutasi</th>
+                  <th className="bg-white dark:bg-gray-800 px-6 py-4 font-semibold text-sm text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">Tipe</th>
+                  <th className="bg-white dark:bg-gray-800 px-6 py-4 font-semibold text-sm text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">Aset Terkait</th>
+                  <th className="bg-white dark:bg-gray-800 px-6 py-4 font-semibold text-sm text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">Lokasi Asal</th>
+                  <th className="bg-white dark:bg-gray-800 px-6 py-4 font-semibold text-sm text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">Lokasi Tujuan</th>
+                  <th className="bg-white dark:bg-gray-800 px-6 py-4 font-semibold text-sm text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">Tanggal Pengajuan</th>
+                  <th className="bg-white dark:bg-gray-800 px-6 py-4 font-semibold text-sm text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">Penanggung Jawab</th>
+                  <th className="bg-white dark:bg-gray-800 px-6 py-4 font-semibold text-sm text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">Status</th>
+                  <th className="bg-white dark:bg-gray-800 px-6 py-4 font-semibold text-sm text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">Aksi</th>
                 </tr>
               </thead>
               <tbody>
@@ -127,40 +125,40 @@ const Mutation = () => {
                   const mType = getMutationType(mut.targetLocation);
                   const statusLabel = getStatusLabel(mut.status);
                   return (
-                    <tr key={mut.id}>
-                      <td style={{ fontWeight: 500 }}>{mut.id}</td>
-                      <td>
-                        <span className={`badge ${mType === 'Internal' ? 'badge-primary' : 'badge-warning'}`}>
+                    <tr key={mut.id} className="hover:bg-gray-50 dark:hover:bg-gray-900">
+                      <td className="px-6 py-4 text-sm border-b border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100 align-middle font-medium">{mut.id}</td>
+                      <td className="px-6 py-4 text-sm border-b border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100 align-middle">
+                        <span className={`px-3 py-1 rounded-[2rem] text-xs font-semibold inline-block ${mType === 'Internal' ? 'bg-orange-50 text-orange-600' : 'bg-amber-100 text-amber-800'}`}>
                           {mType}
                         </span>
                       </td>
-                      <td>{mut.assetId} ({mut.asset?.name || 'Aset'})</td>
-                      <td>{mut.sourceLocation}</td>
-                      <td>{mut.targetLocation}</td>
-                      <td>{new Date(mut.date).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })}</td>
-                      <td>{mut.requesterName}</td>
-                      <td>
-                        <span className={`badge ${
-                          (mut.status === 'Approved' || mut.status === 'Disetujui') ? 'badge-success' : 
-                          (mut.status === 'Rejected' || mut.status === 'Ditolak') ? 'badge-danger' : 'badge-warning'
+                      <td className="px-6 py-4 text-sm border-b border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100 align-middle">{mut.assetId} ({mut.asset?.name || 'Aset'})</td>
+                      <td className="px-6 py-4 text-sm border-b border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100 align-middle">{mut.sourceLocation}</td>
+                      <td className="px-6 py-4 text-sm border-b border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100 align-middle">{mut.targetLocation}</td>
+                      <td className="px-6 py-4 text-sm border-b border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100 align-middle">{new Date(mut.date).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })}</td>
+                      <td className="px-6 py-4 text-sm border-b border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100 align-middle">{mut.requesterName}</td>
+                      <td className="px-6 py-4 text-sm border-b border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100 align-middle">
+                        <span className={`px-3 py-1 rounded-[2rem] text-xs font-semibold inline-block ${
+                          (mut.status === 'Approved' || mut.status === 'Disetujui') ? 'bg-green-100 text-green-800' : 
+                          (mut.status === 'Rejected' || mut.status === 'Ditolak') ? 'bg-red-100 text-red-800' : 'bg-amber-100 text-amber-800'
                         }`}>
                           {statusLabel}
                         </span>
                       </td>
-                      <td>
-                        <Link to={`/dashboard/assets/detail/${mut.assetId}`} className="action-btn" title="Detail Aset"><Eye size={16} /></Link>
+                      <td className="px-6 py-4 text-sm border-b border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100 align-middle">
+                        <Link to={`/dashboard/assets/detail/${mut.assetId}`} className="p-[0.4rem] rounded-custom-md text-gray-500 dark:text-gray-400 transition-all inline-flex mr-2 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-orange-500 dark:hover:text-orange-400" title="Detail Aset"><Eye size={16} /></Link>
                         {mut.status === 'Pending' && (
                           <>
-                            <button className="action-btn" title="Setujui Mutasi" onClick={() => handleApproveMutation(mut.id)}><Check size={16} color="var(--success)" /></button>
-                            <button className="action-btn" title="Tolak Mutasi" onClick={() => handleRejectMutation(mut.id)}><X size={16} color="var(--danger)" /></button>
+                            <button className="p-[0.4rem] rounded-custom-md text-gray-500 dark:text-gray-400 transition-all inline-flex mr-2 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-orange-500 dark:hover:text-orange-400" title="Setujui Mutasi" onClick={() => handleApproveMutation(mut.id)}><Check size={16} className="text-emerald-500" /></button>
+                            <button className="p-[0.4rem] rounded-custom-md text-gray-500 dark:text-gray-400 transition-all inline-flex mr-2 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-orange-500 dark:hover:text-orange-400" title="Tolak Mutasi" onClick={() => handleRejectMutation(mut.id)}><X size={16} className="text-red-500" /></button>
                           </>
                         )}
                       </td>
                     </tr>
                   );
                 }) : (
-                  <tr>
-                    <td colSpan="9" style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-muted)' }}>
+                  <tr className="hover:bg-gray-50 dark:hover:bg-gray-900">
+                    <td colSpan="9" className="px-6 py-4 text-sm border-b border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 align-middle text-center p-8">
                       Tidak ada data mutasi yang sesuai dengan pencarian "{searchTerm}".
                     </td>
                   </tr>

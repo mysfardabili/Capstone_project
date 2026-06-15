@@ -10,6 +10,12 @@ const Repair = sequelize.define('Repair', {
   assetId: {
     type: DataTypes.STRING,
     allowNull: false,
+    references: {
+      model: 'Assets',
+      key: 'id',
+    },
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
   },
   reporterName: {
     type: DataTypes.STRING,

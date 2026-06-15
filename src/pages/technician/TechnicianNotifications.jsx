@@ -103,19 +103,18 @@ const TechnicianNotifications = () => {
     <div style={{ animation: 'fadeIn 0.3s ease-in-out' }}>
       {showToast && <Toast message={toastMsg} onClose={() => setShowToast(false)} />}
 
-      {/* Mobile-style Top Header */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+      <div className="flex items-center justify-between mb-6 gap-3">
+        <div className="flex items-center gap-3">
           <button 
             onClick={() => navigate('/technician')}
-            style={{ background: '#f1f5f9', border: 'none', borderRadius: '12px', padding: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+            className="bg-slate-100 dark:bg-slate-700 border-none rounded-xl p-2 cursor-pointer flex items-center justify-center"
           >
-            <ArrowLeft size={20} color="#0f172a" />
+            <ArrowLeft size={20} className="text-slate-900 dark:text-white" />
           </button>
-          <h2 style={{ margin: 0, fontSize: '1.4rem', fontWeight: '800', color: '#0f172a' }}>
+          <h2 className="m-0 text-[1.4rem] font-extrabold text-slate-900 dark:text-white">
             Notifikasi
             {unreadCount > 0 && (
-              <span style={{ fontSize: '0.75rem', padding: '2px 8px', borderRadius: '10px', background: '#ef4444', color: 'white', marginLeft: '6px', fontWeight: '800', verticalAlign: 'middle' }}>
+              <span className="text-xs px-2 py-[2px] rounded-[10px] bg-red-500 text-white ml-1.5 font-extrabold align-middle">
                 {unreadCount}
               </span>
             )}
@@ -125,18 +124,16 @@ const TechnicianNotifications = () => {
         <button 
           onClick={markAllAsRead} 
           disabled={unreadCount === 0}
-          className="tech-card-link"
-          style={{ border: 'none', outline: 'none', cursor: unreadCount === 0 ? 'default' : 'pointer', opacity: unreadCount === 0 ? 0.5 : 1, display: 'flex', alignItems: 'center', gap: '4px' }}
+          className={`text-xs text-blue-600 font-bold no-underline bg-blue-100/50 dark:bg-blue-900/50 px-3 py-[6px] rounded-[20px] hover:bg-blue-100 dark:hover:bg-blue-900 transition-colors border-none outline-none flex items-center gap-1 ${unreadCount === 0 ? 'opacity-50 cursor-default' : 'cursor-pointer'}`}
         >
           <CheckCircle size={12} /> Baca Semua
         </button>
       </div>
 
-      {/* Main Notifications List */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+      <div className="flex flex-col gap-3">
         {isLoading ? (
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '4rem 0', gap: '1rem', color: '#64748b' }}>
-            <Loader2 size={36} className="spin" style={{ color: '#ff6b00' }} />
+          <div className="flex flex-col items-center justify-center py-16 gap-4 text-slate-500">
+            <Loader2 size={36} className="spin text-orange-500" />
             <span>Memuat notifikasi...</span>
             <style>{`
               .spin { animation: spin 1s linear infinite; }
@@ -144,65 +141,46 @@ const TechnicianNotifications = () => {
             `}</style>
           </div>
         ) : notifications.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '4rem 1.5rem', background: 'white', borderRadius: '20px', border: '1px solid #e2e8f0', color: '#64748b' }}>
-            <Bell size={48} style={{ opacity: 0.3, marginBottom: '1rem', color: '#ff6b00' }} />
-            <h3 style={{ fontSize: '1.1rem', fontWeight: '800', margin: '0 0 4px 0', color: '#0f172a' }}>Belum Ada Notifikasi</h3>
-            <p style={{ fontSize: '0.85rem', margin: 0 }}>Anda belum memiliki notifikasi baru saat ini.</p>
+          <div className="text-center p-16 bg-white dark:bg-slate-800 rounded-[20px] border border-slate-200 dark:border-slate-700 text-slate-500">
+            <Bell size={48} className="opacity-30 mb-4 text-orange-500 mx-auto" />
+            <h3 className="text-lg font-extrabold m-0 mb-1 text-slate-900 dark:text-white">Belum Ada Notifikasi</h3>
+            <p className="text-sm m-0 text-slate-500 dark:text-slate-400">Anda belum memiliki notifikasi baru saat ini.</p>
           </div>
         ) : (
           notifications.map(notif => (
             <div 
               key={notif.id}
               onClick={() => handleNotificationClick(notif)}
-              style={{
-                display: 'flex',
-                gap: '12px',
-                padding: '1rem',
-                backgroundColor: 'white',
-                border: '1px solid #e2e8f0',
-                borderRadius: '16px',
-                boxShadow: '0 4px 15px rgba(0,0,0,0.01)',
-                transition: 'all 0.2s',
-                cursor: 'pointer',
-                position: 'relative',
-                overflow: 'hidden',
-                opacity: notif.isRead ? 0.75 : 1,
-              }}
+              className="flex gap-3 p-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-[0_4px_15px_rgba(0,0,0,0.01)] transition-all duration-200 cursor-pointer relative overflow-hidden"
+              style={{ opacity: notif.isRead ? 0.75 : 1 }}
             >
-              {/* Left Status Bar */}
               {!notif.isRead && (
-                <div style={{ position: 'absolute', top: 0, bottom: 0, left: 0, width: '4px', backgroundColor: '#ff6b00' }}></div>
+                <div className="absolute top-0 bottom-0 left-0 w-1 bg-orange-500"></div>
               )}
 
-              {/* Icon */}
-              <div style={{ 
-                backgroundColor: getBg(notif.type), 
-                width: '36px', height: '36px', 
-                borderRadius: '12px', 
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                flexShrink: 0
-              }}>
+              <div 
+                className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
+                style={{ backgroundColor: getBg(notif.type) }}
+              >
                 {getIcon(notif.type)}
               </div>
 
-              {/* Content */}
-              <div style={{ flex: 1 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '4px' }}>
-                  <h4 style={{ margin: 0, fontSize: '0.9rem', color: '#0f172a', fontWeight: notif.isRead ? '700' : '800' }}>
+              <div className="flex-1">
+                <div className="flex justify-between items-baseline mb-1">
+                  <h4 className="m-0 text-sm text-slate-900 dark:text-white" style={{ fontWeight: notif.isRead ? 700 : 800 }}>
                     {getTitle(notif.type)}
                   </h4>
-                  <span style={{ fontSize: '0.7rem', color: '#94a3b8', display: 'flex', alignItems: 'center', gap: '2px', flexShrink: 0 }}>
+                  <span className="text-[0.7rem] text-slate-400 flex items-center gap-0.5 shrink-0">
                     <Clock size={10} /> {formatTimeDiff(notif.date)}
                   </span>
                 </div>
-                <p style={{ margin: 0, fontSize: '0.8rem', color: '#64748b', lineHeight: 1.4 }}>
+                <p className="m-0 text-sm text-slate-500 dark:text-slate-400 leading-[1.4]">
                   {notif.message}
                 </p>
               </div>
 
-              {/* Unread circle indicator */}
               {!notif.isRead && (
-                <div style={{ width: '8px', height: '8px', backgroundColor: '#ff6b00', borderRadius: '50%', alignSelf: 'center', flexShrink: 0 }}></div>
+                <div className="w-2 h-2 bg-orange-500 rounded-full self-center shrink-0"></div>
               )}
             </div>
           ))

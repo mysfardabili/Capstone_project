@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Plus, Search, Eye, Edit, Check, X, Loader2 } from 'lucide-react';
 import { api } from '../../services/api';
-import '../../components/SharedUI.css';
 import Toast from '../../components/Toast';
 import Pagination from '../../components/Pagination';
 
@@ -60,22 +59,22 @@ const Requests = () => {
   };
 
   return (
-    <div className="page-container">
+    <div className="flex flex-col gap-6 h-full">
       {showToast && <Toast message={toastMsg} onClose={() => setShowToast(false)} />}
-      <div className="page-header">
-        <h1 className="page-title">Permintaan Aset Baru</h1>
-        <Link to="/dashboard/requests/add" className="btn-primary">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 md:gap-0">
+        <h1 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-gray-100">Permintaan Aset Baru</h1>
+        <Link to="/dashboard/requests/add" className="bg-orange-500 text-white px-5 py-[0.6rem] rounded-custom-md font-semibold text-sm inline-flex items-center gap-2 no-underline hover:bg-orange-600 transition-colors disabled:opacity-70 justify-center w-full md:w-auto">
           <Plus size={18} /> Buat Pengajuan Baru
         </Link>
       </div>
 
-      <div className="card">
-        <div className="table-controls">
-          <div style={{ position: 'relative' }}>
-            <Search size={16} color="var(--text-muted)" style={{ position: 'absolute', left: '10px', top: '10px' }} />
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-custom-sm border border-gray-200 dark:border-gray-700 overflow-hidden flex flex-col">
+        <div className="px-4 md:px-6 py-4 flex flex-col md:flex-row justify-between gap-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
+          <div className="relative w-full md:w-auto">
+            <Search size={16} className="text-gray-500 dark:text-gray-400 absolute left-[10px] top-[10px]" />
             <input 
               type="text" 
-              className="search-input" 
+              className="px-4 py-2 border border-gray-200 dark:border-gray-600 rounded-custom-md w-full md:w-[250px] text-sm outline-none focus:border-orange-500 focus:shadow-[0_0_0_2px_rgba(249,115,22,0.2)]" 
               placeholder="Cari ID pengajuan atau unit..." 
               style={{ paddingLeft: '2rem' }}
               value={searchTerm}
@@ -84,10 +83,10 @@ const Requests = () => {
           </div>
         </div>
 
-        <div className="table-wrapper">
+        <div className="overflow-x-auto">
           {isLoading ? (
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '4rem 0', gap: '1rem', color: 'var(--text-muted)' }}>
-              <Loader2 size={36} className="spin" style={{ color: 'var(--primary)' }} />
+            <div className="flex flex-col items-center justify-center py-16 gap-4 text-gray-500 dark:text-gray-400">
+              <Loader2 size={36} className="spin text-orange-500" />
               <span>Memuat data permintaan...</span>
               <style>{`
                 .spin { animation: spin 1s linear infinite; }
@@ -95,68 +94,68 @@ const Requests = () => {
               `}</style>
             </div>
           ) : filteredRequests.length > 0 ? (
-            <table className="data-table">
+            <table className="w-full border-collapse text-left">
               <thead>
                 <tr>
-                  <th>ID Pengajuan</th>
-                  <th>Unit Kerja</th>
-                  <th>Nama Barang</th>
-                  <th>Jumlah</th>
-                  <th>Alasan / Catatan</th>
-                  <th>Status</th>
-                  <th>Aksi</th>
+                  <th className="bg-white dark:bg-gray-800 px-6 py-4 font-semibold text-sm text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">ID Pengajuan</th>
+                  <th className="bg-white dark:bg-gray-800 px-6 py-4 font-semibold text-sm text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">Unit Kerja</th>
+                  <th className="bg-white dark:bg-gray-800 px-6 py-4 font-semibold text-sm text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">Nama Barang</th>
+                  <th className="bg-white dark:bg-gray-800 px-6 py-4 font-semibold text-sm text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">Jumlah</th>
+                  <th className="bg-white dark:bg-gray-800 px-6 py-4 font-semibold text-sm text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">Alasan / Catatan</th>
+                  <th className="bg-white dark:bg-gray-800 px-6 py-4 font-semibold text-sm text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">Status</th>
+                  <th className="bg-white dark:bg-gray-800 px-6 py-4 font-semibold text-sm text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">Aksi</th>
                 </tr>
               </thead>
               <tbody>
                 {paginatedRequests.map(req => (
-                  <tr key={req.id}>
-                    <td style={{ fontWeight: 500 }}>{req.id}</td>
-                    <td>{req.department}</td>
-                    <td>{req.assetName}</td>
-                    <td>{req.qty}</td>
-                    <td>{req.notes || '-'}</td>
-                    <td>
-                      <span className={`badge ${
-                        (req.status === 'Disetujui' || req.status === 'Approved') ? 'badge-success' : 
-                        (req.status === 'Ditolak' || req.status === 'Rejected') ? 'badge-danger' : 'badge-warning'
+                  <tr key={req.id} className="hover:bg-gray-50 dark:hover:bg-gray-900">
+                    <td className="px-6 py-4 text-sm border-b border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100 align-middle" style={{ fontWeight: 500 }}>{req.id}</td>
+                    <td className="px-6 py-4 text-sm border-b border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100 align-middle">{req.department}</td>
+                    <td className="px-6 py-4 text-sm border-b border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100 align-middle">{req.assetName}</td>
+                    <td className="px-6 py-4 text-sm border-b border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100 align-middle">{req.qty}</td>
+                    <td className="px-6 py-4 text-sm border-b border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100 align-middle">{req.notes || '-'}</td>
+                    <td className="px-6 py-4 text-sm border-b border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100 align-middle">
+                      <span className={`px-3 py-1 rounded-[2rem] text-xs font-semibold inline-block ${
+                        (req.status === 'Disetujui' || req.status === 'Approved') ? 'bg-green-100 text-green-800' : 
+                        (req.status === 'Ditolak' || req.status === 'Rejected') ? 'bg-red-100 text-red-800' : 'bg-amber-100 text-amber-800'
                       }`}>
                         {translateStatus(req.status)}
                       </span>
                     </td>
-                    <td style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                      {req.status === 'Pending' ? (
-                        <>
-                          <button 
-                            className="action-btn" 
-                            title="Setujui Pengajuan" 
-                            style={{ color: 'var(--success)' }} 
-                            onClick={() => handleUpdateStatus(req.id, 'Approved')}
-                          >
-                            <Check size={18} />
-                          </button>
-                          <button 
-                            className="action-btn" 
-                            title="Tolak Pengajuan" 
-                            style={{ color: 'var(--danger)' }} 
-                            onClick={() => handleUpdateStatus(req.id, 'Rejected')}
-                          >
-                            <X size={18} />
-                          </button>
-                        </>
-                      ) : (
-                        <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Tindakan Selesai</span>
-                      )}
+                    <td className="px-6 py-4 text-sm border-b border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100 align-middle">
+                      <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                        {req.status === 'Pending' ? (
+                          <>
+                            <button 
+                              className="p-[0.4rem] rounded-custom-md transition-all inline-flex mr-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-emerald-500 hover:text-emerald-600" 
+                              title="Setujui Pengajuan" 
+                              onClick={() => handleUpdateStatus(req.id, 'Approved')}
+                            >
+                              <Check size={18} />
+                            </button>
+                            <button 
+                              className="p-[0.4rem] rounded-custom-md transition-all inline-flex mr-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-red-500 hover:text-red-600" 
+                              title="Tolak Pengajuan" 
+                              onClick={() => handleUpdateStatus(req.id, 'Rejected')}
+                            >
+                              <X size={18} />
+                            </button>
+                          </>
+                        ) : (
+                          <span className="text-xs text-gray-500 dark:text-gray-400">Tindakan Selesai</span>
+                        )}
+                      </div>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           ) : (
-            <div style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-muted)' }}>
-              <div style={{ marginBottom: '1rem' }}>
-                <Search size={48} color="var(--border)" style={{ margin: '0 auto' }} />
+            <div className="p-12 text-center text-gray-500 dark:text-gray-400">
+              <div className="mb-4">
+                <Search size={48} className="mx-auto text-gray-200 dark:text-gray-700" />
               </div>
-              <h3 style={{ fontSize: '1.2rem', marginBottom: '0.5rem', color: 'var(--text-main)' }}>Data tidak ditemukan</h3>
+              <h3 className="text-lg mb-2 text-gray-800 dark:text-gray-100">Data tidak ditemukan</h3>
               <p>Maaf, kami tidak dapat menemukan pengajuan dengan kata kunci "{searchTerm}".</p>
             </div>
           )}

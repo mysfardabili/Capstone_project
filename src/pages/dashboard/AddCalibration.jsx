@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Save, UploadCloud, ArrowLeft, Loader2 } from 'lucide-react';
 import { api } from '../../services/api';
-import '../../components/SharedUI.css';
 import Toast from '../../components/Toast';
 
 const AddCalibration = () => {
@@ -35,7 +34,6 @@ const AddCalibration = () => {
       const formData = new FormData(form);
 
       const calibrationDate = formData.get('calibrationDate');
-      // Calculate next calibration date (1 year later)
       const executionDate = new Date(calibrationDate);
       const nextDate = new Date(executionDate.setFullYear(executionDate.getFullYear() + 1))
         .toISOString()
@@ -48,7 +46,7 @@ const AddCalibration = () => {
         vendor: formData.get('vendor'),
         certificateNumber: formData.get('certificateNumber') || `CERT-CAL-${Date.now().toString().slice(-6)}`,
         notes: formData.get('notes'),
-        status: 'Lulus', // Defaults to Lulus when recorded manually
+        status: 'Lulus',
       };
 
       await api.post('/calibrations', data);
@@ -73,25 +71,25 @@ const AddCalibration = () => {
   };
 
   return (
-    <div className="page-container">
+    <div className="flex flex-col gap-6 h-full">
       {showToast && <Toast message="Data kalibrasi berhasil disimpan!" onClose={() => setShowToast(false)} />}
-      <div className="page-header" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-        <button className="btn-outline" onClick={() => navigate(-1)}><ArrowLeft size={24} /></button>
-        <h1 className="page-title" style={{ margin: 0 }}>Catat Kalibrasi Baru</h1>
+      <div className="flex justify-between items-center gap-4">
+        <button className="bg-transparent text-gray-800 dark:text-gray-100 border border-gray-200 dark:border-gray-600 px-5 py-[0.6rem] rounded-custom-md font-semibold text-sm inline-flex items-center gap-2 no-underline hover:bg-gray-100 dark:hover:bg-gray-700 transition-all" onClick={() => navigate(-1)}><ArrowLeft size={24} /></button>
+        <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100 m-0">Catat Kalibrasi Baru</h1>
       </div>
 
-      <div className="form-container">
+      <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-custom-sm border border-gray-200 dark:border-gray-700 max-w-[800px]">
         {errorMsg && (
-          <div style={{ color: '#ef4444', backgroundColor: '#fee2e2', padding: '0.75rem', borderRadius: '10px', marginBottom: '1.5rem', fontSize: '0.9rem', fontWeight: '500' }}>
+          <div className="text-red-500 bg-red-100 p-3 rounded-[10px] mb-6 text-[0.9rem] font-medium">
             {errorMsg}
           </div>
         )}
 
         <form onSubmit={handleSubmit}>
-          <div className="form-row">
-            <div className="form-group">
-              <label>Pilih Aset</label>
-              <select name="assetId" className="form-control" required defaultValue="">
+          <div className="flex flex-col md:flex-row gap-6 mb-6">
+            <div className="flex flex-col gap-2 flex-1">
+              <label className="text-sm font-semibold text-gray-800 dark:text-gray-100">Pilih Aset</label>
+              <select name="assetId" className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]" required defaultValue="">
                 <option value="" disabled>-- Pilih Aset --</option>
                 {assets.map(asset => (
                   <option key={asset.id} value={asset.id}>
@@ -102,67 +100,54 @@ const AddCalibration = () => {
             </div>
           </div>
 
-          <div className="form-row">
-            <div className="form-group">
-              <label>Tanggal Pelaksanaan Kalibrasi</label>
-              <input type="date" name="calibrationDate" className="form-control" required />
-              <small style={{ color: 'var(--text-muted)', marginTop: '4px', display: 'block' }}>
+          <div className="flex flex-col md:flex-row gap-6 mb-6">
+            <div className="flex flex-col gap-2 flex-1">
+              <label className="text-sm font-semibold text-gray-800 dark:text-gray-100">Tanggal Pelaksanaan Kalibrasi</label>
+              <input type="date" name="calibrationDate" className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]" required />
+              <small className="text-gray-500 dark:text-gray-400 mt-1 block">
                 *Jadwal kalibrasi berikutnya akan otomatis diset 1 tahun dari tanggal ini.
               </small>
             </div>
-            <div className="form-group">
-              <label>Teknisi / Lembaga Pelaksana</label>
-              <input type="text" name="vendor" className="form-control" placeholder="Nama instansi kalibrasi" required />
+            <div className="flex flex-col gap-2 flex-1">
+              <label className="text-sm font-semibold text-gray-800 dark:text-gray-100">Teknisi / Lembaga Pelaksana</label>
+              <input type="text" name="vendor" className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]" placeholder="Nama instansi kalibrasi" required />
             </div>
           </div>
 
-          <div className="form-row">
-            <div className="form-group">
-              <label>Nomor Sertifikat Kalibrasi</label>
-              <input type="text" name="certificateNumber" className="form-control" placeholder="Contoh: CERT-USG-2026-001" />
+          <div className="flex flex-col md:flex-row gap-6 mb-6">
+            <div className="flex flex-col gap-2 flex-1">
+              <label className="text-sm font-semibold text-gray-800 dark:text-gray-100">Nomor Sertifikat Kalibrasi</label>
+              <input type="text" name="certificateNumber" className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]" placeholder="Contoh: CERT-USG-2026-001" />
             </div>
           </div>
 
-          <div className="form-group">
-            <label>Upload Sertifikat (PDF) - Opsional</label>
+          <div className="flex flex-col gap-2 flex-1">
+            <label className="text-sm font-semibold text-gray-800 dark:text-gray-100">Upload Sertifikat (PDF) - Opsional</label>
             <div
-              style={{
-                border: '2px dashed var(--border-color)',
-                borderRadius: '8px',
-                padding: '2rem',
-                textAlign: 'center',
-                backgroundColor: 'var(--bg-light)',
-                cursor: 'pointer',
-                position: 'relative'
-              }}
+              className="border-2 border-dashed border-gray-200 dark:border-gray-700 rounded-lg p-8 text-center bg-gray-50 dark:bg-gray-800/50 cursor-pointer relative"
             >
               <input
                 type="file"
                 accept=".pdf"
                 onChange={handleFileChange}
-                style={{
-                  position: 'absolute',
-                  top: 0, left: 0, width: '100%', height: '100%',
-                  opacity: 0,
-                  cursor: 'pointer'
-                }}
+                className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer"
               />
-              <UploadCloud size={32} color="var(--primary)" style={{ marginBottom: '10px' }} />
-              <p style={{ margin: 0, fontWeight: 500 }}>
+              <UploadCloud size={32} className="text-orange-500 mb-[10px]" />
+              <p className="m-0 font-medium">
                 {fileName ? fileName : 'Klik atau drag file sertifikat ke sini'}
               </p>
-              {!fileName && <p style={{ margin: '5px 0 0', fontSize: '0.8rem', color: 'var(--text-muted)' }}>Maksimal ukuran file: 5MB</p>}
+              {!fileName && <p className="mt-[5px] text-[0.8rem] text-gray-500 dark:text-gray-400">Maksimal ukuran file: 5MB</p>}
             </div>
           </div>
 
-          <div className="form-group" style={{ marginBottom: '1.5rem' }}>
-            <label>Catatan Hasil Kalibrasi</label>
-            <textarea name="notes" className="form-control" placeholder="Tuliskan catatan atau rekomendasi dari teknisi"></textarea>
+          <div className="flex flex-col gap-2 flex-1 mb-6">
+            <label className="text-sm font-semibold text-gray-800 dark:text-gray-100">Catatan Hasil Kalibrasi</label>
+            <textarea name="notes" className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]" placeholder="Tuliskan catatan atau rekomendasi dari teknisi"></textarea>
           </div>
 
-          <div className="form-actions">
-            <Link to="/dashboard/calibration" className="btn-outline">Batal</Link>
-            <button type="submit" className="btn-primary" disabled={isLoading}>
+          <div className="flex justify-end gap-4 mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
+            <Link to="/dashboard/calibration" className="bg-transparent text-gray-800 dark:text-gray-100 border border-gray-200 dark:border-gray-600 px-5 py-[0.6rem] rounded-custom-md font-semibold text-sm inline-flex items-center gap-2 no-underline hover:bg-gray-100 dark:hover:bg-gray-700 transition-all">Batal</Link>
+            <button type="submit" className="bg-orange-500 text-white px-5 py-[0.6rem] rounded-custom-md font-semibold text-sm inline-flex items-center gap-2 no-underline hover:bg-orange-600 transition-colors disabled:opacity-70" disabled={isLoading}>
               {isLoading ? (
                 <><Loader2 size={18} className="spin" /> Menyimpan...</>
               ) : (

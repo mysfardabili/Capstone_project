@@ -31,8 +31,6 @@ import TechnicianHistory from './pages/technician/TechnicianHistory';
 import TechnicianProfile from './pages/technician/TechnicianProfile';
 import TechnicianNotifications from './pages/technician/TechnicianNotifications';
 
-import './App.css';
-
 function App() {
   return (
     <Router>

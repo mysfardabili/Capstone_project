@@ -5,7 +5,6 @@ import {
   RefreshCw, QrCode, ShieldPlus, ChevronDown,
   MapPin, Mail, Phone, ScanLine, Smartphone, CheckCircle, ShieldAlert, Bell
 } from 'lucide-react';
-import './LandingPage.css';
 
 const LandingPage = () => {
   const [activeFaq, setActiveFaq] = useState(null);
@@ -26,54 +25,54 @@ const LandingPage = () => {
   ];
 
   return (
-    <div className="landing-page-wrapper">
+    <div className="font-jakarta text-stone-900 bg-white min-h-screen overflow-x-hidden leading-relaxed">
       
       {/* Container for Top Nav and Hero */}
-      <div className="container">
+      <div className="max-w-[1200px] mx-auto px-8">
         
         {/* Navbar */}
-        <nav className="landing-navbar">
+        <nav className="flex justify-between items-center py-6 border-b border-stone-200">
           <div className="nav-logo">
             <img 
               src="/asetra-oren.png" 
               alt="Logo ASETRA" 
-              style={{ height: '45px', objectFit: 'contain' }} 
+              className="h-[45px] object-contain"
             />
           </div>
-          <div className="nav-links phone-hide">
-            <a href="#beranda">Beranda</a>
-            <a href="#fitur">Fitur</a>
-            <a href="#tentang">Tentang</a>
-            <a href="#faq">FaQ</a>
-            <a href="#kontak">Kontak</a>
+          <div className="flex gap-10 items-center phone-hide">
+            <a href="#beranda" className="text-stone-600 font-bold text-sm hover:text-orange-500 transition-colors">Beranda</a>
+            <a href="#fitur" className="text-stone-600 font-bold text-sm hover:text-orange-500 transition-colors">Fitur</a>
+            <a href="#tentang" className="text-stone-600 font-bold text-sm hover:text-orange-500 transition-colors">Tentang</a>
+            <a href="#faq" className="text-stone-600 font-bold text-sm hover:text-orange-500 transition-colors">FaQ</a>
+            <a href="#kontak" className="text-stone-600 font-bold text-sm hover:text-orange-500 transition-colors">Kontak</a>
           </div>
-          <Link to="/login" className="btn-primary">
+          <Link to="/login" className="bg-orange-500 text-white px-6 py-3 rounded-[30px] font-bold inline-flex items-center gap-2 border-none cursor-pointer transition-all duration-200 shadow-[0_4px_14px_rgba(249,115,22,0.3)] hover:bg-orange-600 hover:-translate-y-[2px] hover:shadow-[0_6px_20px_rgba(249,115,22,0.4)]">
             Login
           </Link>
         </nav>
 
         {/* Hero Section */}
-        <section id="beranda" className="hero-section">
-          <div className="hero-left">
-            <div className="hero-badge">Sistem Informasi Manajemen Aset Rumah Sakit</div>
-            <h1>Kelola Aset Medis Rumah Sakit dengan Lebih Cepat dan <span className="text-orange">Terintegrasi</span></h1>
-            <p>
+        <section id="beranda" className="py-16 pb-24 flex items-center justify-between gap-16">
+          <div className="flex-1">
+            <div className="inline-block bg-orange-100 text-orange-600 px-4 py-[6px] rounded-[20px] text-sm font-bold mb-6">Sistem Informasi Manajemen Aset Rumah Sakit</div>
+            <h1 className="text-[3.5rem] font-extrabold leading-[1.15] mb-6 tracking-tight max-md:text-[2.5rem]">Kelola Aset Medis Rumah Sakit dengan Lebih Cepat dan <span className="text-orange-500">Terintegrasi</span></h1>
+            <p className="text-lg mb-8 max-w-[500px]">
               Asetra membantu rumah sakit dalam mengelola aset medis secara terpusat, memantau kondisi, melakukan permintaan, perbaikan, mutasi, hingga identifikasi aset dengan QR Code.
             </p>
-            <Link to="/login" className="btn-primary" style={{ padding: '16px 32px', fontSize: '1.1rem', marginTop: '1rem' }}>
+            <Link to="/login" className="bg-orange-500 text-white px-8 py-4 rounded-[30px] font-bold inline-flex items-center gap-2 border-none cursor-pointer transition-all duration-200 shadow-[0_4px_14px_rgba(249,115,22,0.3)] hover:bg-orange-600 hover:-translate-y-[2px] hover:shadow-[0_6px_20px_rgba(249,115,22,0.4)] text-lg mt-4">
               Explore Dashboard <ArrowRight size={20} />
             </Link>
             
-            <div className="hero-tags">
-              <span className="hero-tag"><Activity size={16} /> Real-time Monitoring</span>
-              <span className="hero-tag"><QrCode size={16} /> QR Code Scanner</span>
-              <span className="hero-tag"><Smartphone size={16} /> Akses Mobile</span>
+            <div className="flex gap-6 mt-12">
+              <span className="flex items-center gap-2 text-sm font-bold text-stone-500"><Activity size={16} className="text-orange-500 bg-orange-100 p-1 rounded-full" /> Real-time Monitoring</span>
+              <span className="flex items-center gap-2 text-sm font-bold text-stone-500"><QrCode size={16} className="text-orange-500 bg-orange-100 p-1 rounded-full" /> QR Code Scanner</span>
+              <span className="flex items-center gap-2 text-sm font-bold text-stone-500"><Smartphone size={16} className="text-orange-500 bg-orange-100 p-1 rounded-full" /> Akses Mobile</span>
             </div>
           </div>
           
-          <div className="hero-right phone-hide">
-            <div className="hero-mockup-wrapper" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <img src="/hero-mockup.png" alt="Asetra Dashboard Mockup" style={{ width: '120%', maxWidth: '750px', objectFit: 'contain', transform: 'translateX(5%)' }} />
+          <div className="flex-1 relative flex justify-end phone-hide">
+            <div className="flex items-center justify-center">
+              <img src="/hero-mockup.png" alt="Asetra Dashboard Mockup" className="w-[120%] max-w-[750px] object-contain translate-x-[5%]" />
             </div>
           </div>
         </section>
@@ -81,153 +80,153 @@ const LandingPage = () => {
       </div>
 
       {/* Fitur Utama */}
-      <section id="fitur" className="features-section">
-        <div className="container">
-          <div className="section-header">
-            <span className="section-badge">+ FITUR UTAMA</span>
-            <h2>Semua yang Anda Butuhkan dalam Satu Sistem</h2>
-            <p>Asetra merupakan sistem informasi manajemen aset rumah sakit berbasis web dan mobile yang membantu rumah sakit dalam mengelola aset medis secara terpusat, modern, dan terintegrasi.</p>
+      <section id="fitur" className="bg-stone-50 py-24 border-t border-stone-100">
+        <div className="max-w-[1200px] mx-auto px-8">
+          <div className="text-center mb-16">
+            <span className="inline-block text-orange-600 bg-orange-100 px-3 py-1 rounded-xl text-xs font-extrabold tracking-wider mb-4">+ FITUR UTAMA</span>
+            <h2 className="text-[2.2rem] font-extrabold mb-4">Semua yang Anda Butuhkan dalam Satu Sistem</h2>
+            <p className="max-w-[600px] mx-auto">Asetra merupakan sistem informasi manajemen aset rumah sakit berbasis web dan mobile yang membantu rumah sakit dalam mengelola aset medis secara terpusat, modern, dan terintegrasi.</p>
           </div>
 
-          <div className="features-grid">
-            <div className="feature-card">
-              <div className="feature-icon-box"><Database size={24} /></div>
-              <h3>Manajemen Aset Terpusat</h3>
-              <p>Kelola seluruh data aset medis secara terpusat dan mudah diakses kapan saja.</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="bg-white border border-stone-100 rounded-2xl p-8 shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:-translate-y-[5px] hover:shadow-[0_10px_30px_rgba(0,0,0,0.05)] transition-all duration-200">
+              <div className="w-[50px] h-[50px] bg-orange-100 rounded-xl flex items-center justify-center text-orange-600 mb-6"><Database size={24} /></div>
+              <h3 className="text-lg font-extrabold mb-2">Manajemen Aset Terpusat</h3>
+              <p className="text-sm">Kelola seluruh data aset medis secara terpusat dan mudah diakses kapan saja.</p>
             </div>
-            <div className="feature-card">
-              <div className="feature-icon-box"><ShieldPlus size={24} /></div>
-              <h3>Permintaan Aset</h3>
-              <p>Ajukan permintaan aset baru atau penggantian dengan proses yang terstruktur.</p>
+            <div className="bg-white border border-stone-100 rounded-2xl p-8 shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:-translate-y-[5px] hover:shadow-[0_10px_30px_rgba(0,0,0,0.05)] transition-all duration-200">
+              <div className="w-[50px] h-[50px] bg-orange-100 rounded-xl flex items-center justify-center text-orange-600 mb-6"><ShieldPlus size={24} /></div>
+              <h3 className="text-lg font-extrabold mb-2">Permintaan Aset</h3>
+              <p className="text-sm">Ajukan permintaan aset baru atau penggantian dengan proses yang terstruktur.</p>
             </div>
-            <div className="feature-card">
-              <div className="feature-icon-box"><WrenchIcon /></div>
-              <h3>Perbaikan Aset</h3>
-              <p>Laporkan kerusakan aset dan pantau proses perbaikan hingga selesai.</p>
+            <div className="bg-white border border-stone-100 rounded-2xl p-8 shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:-translate-y-[5px] hover:shadow-[0_10px_30px_rgba(0,0,0,0.05)] transition-all duration-200">
+              <div className="w-[50px] h-[50px] bg-orange-100 rounded-xl flex items-center justify-center text-orange-600 mb-6"><WrenchIcon /></div>
+              <h3 className="text-lg font-extrabold mb-2">Perbaikan Aset</h3>
+              <p className="text-sm">Laporkan kerusakan aset dan pantau proses perbaikan hingga selesai.</p>
             </div>
-            <div className="feature-card">
-              <div className="feature-icon-box"><RefreshCw size={24} /></div>
-              <h3>Mutasi Aset</h3>
-              <p>Kelola perpindahan aset antar ruangan atau unit kerja dengan mudah.</p>
+            <div className="bg-white border border-stone-100 rounded-2xl p-8 shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:-translate-y-[5px] hover:shadow-[0_10px_30px_rgba(0,0,0,0.05)] transition-all duration-200">
+              <div className="w-[50px] h-[50px] bg-orange-100 rounded-xl flex items-center justify-center text-orange-600 mb-6"><RefreshCw size={24} /></div>
+              <h3 className="text-lg font-extrabold mb-2">Mutasi Aset</h3>
+              <p className="text-sm">Kelola perpindahan aset antar ruangan atau unit kerja dengan mudah.</p>
             </div>
-            <div className="feature-card">
-              <div className="feature-icon-box"><QrCode size={24} /></div>
-              <h3>QR Code Scanner</h3>
-              <p>Identifikasi aset dengan cepat menggunakan kamera smartphone.</p>
+            <div className="bg-white border border-stone-100 rounded-2xl p-8 shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:-translate-y-[5px] hover:shadow-[0_10px_30px_rgba(0,0,0,0.05)] transition-all duration-200">
+              <div className="w-[50px] h-[50px] bg-orange-100 rounded-xl flex items-center justify-center text-orange-600 mb-6"><QrCode size={24} /></div>
+              <h3 className="text-lg font-extrabold mb-2">QR Code Scanner</h3>
+              <p className="text-sm">Identifikasi aset dengan cepat menggunakan kamera smartphone.</p>
             </div>
-            <div className="feature-card">
-              <div className="feature-icon-box"><BellIcon /></div>
-              <h3>Notifikasi Real-time</h3>
-              <p>Dapatkan notifikasi instan untuk setiap aktivitas penting terkait aset.</p>
+            <div className="bg-white border border-stone-100 rounded-2xl p-8 shadow-[0_4px_20px_rgba(0,0,0,0.02)] hover:-translate-y-[5px] hover:shadow-[0_10px_30px_rgba(0,0,0,0.05)] transition-all duration-200">
+              <div className="w-[50px] h-[50px] bg-orange-100 rounded-xl flex items-center justify-center text-orange-600 mb-6"><BellIcon /></div>
+              <h3 className="text-lg font-extrabold mb-2">Notifikasi Real-time</h3>
+              <p className="text-sm">Dapatkan notifikasi instan untuk setiap aktivitas penting terkait aset.</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* Image Banner */}
-      <div className="image-divider" style={{ padding: '4rem 0', background: '#f8fafc' }}>
-        <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-          <h2 style={{ fontSize: '1.8rem', fontWeight: '800' }}>Informasi Aset Lebih Akurat</h2>
-          <p>Pantau kondisi dan aktivitas aset rumah sakit secara real-time melalui dashboard yang modern dan terintegrasi.</p>
+      <div className="py-16 bg-slate-50">
+        <div className="text-center mb-8">
+          <h2 className="text-[1.8rem] font-extrabold">Informasi Aset Lebih Akurat</h2>
+          <p className="text-stone-500">Pantau kondisi dan aktivitas aset rumah sakit secara real-time melalui dashboard yang modern dan terintegrasi.</p>
         </div>
-        <div style={{ maxWidth: '900px', margin: '0 auto', padding: '0 2rem' }}>
-          <img src="/hero-mockup.png" alt="Hospital Context" style={{ width: '100%', borderRadius: '16px', boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)' }} />
+        <div className="max-w-[900px] mx-auto px-8">
+          <img src="/hero-mockup.png" alt="Hospital Context" className="w-full rounded-2xl shadow-[0_25px_50px_-12px_rgba(0,0,0,0.25)]" />
         </div>
       </div>
 
       {/* Cara Kerja */}
-      <section className="steps-section">
-        <div className="container">
-          <div className="section-header">
-            <h2>Cara Kerja Asetra</h2>
-            <p>Alur kerja sederhana untuk produktivitas maksimal.</p>
+      <section className="py-20 bg-orange-50">
+        <div className="max-w-[1200px] mx-auto px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-[2.2rem] font-extrabold mb-4">Cara Kerja Asetra</h2>
+            <p className="max-w-[600px] mx-auto">Alur kerja sederhana untuk produktivitas maksimal.</p>
           </div>
 
-          <div className="steps-container">
-            <div className="steps-line"></div>
+          <div className="flex justify-between gap-4 relative mt-12 flex-col md:flex-row">
+            <div className="hidden md:block absolute top-1/2 left-[5%] right-[5%] h-[2px] bg-[repeating-linear-gradient(to_right,#d6d3d1_0,#d6d3d1_50%,transparent_50%,transparent_10px)] z-0"></div>
             
-            <div className="step-card">
-              <div className="step-icon"><ScanLine size={24} /></div>
-              <h4>LANGKAH 1</h4>
-              <h3>Scan QR Code Aset</h3>
-              <p>Pindai label QR pada alat medis dengan web asetra.</p>
+            <div className="flex-1 bg-white rounded-2xl px-4 py-8 text-center shadow-[0_10px_30px_rgba(0,0,0,0.03)] relative z-10">
+              <div className="w-12 h-12 bg-orange-100 text-orange-600 rounded-xl flex items-center justify-center mx-auto mb-4"><ScanLine size={24} /></div>
+              <h4 className="text-[0.85rem] text-orange-600 uppercase font-extrabold mb-2">LANGKAH 1</h4>
+              <h3 className="text-base font-extrabold mb-2">Scan QR Code Aset</h3>
+              <p className="text-xs text-stone-500">Pindai label QR pada alat medis dengan web asetra.</p>
             </div>
-            <div className="step-card">
-              <div className="step-icon"><Database size={24} /></div>
-              <h4>LANGKAH 2</h4>
-              <h3>Lihat Detail</h3>
-              <p>Akses status, riwayat, dan manual alat.</p>
+            <div className="flex-1 bg-white rounded-2xl px-4 py-8 text-center shadow-[0_10px_30px_rgba(0,0,0,0.03)] relative z-10">
+              <div className="w-12 h-12 bg-orange-100 text-orange-600 rounded-xl flex items-center justify-center mx-auto mb-4"><Database size={24} /></div>
+              <h4 className="text-[0.85rem] text-orange-600 uppercase font-extrabold mb-2">LANGKAH 2</h4>
+              <h3 className="text-base font-extrabold mb-2">Lihat Detail</h3>
+              <p className="text-xs text-stone-500">Akses status, riwayat, dan manual alat.</p>
             </div>
-            <div className="step-card">
-              <div className="step-icon"><AlertTriangle size={24} /></div>
-              <h4>LANGKAH 3</h4>
-              <h3>Lapor/Mutasi</h3>
-              <p>Ajukan perbaikan atau pindahkan unit.</p>
+            <div className="flex-1 bg-white rounded-2xl px-4 py-8 text-center shadow-[0_10px_30px_rgba(0,0,0,0.03)] relative z-10">
+              <div className="w-12 h-12 bg-orange-100 text-orange-600 rounded-xl flex items-center justify-center mx-auto mb-4"><AlertTriangle size={24} /></div>
+              <h4 className="text-[0.85rem] text-orange-600 uppercase font-extrabold mb-2">LANGKAH 3</h4>
+              <h3 className="text-base font-extrabold mb-2">Lapor/Mutasi</h3>
+              <p className="text-xs text-stone-500">Ajukan perbaikan atau pindahkan unit.</p>
             </div>
-            <div className="step-card">
-              <div className="step-icon"><Bell size={24} /></div>
-              <h4>LANGKAH 4</h4>
-              <h3>Notifikasi Alert</h3>
-              <p>Teknisi menerima pesan peringatan secara real-time.</p>
+            <div className="flex-1 bg-white rounded-2xl px-4 py-8 text-center shadow-[0_10px_30px_rgba(0,0,0,0.03)] relative z-10">
+              <div className="w-12 h-12 bg-orange-100 text-orange-600 rounded-xl flex items-center justify-center mx-auto mb-4"><Bell size={24} /></div>
+              <h4 className="text-[0.85rem] text-orange-600 uppercase font-extrabold mb-2">LANGKAH 4</h4>
+              <h3 className="text-base font-extrabold mb-2">Notifikasi Alert</h3>
+              <p className="text-xs text-stone-500">Teknisi menerima pesan peringatan secara real-time.</p>
             </div>
-            <div className="step-card">
-              <div className="step-icon"><CheckCircle size={24} /></div>
-              <h4>LANGKAH 5</h4>
-              <h3>Monitoring</h3>
-              <p>Pantau progress pengerjaan real-time.</p>
+            <div className="flex-1 bg-white rounded-2xl px-4 py-8 text-center shadow-[0_10px_30px_rgba(0,0,0,0.03)] relative z-10">
+              <div className="w-12 h-12 bg-orange-100 text-orange-600 rounded-xl flex items-center justify-center mx-auto mb-4"><CheckCircle size={24} /></div>
+              <h4 className="text-[0.85rem] text-orange-600 uppercase font-extrabold mb-2">LANGKAH 5</h4>
+              <h3 className="text-base font-extrabold mb-2">Monitoring</h3>
+              <p className="text-xs text-stone-500">Pantau progress pengerjaan real-time.</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* Akses & Komparasi */}
-      <section className="compare-section">
-        <div className="container">
-          <div className="section-header" style={{ marginBottom: '3rem' }}>
-            <h2>Akses Berdasarkan Peran</h2>
-            <p>Personalisasi tampilan untuk efisiensi kerja tim.</p>
+      <section className="bg-orange-50 py-20 text-center">
+        <div className="max-w-[1200px] mx-auto px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-[2.2rem] font-extrabold mb-4">Akses Berdasarkan Peran</h2>
+            <p className="max-w-[600px] mx-auto">Personalisasi tampilan untuk efisiensi kerja tim.</p>
           </div>
 
-          <div className="role-cards">
-            <div className="role-card">
+          <div className="flex gap-8 justify-center mb-24 flex-col md:flex-row items-center">
+            <div className="bg-white rounded-[20px] p-12 pt-12 w-full max-w-[400px] text-left shadow-[0_10px_30px_rgba(0,0,0,0.02)]">
               <ShieldPlus size={40} color="#f97316" />
-              <h3>Admin</h3>
-              <p style={{ fontSize: '0.9rem' }}>Kontrol penuh pengelolaan data aset, manajemen user, dan konfigurasi sistem.</p>
-              <span className="role-label">FULL CONTROL</span>
+              <h3 className="text-xl mt-4 mb-2">Admin</h3>
+              <p className="text-[0.9rem]">Kontrol penuh pengelolaan data aset, manajemen user, dan konfigurasi sistem.</p>
+              <span className="text-[0.7rem] font-extrabold text-orange-600 mt-6 block">FULL CONTROL</span>
             </div>
-            <div className="role-card">
+            <div className="bg-white rounded-[20px] p-12 pt-12 w-full max-w-[400px] text-left shadow-[0_10px_30px_rgba(0,0,0,0.02)]">
               <WrenchIcon size={40} color="#f97316" />
-              <h3>Teknisi</h3>
-              <p style={{ fontSize: '0.9rem' }}>Kelola work-order pemeliharaan berkala dan update status perbaikan alat.</p>
-              <span className="role-label">MAINTENANCE</span>
+              <h3 className="text-xl mt-4 mb-2">Teknisi</h3>
+              <p className="text-[0.9rem]">Kelola work-order pemeliharaan berkala dan update status perbaikan alat.</p>
+              <span className="text-[0.7rem] font-extrabold text-orange-600 mt-6 block">MAINTENANCE</span>
             </div>
           </div>
 
-          <div className="section-header" style={{ marginBottom: '2rem' }}>
-            <h2>Tinggalkan Cara Lama, Sambut Efisiensi<br/>Digital Terpadu</h2>
+          <div className="text-center mb-8">
+            <h2 className="text-[2.2rem] font-extrabold mb-4">Tinggalkan Cara Lama, Sambut Efisiensi<br/>Digital Terpadu</h2>
           </div>
 
-          <div className="compare-cards">
-            <div className="comp-card" style={{ borderTop: '4px solid #ef4444' }}>
-              <div className="comp-header">
+          <div className="flex gap-8 justify-center mt-12 flex-col md:flex-row items-center">
+            <div className="bg-white rounded-[20px] p-10 w-full max-w-[450px] text-left shadow-[0_10px_30px_rgba(0,0,0,0.02)]" style={{ borderTop: '4px solid #ef4444' }}>
+              <div className="flex items-center gap-3 mb-6 font-extrabold text-lg">
                 <ShieldAlert size={28} color="#ef4444" /> Sistem Manual (Lama)
               </div>
-              <ul>
-                <li>Risiko human error tinggi</li>
-                <li>Pelaporan kerusakan lambat</li>
-                <li>Data aset tidak sinkron antar divisi</li>
-                <li>Sulit melacak riwayat pemeliharaan</li>
+              <ul className="list-none p-0 m-0">
+                <li className="mb-3 text-sm relative pl-[15px] text-stone-500 before:content-['•'] before:absolute before:left-0 before:text-stone-900">Risiko human error tinggi</li>
+                <li className="mb-3 text-sm relative pl-[15px] text-stone-500 before:content-['•'] before:absolute before:left-0 before:text-stone-900">Pelaporan kerusakan lambat</li>
+                <li className="mb-3 text-sm relative pl-[15px] text-stone-500 before:content-['•'] before:absolute before:left-0 before:text-stone-900">Data aset tidak sinkron antar divisi</li>
+                <li className="mb-3 text-sm relative pl-[15px] text-stone-500 before:content-['•'] before:absolute before:left-0 before:text-stone-900">Sulit melacak riwayat pemeliharaan</li>
               </ul>
             </div>
-            <div className="comp-card" style={{ borderTop: '4px solid #f97316' }}>
-              <div className="comp-header">
+            <div className="bg-white rounded-[20px] p-10 w-full max-w-[450px] text-left shadow-[0_10px_30px_rgba(0,0,0,0.02)]" style={{ borderTop: '4px solid #f97316' }}>
+              <div className="flex items-center gap-3 mb-6 font-extrabold text-lg">
                 <Activity size={28} color="#f97316" /> Asetra Digital (Baru)
               </div>
-              <ul>
-                <li>Automasi data real-time</li>
-                <li>Lapor kerusakan instan via mobile</li>
-                <li>Single Source of Truth terpusat</li>
-                <li>Penjadwalan maintenance prediktif</li>
+              <ul className="list-none p-0 m-0">
+                <li className="mb-3 text-sm relative pl-[15px] text-stone-500 before:content-['•'] before:absolute before:left-0 before:text-stone-900">Automasi data real-time</li>
+                <li className="mb-3 text-sm relative pl-[15px] text-stone-500 before:content-['•'] before:absolute before:left-0 before:text-stone-900">Lapor kerusakan instan via mobile</li>
+                <li className="mb-3 text-sm relative pl-[15px] text-stone-500 before:content-['•'] before:absolute before:left-0 before:text-stone-900">Single Source of Truth terpusat</li>
+                <li className="mb-3 text-sm relative pl-[15px] text-stone-500 before:content-['•'] before:absolute before:left-0 before:text-stone-900">Penjadwalan maintenance prediktif</li>
               </ul>
             </div>
           </div>
@@ -235,32 +234,32 @@ const LandingPage = () => {
       </section>
 
       {/* FAQ */}
-      <section id="faq" className="faq-section">
-        <div className="container">
-          <div className="section-header">
-            <h2>Pertanyaan Umum</h2>
+      <section id="faq" className="py-20 bg-orange-50 pb-32">
+        <div className="max-w-[1200px] mx-auto px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-[2.2rem] font-extrabold mb-4">Pertanyaan Umum</h2>
           </div>
           
-          <div className="faq-container">
+          <div className="max-w-[800px] mx-auto flex flex-col gap-4">
             {faqs.map((faq, index) => (
               <div 
                 key={index} 
-                className="faq-item" 
+                className="bg-white rounded-2xl px-8 py-6 flex flex-col cursor-pointer shadow-[0_4px_15px_rgba(0,0,0,0.02)] transition-all duration-300" 
                 onClick={() => setActiveFaq(activeFaq === index ? null : index)}
               >
-                <div className="faq-question">
-                  <h3>{faq.question}</h3>
+                <div className="flex justify-between items-center w-full">
+                  <h3 className="text-lg font-bold text-stone-900">{faq.question}</h3>
                   <ChevronDown 
                     size={24} 
                     color="#a8a29e" 
+                    className="transition-transform duration-300"
                     style={{ 
-                      transform: activeFaq === index ? 'rotate(180deg)' : 'rotate(0deg)',
-                      transition: 'transform 0.3s ease'
+                      transform: activeFaq === index ? 'rotate(180deg)' : 'rotate(0deg)'
                     }} 
                   />
                 </div>
                 {activeFaq === index && (
-                  <div className="faq-answer">
+                  <div className="mt-4 text-stone-500 text-sm leading-relaxed border-t border-stone-100 pt-4 animate-fade-in">
                     {faq.answer}
                   </div>
                 )}
@@ -271,53 +270,53 @@ const LandingPage = () => {
       </section>
 
       {/* Footer / CTA Area */}
-      <section className="cta-footer-section">
+      <section className="bg-orange-50">
         
         {/* Floating CTA Banner */}
-        <div className="container" style={{ position: 'relative' }}>
-          <div className="cta-banner">
-            <div className="cta-content">
-              <h2>Tingkatkan Efisiensi<br/>Pengelolaan Aset Rumah<br/>Sakit Bersama <span className="text-orange">Asetra</span></h2>
-              <p style={{ margin: '1rem 0 2rem 0', fontSize: '1.1rem' }}>Kelola aset medis, maintenance, dan monitoring secara real-time dalam satu sistem terintegrasi.</p>
-              <Link to="/login" className="btn-primary" style={{ padding: '16px 40px', fontSize: '1.2rem' }}>
+        <div className="max-w-[1200px] mx-auto px-8 relative">
+          <div className="flex flex-col md:flex-row items-center justify-between max-w-[1200px] mx-auto bg-white rounded-3xl px-8 md:pl-16 shadow-[0_20px_40px_rgba(0,0,0,0.05)] md:translate-y-[-50px] overflow-hidden">
+            <div className="flex-1 py-8 md:py-16 md:pr-16">
+              <h2 className="text-[2.2rem] font-extrabold leading-tight mb-4">Tingkatkan Efisiensi<br/>Pengelolaan Aset Rumah<br/>Sakit Bersama <span className="text-orange-500">Asetra</span></h2>
+              <p className="my-4 mb-8 text-lg">Kelola aset medis, maintenance, dan monitoring secara real-time dalam satu sistem terintegrasi.</p>
+              <Link to="/login" className="bg-orange-500 text-white px-10 py-4 rounded-[30px] font-bold inline-flex items-center gap-2 border-none cursor-pointer transition-all duration-200 shadow-[0_4px_14px_rgba(249,115,22,0.3)] hover:bg-orange-600 hover:-translate-y-[2px] hover:shadow-[0_6px_20px_rgba(249,115,22,0.4)] text-xl">
                 Login
               </Link>
             </div>
-            <div className="cta-image"></div>
+            <div className="flex-1 h-[300px] md:h-[400px] bg-cover bg-center md:[clip-path:polygon(15%_0,100%_0,100%_100%,0%_100%)]"></div>
           </div>
         </div>
 
         {/* Real Footer Links */}
-        <footer className="footer-bottom">
-          <div className="footer-col">
-            <img src="/asetra-oren.png" alt="ASETRA" style={{ height: '30px', marginBottom: '1.5rem' }} />
-            <h4>Kontak</h4>
+        <footer className="max-w-[1200px] mx-auto p-8 flex flex-col md:flex-row justify-between border-t border-orange-200 mt-8 gap-8">
+          <div className="flex-1">
+            <img src="/asetra-oren.png" alt="ASETRA" className="h-[30px] mb-6" />
+            <h4 className="font-extrabold mb-4">Kontak</h4>
             <p><MapPin size={16} color="#ea580c"/> PT Adi Multi Kalibrasi</p>
             <p><Mail size={16} color="#ea580c"/> Info@Asetra.id</p>
             <p><Phone size={16} color="#ea580c"/> +62 8xx xxxx xxxx</p>
           </div>
           
-          <div className="footer-col" style={{ flex: 0.5 }}>
-            <h4>Menu</h4>
-            <ul className="footer-links">
-              <li><a href="#beranda">Beranda</a></li>
-              <li><a href="#tentang">Tentang</a></li>
-              <li><a href="#fitur">Fitur</a></li>
-              <li><a href="#beranda">Monitoring</a></li>
-              <li><a href="#kontak">Kontak</a></li>
-              <li><Link to="/login">Login</Link></li>
+          <div className="flex-[0.5]">
+            <h4 className="font-extrabold mb-4">Menu</h4>
+            <ul className="list-none p-0 m-0">
+              <li className="mb-2"><a href="#beranda" className="text-stone-500 text-sm font-semibold">Beranda</a></li>
+              <li className="mb-2"><a href="#tentang" className="text-stone-500 text-sm font-semibold">Tentang</a></li>
+              <li className="mb-2"><a href="#fitur" className="text-stone-500 text-sm font-semibold">Fitur</a></li>
+              <li className="mb-2"><a href="#beranda" className="text-stone-500 text-sm font-semibold">Monitoring</a></li>
+              <li className="mb-2"><a href="#kontak" className="text-stone-500 text-sm font-semibold">Kontak</a></li>
+              <li className="mb-2"><Link to="/login" className="text-stone-500 text-sm font-semibold">Login</Link></li>
             </ul>
           </div>
 
-          <div className="footer-col">
-            <h4>Fitur Utama</h4>
-            <ul className="footer-links">
-              <li><a href="#">Dashboard Aset</a></li>
-              <li><a href="#">QR Code Scanner</a></li>
-              <li><a href="#">Monitoring Aset</a></li>
-              <li><a href="#">Mutasi Aset</a></li>
-              <li><a href="#">Permintaan Perbaikan</a></li>
-              <li><a href="#">Permintaan Aset</a></li>
+          <div className="flex-1">
+            <h4 className="font-extrabold mb-4">Fitur Utama</h4>
+            <ul className="list-none p-0 m-0">
+              <li className="mb-2"><a href="#" className="text-stone-500 text-sm font-semibold">Dashboard Aset</a></li>
+              <li className="mb-2"><a href="#" className="text-stone-500 text-sm font-semibold">QR Code Scanner</a></li>
+              <li className="mb-2"><a href="#" className="text-stone-500 text-sm font-semibold">Monitoring Aset</a></li>
+              <li className="mb-2"><a href="#" className="text-stone-500 text-sm font-semibold">Mutasi Aset</a></li>
+              <li className="mb-2"><a href="#" className="text-stone-500 text-sm font-semibold">Permintaan Perbaikan</a></li>
+              <li className="mb-2"><a href="#" className="text-stone-500 text-sm font-semibold">Permintaan Aset</a></li>
             </ul>
           </div>
         </footer>

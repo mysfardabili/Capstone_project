@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
   --primary: #f97316; /* Orange 500 */
   --primary-dark: #ea580c; /* Orange 600 */
@@ -37,7 +41,7 @@
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.dark-mode {
+.dark {
   --bg-color: #0f172a; /* Slate 900 */
   --surface: #1e293b; /* Slate 800 */
   --text-main: #f1f5f9; /* Slate 100 */

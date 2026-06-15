@@ -10,6 +10,12 @@ const Mutation = sequelize.define('Mutation', {
   assetId: {
     type: DataTypes.STRING,
     allowNull: false,
+    references: {
+      model: 'Assets',
+      key: 'id',
+    },
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
   },
   sourceLocation: {
     type: DataTypes.STRING,

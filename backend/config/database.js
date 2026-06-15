@@ -16,7 +16,16 @@ if (dbType === 'sqlite') {
   sequelize = new Sequelize({
     dialect: 'sqlite',
     storage: process.env.DB_STORAGE || path.join(__dirname, '../database.sqlite'),
-    logging: false, // Set to console.log to see SQL queries in console
+    logging: false, // Set to console.log to see SQL queries
+    // Enable foreign key support in SQLite
+    dialectOptions: {
+      supportBigNumbers: true,
+    },
+  });
+  
+  // Enable foreign key constraints for SQLite
+  sequelize.afterConnect((connection, config) => {
+    return connection.query('PRAGMA foreign_keys = ON');
   });
 } else {
   // Configured for MySQL or PostgreSQL

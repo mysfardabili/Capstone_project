@@ -9,29 +9,16 @@ const Toast = ({ message, type = 'success', onClose }) => {
     return () => clearTimeout(timer);
   }, [onClose]);
 
-  const bgColor = type === 'success' ? '#10b981' : '#ef4444';
+  const borderClass = type === 'success' ? 'border-l-emerald-500' : 'border-l-red-500';
+  const iconColor = type === 'success' ? 'text-emerald-500' : 'text-red-500';
   const Icon = type === 'success' ? CheckCircle : XCircle;
 
   return (
-    <div style={{
-      position: 'fixed',
-      bottom: '20px',
-      right: '20px',
-      backgroundColor: 'white',
-      borderLeft: `4px solid ${bgColor}`,
-      boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-      padding: '15px 20px',
-      borderRadius: '8px',
-      display: 'flex',
-      alignItems: 'center',
-      gap: '12px',
-      zIndex: 9999,
-      animation: 'slideIn 0.3s ease-out forwards',
-    }}>
-      <Icon size={24} color={bgColor} />
-      <span style={{ fontWeight: 500, color: '#1f2937' }}>{message}</span>
-      <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', marginLeft: '10px' }}>
-        <X size={16} color="#9ca3af" />
+    <div className={`fixed bottom-5 right-5 bg-white dark:bg-gray-800 border-l-4 ${borderClass} shadow-custom-md p-[15px_20px] rounded-lg flex items-center gap-3 z-[9999] animate-[slideIn_0.3s_ease-out_forwards]`}>
+      <Icon size={24} className={iconColor} />
+      <span className="font-medium text-slate-800 dark:text-slate-200">{message}</span>
+      <button onClick={onClose} className="bg-transparent border-none cursor-pointer ml-2.5 flex items-center justify-center">
+        <X size={16} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300" />
       </button>
       
       <style>{`

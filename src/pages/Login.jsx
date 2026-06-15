@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Activity, ArrowLeft } from 'lucide-react';
 import { api } from '../services/api';
-import './Login.css';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -43,33 +42,33 @@ const Login = () => {
 
 
   return (
-    <div className="login-container">
-      <div className="login-card">
-        <div className="login-header">
-          <div className="login-logo" style={{ marginBottom: '1rem' }}>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 to-orange-200 p-3 md:p-4">
+      <div className="bg-white/95 backdrop-blur-[10px] p-6 md:p-12 rounded-custom-lg shadow-custom-lg w-full max-w-[450px] border border-white/50">
+        <div className="text-center mb-8">
+          <div className="flex justify-center mb-4">
             <img 
               src="/asetra-oren.png" 
               alt="Logo ASETRA" 
-              style={{ width: '200px', objectFit: 'contain' }} 
+              className="w-[160px] md:w-[200px] object-contain"
             />
           </div>
-          <h2>Selamat Datang Kembali</h2>
-          <p>Silakan masuk ke akun Anda</p>
+          <h2 className="text-xl md:text-[1.75rem] text-gray-800 dark:text-gray-100 mb-2">Selamat Datang Kembali</h2>
+          <p className="text-gray-500 dark:text-gray-400">Silakan masuk ke akun Anda</p>
         </div>
         
         {errorMsg && (
-          <div style={{ color: '#ef4444', backgroundColor: '#fee2e2', padding: '0.75rem', borderRadius: '10px', marginBottom: '1rem', fontSize: '0.9rem', textAlign: 'center', fontWeight: '500' }}>
+          <div className="text-red-500 bg-red-100 p-3 rounded-[10px] mb-4 text-sm text-center font-medium">
             {errorMsg}
           </div>
         )}
 
-        <form className="login-form" onSubmit={handleLogin}>
-          <div className="form-group">
-            <label htmlFor="email">Email / ID Pengguna</label>
+        <form className="flex flex-col gap-6" onSubmit={handleLogin}>
+          <div className="flex flex-col gap-2">
+            <label htmlFor="email" className="text-sm font-medium text-gray-800 dark:text-gray-100">Email / ID Pengguna</label>
             <input 
               type="text" 
               id="email"
-              className="form-input" 
+              className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md outline-none transition-[border-color,box-shadow] duration-200 focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)] bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100" 
               placeholder="Masukkan email atau ID Anda"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -77,12 +76,12 @@ const Login = () => {
             />
           </div>
           
-          <div className="form-group">
-            <label htmlFor="password">Kata Sandi</label>
+          <div className="flex flex-col gap-2">
+            <label htmlFor="password" className="text-sm font-medium text-gray-800 dark:text-gray-100">Kata Sandi</label>
             <input 
               type="password" 
               id="password"
-              className="form-input" 
+              className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md outline-none transition-[border-color,box-shadow] duration-200 focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)] bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100" 
               placeholder="Masukkan kata sandi"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -90,12 +89,12 @@ const Login = () => {
             />
           </div>
           
-          <button type="submit" className="btn-login" disabled={isSubmitting}>
+          <button type="submit" className="bg-orange-500 text-white py-[0.875rem] rounded-custom-md font-semibold text-base transition-colors duration-200 mt-2 hover:bg-orange-600 active:scale-[0.98] disabled:opacity-70" disabled={isSubmitting}>
             {isSubmitting ? 'Memproses Masuk...' : 'Masuk'}
           </button>
         </form>
 
-        <Link to="/" className="back-link">
+        <Link to="/" className="flex items-center justify-center gap-2 mt-6 text-gray-500 dark:text-gray-400 text-sm hover:text-orange-500 transition-colors">
           <ArrowLeft size={16} /> Kembali ke Beranda
         </Link>
       </div>

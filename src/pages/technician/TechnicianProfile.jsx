@@ -97,96 +97,84 @@ const TechnicianProfile = () => {
 
   if (isFetching) {
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '60vh', gap: '1rem', color: '#64748b' }}>
-        <Loader2 size={40} className="spin" style={{ color: '#ff6b00' }} />
+      <div className="flex flex-col items-center justify-center h-[60vh] gap-4 text-slate-400 dark:text-slate-500">
+        <Loader2 size={40} className="animate-spin text-orange-500" />
         <span>Memuat profil teknisi...</span>
-        <style>{`
-          .spin { animation: spin 1s linear infinite; }
-          @keyframes spin { 100% { transform: rotate(360deg); } }
-        `}</style>
       </div>
     );
   }
 
   return (
-    <div style={{ animation: 'fadeIn 0.3s ease-in-out', paddingBottom: '2rem' }}>
+    <div className="animate-[fadeIn_0.3s_ease-in-out] pb-8">
       {showToast && <Toast message={toastMsg} onClose={() => setShowToast(false)} />}
 
       {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '2rem' }}>
+      <div className="flex items-center gap-3 mb-8">
         {isEditing && (
           <button 
             onClick={() => {
               setIsEditing(false);
               setPreviewUrl('');
             }}
-            style={{ background: '#f1f5f9', border: 'none', borderRadius: '12px', padding: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+            className="bg-slate-100 dark:bg-slate-700 border-none rounded-xl p-2 cursor-pointer flex items-center justify-center"
           >
-            <ArrowLeft size={20} color="#0f172a" />
+            <ArrowLeft size={20} className="text-slate-900 dark:text-slate-100" />
           </button>
         )}
-        <h2 style={{ margin: 0, fontSize: '1.6rem', fontWeight: '800', color: '#0f172a' }}>
+        <h2 className="m-0 text-[1.6rem] font-extrabold text-slate-900 dark:text-white">
           {isEditing ? 'Edit Profil' : 'Profil Saya'}
         </h2>
       </div>
 
       {!isEditing ? (
         /* READ ONLY PROFILE VIEW */
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <div className="flex flex-col items-center">
           {/* Avatar Container */}
-          <div style={{ position: 'relative', marginBottom: '1.5rem' }}>
-            <div style={{ 
-              width: '100px', height: '100px', 
-              backgroundColor: '#fff7ed', 
-              borderRadius: '50%', 
-              display: 'flex', alignItems: 'center', justifyContent: 'center', 
-              border: '4px solid white', 
-              boxShadow: '0 8px 30px rgba(249, 115, 22, 0.12)', 
-              overflow: 'hidden' 
-            }}>
+          <div className="relative mb-6">
+            <div className="w-[100px] h-[100px] bg-orange-50/50 rounded-full flex items-center justify-center border-4 border-white shadow-[0_8px_30px_rgba(249,115,22,0.12)] overflow-hidden">
               {techUser.profilePicture ? (
                 <img 
                   src={`http://localhost:5000${techUser.profilePicture}`} 
                   alt="Avatar" 
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                  className="w-full h-full object-cover" 
                 />
               ) : (
-                <User size={48} color="#f97316" />
+                <User size={48} className="text-orange-500" />
               )}
             </div>
           </div>
           
-          <h2 style={{ fontSize: '1.4rem', fontWeight: '800', margin: '0 0 0.25rem 0', color: '#0f172a' }}>{techUser.name}</h2>
-          <p style={{ color: '#ff6b00', fontWeight: '700', fontSize: '0.85rem', margin: '0 0 1rem 0', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+          <h2 className="text-[1.4rem] font-extrabold m-0 mb-1 text-slate-900 dark:text-white">{techUser.name}</h2>
+          <p className="text-orange-500 font-bold text-[0.85rem] m-0 mb-4 uppercase tracking-[0.5px]">
             {translateRole(techUser.role)}
           </p>
 
           {/* Details Card */}
-          <div className="tech-card tech-card-blue" style={{ width: '100%', padding: '1.2rem', marginBottom: '1.2rem' }}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.9rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <FileText size={18} color="#2563eb" style={{ opacity: 0.8 }} />
+          <div className="w-full max-w-lg bg-white dark:bg-slate-800 rounded-[20px] p-5 shadow-card mb-[1.2rem] border border-white/80 dark:border-slate-700 bg-[linear-gradient(145deg,#ffffff_0%,#f0f7ff_100%)] dark:bg-[linear-gradient(145deg,#1e293b_0%,#0f172a_100%)] border-l-[6px] border-l-blue-600">
+            <div className="flex flex-col gap-3.5">
+              <div className="flex items-center gap-3">
+                <FileText size={18} className="text-blue-600 dark:text-blue-400 opacity-80" />
                 <div>
-                  <span style={{ fontSize: '0.75rem', color: '#94a3b8', display: 'block' }}>ID PEGAWAI</span>
-                  <strong style={{ fontSize: '0.95rem', color: '#0f172a' }}>
+                  <span className="text-xs text-slate-400 block">ID PEGAWAI</span>
+                  <strong className="text-[0.95rem] text-slate-900 dark:text-slate-100">
                     TK-{techUser.email.split('@')[0].toUpperCase()}
                   </strong>
                 </div>
               </div>
 
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <Mail size={18} color="#2563eb" style={{ opacity: 0.8 }} />
+              <div className="flex items-center gap-3">
+                <Mail size={18} className="text-blue-600 dark:text-blue-400 opacity-80" />
                 <div>
-                  <span style={{ fontSize: '0.75rem', color: '#94a3b8', display: 'block' }}>ALAMAT EMAIL</span>
-                  <strong style={{ fontSize: '0.95rem', color: '#0f172a' }}>{techUser.email}</strong>
+                  <span className="text-xs text-slate-400 block">ALAMAT EMAIL</span>
+                  <strong className="text-[0.95rem] text-slate-900 dark:text-slate-100">{techUser.email}</strong>
                 </div>
               </div>
 
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <Phone size={18} color="#2563eb" style={{ opacity: 0.8 }} />
+              <div className="flex items-center gap-3">
+                <Phone size={18} className="text-blue-600 dark:text-blue-400 opacity-80" />
                 <div>
-                  <span style={{ fontSize: '0.75rem', color: '#94a3b8', display: 'block' }}>NOMOR TELEPON</span>
-                  <strong style={{ fontSize: '0.95rem', color: '#0f172a' }}>
+                  <span className="text-xs text-slate-400 block">NOMOR TELEPON</span>
+                  <strong className="text-[0.95rem] text-slate-900 dark:text-slate-100">
                     {techUser.phone || 'Belum diisi'}
                   </strong>
                 </div>
@@ -195,19 +183,17 @@ const TechnicianProfile = () => {
           </div>
 
           {/* Actions */}
-          <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+          <div className="w-full max-w-lg flex flex-col gap-3">
             <button 
               onClick={() => setIsEditing(true)}
-              className="btn-full btn-orange"
-              style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' }}
+              className="w-full p-4 rounded-2xl font-bold text-base border-none cursor-pointer text-center transition-all duration-200 active:scale-[0.98] bg-gradient-to-br from-orange-500 to-orange-600 text-white shadow-[0_8px_20px_rgba(249,115,22,0.3)] flex justify-center items-center gap-2"
             >
               <Edit2 size={18} /> Edit Profil
             </button>
             
             <button 
               onClick={handleLogout}
-              className="btn-full" 
-              style={{ backgroundColor: '#fee2e2', color: '#ef4444', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' }}
+              className="w-full p-4 rounded-2xl font-bold text-base border-none cursor-pointer text-center transition-all duration-200 active:scale-[0.98] bg-red-100 dark:bg-red-950/30 text-red-500 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-900/40 flex justify-center items-center gap-2"
             >
               <LogOut size={18} /> Logout Akun
             </button>
@@ -215,36 +201,22 @@ const TechnicianProfile = () => {
         </div>
       ) : (
         /* INTERACTIVE PROFILE EDIT FORM */
-        <form onSubmit={handleProfileSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+        <form onSubmit={handleProfileSubmit} className="flex flex-col gap-6 max-w-lg mx-auto">
           
           {/* Avatar Upload Container */}
-          <div style={{ alignSelf: 'center', position: 'relative', marginBottom: '1rem' }}>
-            <div style={{ 
-              width: '100px', height: '100px', 
-              backgroundColor: '#fff7ed', 
-              borderRadius: '50%', 
-              display: 'flex', alignItems: 'center', justifyContent: 'center', 
-              border: '4px solid white', 
-              boxShadow: '0 8px 30px rgba(249, 115, 22, 0.12)', 
-              overflow: 'hidden' 
-            }}>
+          <div className="self-center relative mb-4">
+            <div className="w-[100px] h-[100px] bg-orange-50/50 rounded-full flex items-center justify-center border-4 border-white shadow-[0_8px_30px_rgba(249, 115, 22, 0.12)] overflow-hidden">
               {previewUrl ? (
-                <img src={previewUrl} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <img src={previewUrl} alt="Preview" className="w-full h-full object-cover" />
               ) : techUser.profilePicture ? (
-                <img src={`http://localhost:5000${techUser.profilePicture}`} alt="Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <img src={`http://localhost:5000${techUser.profilePicture}`} alt="Avatar" className="w-full h-full object-cover" />
               ) : (
-                <User size={48} color="#f97316" />
+                <User size={48} className="text-orange-500" />
               )}
             </div>
 
             {/* Upload Button Overlay */}
-            <div style={{
-              position: 'absolute', bottom: 0, right: 0,
-              backgroundColor: '#ff6b00', color: 'white',
-              borderRadius: '50%', padding: '6px',
-              boxShadow: '0 4px 10px rgba(255, 107, 0, 0.3)',
-              cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center'
-            }}>
+            <div className="absolute bottom-0 right-0 bg-orange-500 text-white rounded-full p-1.5 shadow-[0_4px_10px_rgba(255,107,0,0.3)] cursor-pointer flex items-center justify-center">
               <Camera size={16} />
               <input 
                 type="file"
@@ -255,15 +227,15 @@ const TechnicianProfile = () => {
                     setPreviewUrl(URL.createObjectURL(e.target.files[0]));
                   }
                 }}
-                style={{ position: 'absolute', top: 0, left: 0, opacity: 0, width: '100%', height: '100%', cursor: 'pointer' }}
+                className="absolute top-0 left-0 opacity-0 w-full h-full cursor-pointer"
               />
             </div>
           </div>
 
           {/* Form Fields */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              <label style={{ fontSize: '0.85rem', fontWeight: '800', color: '#475569' }}>Nama Lengkap</label>
+          <div className="flex flex-col gap-[1.2rem]">
+            <div className="flex flex-col gap-1.5">
+              <label className="text-[0.85rem] font-extrabold text-slate-600 dark:text-slate-400">Nama Lengkap</label>
               <input 
                 type="text" 
                 name="name"
@@ -274,8 +246,8 @@ const TechnicianProfile = () => {
               />
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              <label style={{ fontSize: '0.85rem', fontWeight: '800', color: '#475569' }}>Alamat Email</label>
+            <div className="flex flex-col gap-1.5">
+              <label className="text-[0.85rem] font-extrabold text-slate-600 dark:text-slate-400">Alamat Email</label>
               <input 
                 type="email" 
                 name="email"
@@ -286,8 +258,8 @@ const TechnicianProfile = () => {
               />
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              <label style={{ fontSize: '0.85rem', fontWeight: '800', color: '#475569' }}>Nomor Telepon</label>
+            <div className="flex flex-col gap-1.5">
+              <label className="text-[0.85rem] font-extrabold text-slate-600 dark:text-slate-400">Nomor Telepon</label>
               <input 
                 type="text" 
                 name="phone"
@@ -302,11 +274,10 @@ const TechnicianProfile = () => {
           <button 
             type="submit" 
             disabled={isLoading}
-            className="btn-full btn-orange"
-            style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', marginTop: '1rem' }}
+            className="w-full p-4 rounded-2xl font-bold text-base border-none cursor-pointer text-center transition-all duration-200 active:scale-[0.98] bg-gradient-to-br from-orange-500 to-orange-600 text-white shadow-[0_8px_20px_rgba(249,115,22,0.3)] flex justify-center items-center gap-2 mt-4"
           >
             {isLoading ? (
-              <><Loader2 size={18} className="spin" /> Menyimpan...</>
+              <><Loader2 size={18} className="animate-spin" /> Menyimpan...</>
             ) : (
               <><Save size={18} /> Simpan Perubahan</>
             )}

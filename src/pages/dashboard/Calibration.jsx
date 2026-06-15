@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Plus, Search, Calendar, CheckCircle, AlertTriangle, Download, Loader2 } from 'lucide-react';
 import { api } from '../../services/api';
-import '../../components/SharedUI.css';
 import Toast from '../../components/Toast';
 
 const Calibration = () => {
@@ -38,7 +37,6 @@ const Calibration = () => {
     if (cal.status === 'Lulus') return 'Aman';
     if (cal.status === 'Gagal') return 'Gagal Uji';
     
-    // Check if next calibration date is near or past
     const now = new Date();
     const nextDate = new Date(cal.nextCalibrationDate);
     if (nextDate < now) return 'Kadaluarsa';
@@ -52,34 +50,33 @@ const Calibration = () => {
   };
 
   return (
-    <div className="page-container">
+    <div className="flex flex-col gap-6 h-full">
       {showToast && <Toast message={toastMsg} onClose={() => setShowToast(false)} />}
-      <div className="page-header">
-        <h1 className="page-title">Kalibrasi & Maintenance Rutin</h1>
-        <Link to="/dashboard/calibration/add" className="btn-primary">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 md:gap-0">
+        <h1 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-gray-100">Kalibrasi & Maintenance Rutin</h1>
+        <Link to="/dashboard/calibration/add" className="bg-orange-500 text-white px-5 py-[0.6rem] rounded-custom-md font-semibold text-sm inline-flex items-center gap-2 no-underline hover:bg-orange-600 transition-colors disabled:opacity-70 justify-center w-full md:w-auto">
           <Plus size={18} /> Catat Kalibrasi Baru
         </Link>
       </div>
 
-      <div className="card">
-        <div className="table-controls">
-          <div style={{ position: 'relative' }}>
-            <Search size={16} color="var(--text-muted)" style={{ position: 'absolute', left: '10px', top: '10px' }} />
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-custom-sm border border-gray-200 dark:border-gray-700 overflow-hidden flex flex-col">
+        <div className="px-4 md:px-6 py-4 flex flex-col md:flex-row justify-between gap-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
+          <div className="relative w-full md:w-auto">
+            <Search size={16} className="text-gray-500 dark:text-gray-400 absolute left-[10px] top-[10px]" />
             <input 
               type="text" 
-              className="search-input" 
+              className="px-4 py-2 border border-gray-200 dark:border-gray-600 rounded-custom-md w-full md:w-[250px] text-sm outline-none focus:border-orange-500 focus:shadow-[0_0_0_2px_rgba(249,115,22,0.2)] pl-8" 
               placeholder="Cari nama aset..." 
-              style={{ paddingLeft: '2rem' }}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
         </div>
 
-        <div className="table-wrapper">
+        <div className="overflow-x-auto">
           {isLoading ? (
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '4rem 0', gap: '1rem', color: 'var(--text-muted)' }}>
-              <Loader2 size={36} className="spin" style={{ color: 'var(--primary)' }} />
+            <div className="flex flex-col items-center justify-center py-16 gap-4 text-gray-500 dark:text-gray-400">
+              <Loader2 size={36} className="spin text-orange-500" />
               <span>Memuat data kalibrasi...</span>
               <style>{`
                 .spin { animation: spin 1s linear infinite; }
@@ -87,66 +84,65 @@ const Calibration = () => {
               `}</style>
             </div>
           ) : (
-            <table className="data-table">
+            <table className="w-full border-collapse text-left">
               <thead>
                 <tr>
-                  <th>ID Kalibrasi</th>
-                  <th>Nama Aset Terkait</th>
-                  <th>Tgl Kalibrasi Terakhir</th>
-                  <th>Jadwal Berikutnya (1 Tahun)</th>
-                  <th>Status Notifikasi</th>
-                  <th>Sertifikat</th>
+                  <th className="bg-white dark:bg-gray-800 px-6 py-4 font-semibold text-sm text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">ID Kalibrasi</th>
+                  <th className="bg-white dark:bg-gray-800 px-6 py-4 font-semibold text-sm text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">Nama Aset Terkait</th>
+                  <th className="bg-white dark:bg-gray-800 px-6 py-4 font-semibold text-sm text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">Tgl Kalibrasi Terakhir</th>
+                  <th className="bg-white dark:bg-gray-800 px-6 py-4 font-semibold text-sm text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">Jadwal Berikutnya (1 Tahun)</th>
+                  <th className="bg-white dark:bg-gray-800 px-6 py-4 font-semibold text-sm text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">Status Notifikasi</th>
+                  <th className="bg-white dark:bg-gray-800 px-6 py-4 font-semibold text-sm text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">Sertifikat</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredCalibrations.length > 0 ? filteredCalibrations.map(cal => {
                   const statusLabel = getStatus(cal);
                   return (
-                    <tr key={cal.id}>
-                      <td style={{ fontWeight: 500 }}>{cal.id}</td>
-                      <td>{cal.asset?.name || `Aset (${cal.assetId})`}</td>
-                      <td>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                          <Calendar size={14} color="var(--text-muted)" />
+                    <tr key={cal.id} className="hover:bg-gray-50 dark:hover:bg-gray-900">
+                      <td className="px-6 py-4 text-sm border-b border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100 align-middle font-medium">{cal.id}</td>
+                      <td className="px-6 py-4 text-sm border-b border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100 align-middle">{cal.asset?.name || `Aset (${cal.assetId})`}</td>
+                      <td className="px-6 py-4 text-sm border-b border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100 align-middle">
+                        <div className="flex items-center gap-[5px]">
+                          <Calendar size={14} className="text-gray-500 dark:text-gray-400" />
                           {formatDate(cal.calibrationDate)}
                         </div>
                       </td>
-                      <td>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                          <Calendar size={14} color="var(--primary)" />
+                      <td className="px-6 py-4 text-sm border-b border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100 align-middle">
+                        <div className="flex items-center gap-[5px]">
+                          <Calendar size={14} className="text-orange-500" />
                           {formatDate(cal.nextCalibrationDate)}
                         </div>
                       </td>
-                      <td>
-                        <span className={`badge ${
-                          statusLabel === 'Aman' ? 'badge-success' : 'badge-danger'
+                      <td className="px-6 py-4 text-sm border-b border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100 align-middle">
+                        <span className={`px-3 py-1 rounded-[2rem] text-xs font-semibold inline-block ${
+                          statusLabel === 'Aman' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
                         }`}>
-                          {statusLabel === 'Aman' ? <CheckCircle size={12} style={{marginRight: '4px'}}/> : <AlertTriangle size={12} style={{marginRight: '4px'}}/>}
+                          {statusLabel === 'Aman' ? <CheckCircle size={12} className="mr-1"/> : <AlertTriangle size={12} className="mr-1"/>}
                           {statusLabel}
                         </span>
                       </td>
-                      <td>
+                      <td className="px-6 py-4 text-sm border-b border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100 align-middle">
                         {cal.certificateUrl ? (
                           <a 
                             href={`http://localhost:5000${cal.certificateUrl}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="btn-outline"
-                            style={{ padding: '0.2rem 0.5rem', fontSize: '0.8rem', display: 'inline-flex', alignItems: 'center', gap: '4px', textDecoration: 'none' }}
+                            className="bg-transparent text-gray-800 dark:text-gray-100 border border-gray-200 dark:border-gray-600 rounded-custom-md font-semibold hover:bg-gray-100 dark:hover:bg-gray-700 transition-all no-underline inline-flex items-center gap-1 p-[0.2rem_0.5rem] text-[0.8rem]"
                           >
                             <Download size={14} /> {cal.certificateNumber || 'Unduh'}
                           </a>
                         ) : cal.certificateNumber ? (
-                          <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 500 }}>{cal.certificateNumber}</span>
+                          <span className="text-[0.85rem] text-gray-500 dark:text-gray-400 font-medium">{cal.certificateNumber}</span>
                         ) : (
-                          <span style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Belum ada</span>
+                          <span className="text-gray-500 dark:text-gray-400 text-[0.9rem]">Belum ada</span>
                         )}
                       </td>
                     </tr>
                   );
                 }) : (
-                  <tr>
-                    <td colSpan="6" style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-muted)' }}>
+                  <tr className="hover:bg-gray-50 dark:hover:bg-gray-900">
+                    <td colSpan="6" className="px-6 py-4 text-sm border-b border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 align-middle text-center p-8">
                       Tidak ada jadwal kalibrasi yang sesuai dengan pencarian "{searchTerm}".
                     </td>
                   </tr>

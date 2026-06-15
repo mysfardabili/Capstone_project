@@ -3,7 +3,6 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { AlertTriangle, QrCode, ArrowLeft, Loader2 } from 'lucide-react';
 import { Html5Qrcode } from 'html5-qrcode';
 import { api } from '../../services/api';
-import '../../components/SharedUI.css';
 import Toast from '../../components/Toast';
 
 const AddRepair = () => {
@@ -115,29 +114,29 @@ const AddRepair = () => {
   };
 
   return (
-    <div className="page-container">
+    <div className="flex flex-col gap-6 h-full">
       {showToast && <Toast message="Laporan kerusakan berhasil dikirim!" onClose={() => setShowToast(false)} />}
-      <div className="page-header" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-        <button className="btn-outline" onClick={() => navigate(-1)}><ArrowLeft size={24} /></button>
-        <h1 className="page-title" style={{ margin: 0 }}>Form Pelaporan Kerusakan</h1>
+      <div className="flex justify-between items-center" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+        <button className="bg-transparent text-gray-800 dark:text-gray-100 border border-gray-200 dark:border-gray-600 px-5 py-[0.6rem] rounded-custom-md font-semibold text-sm inline-flex items-center gap-2 no-underline hover:bg-gray-100 dark:hover:bg-gray-700 transition-all" onClick={() => navigate(-1)}><ArrowLeft size={24} /></button>
+        <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100" style={{ margin: 0 }}>Form Pelaporan Kerusakan</h1>
       </div>
 
-      <div className="form-container" style={{ borderTop: '4px solid var(--danger)' }}>
+      <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-custom-sm border border-gray-200 dark:border-gray-700 max-w-[800px] border-t-4 border-t-red-500">
         {errorMsg && (
-          <div style={{ color: '#ef4444', backgroundColor: '#fee2e2', padding: '0.75rem', borderRadius: '10px', marginBottom: '1.5rem', fontSize: '0.9rem', fontWeight: '500' }}>
+          <div className="text-red-500 bg-red-100 p-3 rounded-[10px] mb-6 text-sm font-medium">
             {errorMsg}
           </div>
         )}
 
         <form onSubmit={handleSubmit}>
-          <div className="form-row">
-            <div className="form-group">
-              <label>ID Aset / Scan QR</label>
+          <div className="flex flex-col md:flex-row gap-6 mb-6">
+            <div className="flex flex-col gap-2 flex-1">
+              <label className="text-sm font-semibold text-gray-800 dark:text-gray-100">ID Aset / Scan QR</label>
               <div style={{ display: 'flex', gap: '0.5rem' }}>
                 <input
                   type="text"
                   name="assetId"
-                  className="form-control"
+                  className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]"
                   placeholder="Contoh: AST-002"
                   required
                   style={{ flex: 1 }}
@@ -146,8 +145,8 @@ const AddRepair = () => {
                 />
                 <button
                   type="button"
-                  className="btn-outline"
-                  style={{ padding: '0 1rem', backgroundColor: 'var(--secondary)' }}
+                  className="bg-transparent text-gray-800 dark:text-gray-100 border border-gray-200 dark:border-gray-600 px-5 py-[0.6rem] rounded-custom-md font-semibold text-sm inline-flex items-center gap-2 no-underline hover:bg-gray-100 dark:hover:bg-gray-700 transition-all"
+                  style={{ padding: '0 1rem' }}
                   title="Scan QR Code"
                   onClick={startScanner}
                 >
@@ -155,9 +154,9 @@ const AddRepair = () => {
                 </button>
               </div>
             </div>
-            <div className="form-group">
-              <label>Tingkat Prioritas</label>
-              <select name="priority" className="form-control" required defaultValue="sedang">
+            <div className="flex flex-col gap-2 flex-1">
+              <label className="text-sm font-semibold text-gray-800 dark:text-gray-100">Tingkat Prioritas</label>
+              <select name="priority" className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]" required defaultValue="sedang">
                 <option value="rendah">Rendah (Dapat ditunda)</option>
                 <option value="sedang">Sedang (Perlu penanganan)</option>
                 <option value="tinggi">Tinggi (Berpengaruh pada pasien / Cito)</option>
@@ -168,25 +167,25 @@ const AddRepair = () => {
           {/* Hidden field: reporterName auto-filled from logged in user */}
           <input type="hidden" name="reporterName" value={reporterName} />
 
-          <div className="form-group" style={{ marginBottom: '1.5rem' }}>
-            <label>Deskripsi Kerusakan</label>
-            <textarea name="description" className="form-control" placeholder="Jelaskan secara rinci kerusakan yang terjadi..." required></textarea>
+          <div className="flex flex-col gap-2 flex-1 mb-6">
+            <label className="text-sm font-semibold text-gray-800 dark:text-gray-100">Deskripsi Kerusakan</label>
+            <textarea name="description" className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]" placeholder="Jelaskan secara rinci kerusakan yang terjadi..." required></textarea>
           </div>
 
-          <div className="form-group" style={{ marginBottom: '1.5rem' }}>
-            <label>Unggah Foto Bukti Kerusakan (Opsional)</label>
+          <div className="flex flex-col gap-2 flex-1 mb-6">
+            <label className="text-sm font-semibold text-gray-800 dark:text-gray-100">Unggah Foto Bukti Kerusakan (Opsional)</label>
             <input
               type="file"
               name="image"
               accept="image/*"
-              className="form-control"
+              className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]"
               style={{ padding: '0.5rem', background: '#f8fafc' }}
             />
           </div>
 
-          <div className="form-actions">
-            <Link to="/dashboard/repairs" className="btn-outline">Batal</Link>
-            <button type="submit" className="btn-primary" disabled={isLoading} style={{ backgroundColor: 'var(--danger)', opacity: isLoading ? 0.7 : 1 }}>
+          <div className="flex justify-end gap-4 mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
+            <Link to="/dashboard/repairs" className="bg-transparent text-gray-800 dark:text-gray-100 border border-gray-200 dark:border-gray-600 px-5 py-[0.6rem] rounded-custom-md font-semibold text-sm inline-flex items-center gap-2 no-underline hover:bg-gray-100 dark:hover:bg-gray-700 transition-all">Batal</Link>
+            <button type="submit" className="bg-red-500 text-white px-5 py-[0.6rem] rounded-custom-md font-semibold text-sm inline-flex items-center gap-2 no-underline hover:bg-red-600 transition-colors disabled:opacity-70" disabled={isLoading} style={{ opacity: isLoading ? 0.7 : 1 }}>
               {isLoading ? (
                 <><Loader2 size={18} className="spin" /> Melaporkan...</>
               ) : (
@@ -203,22 +202,22 @@ const AddRepair = () => {
       `}</style>
 
       {isScanning && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(4px)' }}>
-          <div style={{ background: 'var(--surface)', borderRadius: '20px', padding: '1.5rem', maxWidth: '400px', width: '90%', boxShadow: 'var(--shadow-lg)', border: '1px solid var(--border)' }}>
-            <h3 style={{ margin: '0 0 1rem 0', color: 'var(--text-main)' }}>Scan QR Code Aset</h3>
+        <div className="fixed inset-0 z-[1000] flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)' }}>
+          <div className="bg-white dark:bg-gray-800 rounded-[20px] p-6 max-w-[400px] w-[90%] shadow-custom-lg border border-gray-200 dark:border-gray-700">
+            <h3 className="m-0 mb-4 text-gray-800 dark:text-gray-100">Scan QR Code Aset</h3>
 
             {cameraError ? (
-              <div style={{ color: '#ef4444', backgroundColor: '#fee2e2', padding: '0.75rem', borderRadius: '10px', fontSize: '0.85rem', marginBottom: '1rem', fontWeight: '500' }}>
+              <div className="text-red-500 bg-red-100 p-3 rounded-[10px] text-sm font-medium mb-4">
                 {cameraError}
               </div>
             ) : (
-              <div style={{ width: '100%', borderRadius: '12px', overflow: 'hidden', border: '1px solid var(--border)', marginBottom: '1rem' }}>
-                <div id={scannerDivId} style={{ width: '100%' }} />
+              <div className="w-full rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700 mb-4">
+                <div id={scannerDivId} className="w-full" />
               </div>
             )}
 
-            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <button type="button" className="btn-outline" onClick={stopScanner}>Tutup</button>
+            <div className="flex justify-end">
+              <button type="button" className="bg-transparent text-gray-800 dark:text-gray-100 border border-gray-200 dark:border-gray-600 px-5 py-[0.6rem] rounded-custom-md font-semibold text-sm inline-flex items-center gap-2 no-underline hover:bg-gray-100 dark:hover:bg-gray-700 transition-all" onClick={stopScanner}>Tutup</button>
             </div>
           </div>
         </div>

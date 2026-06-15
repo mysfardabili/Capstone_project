@@ -4,7 +4,6 @@ import {
   ArrowLeft, FileText, Wrench, RefreshCw, Activity,
   MapPin, Box, Hash, Calendar, QrCode, Image as ImageIcon, Download, Loader2
 } from 'lucide-react';
-import '../../components/SharedUI.css';
 import Toast from '../../components/Toast';
 
 import { api } from '../../services/api';
@@ -41,13 +40,9 @@ const AssetDetail = () => {
 
   if (isLoading) {
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '60vh', gap: '1rem', color: 'var(--text-muted)' }}>
-        <Loader2 size={40} className="spin" style={{ color: 'var(--primary)' }} />
+      <div className="flex flex-col items-center justify-center h-[60vh] gap-4 text-gray-500 dark:text-gray-400">
+        <Loader2 size={40} className="animate-spin" color="#f97316" />
         <span>Memuat detail aset...</span>
-        <style>{`
-          .spin { animation: spin 1s linear infinite; }
-          @keyframes spin { 100% { transform: rotate(360deg); } }
-        `}</style>
       </div>
     );
   }
@@ -57,7 +52,7 @@ const AssetDetail = () => {
       <div style={{ padding: '2rem', textAlign: 'center', color: '#ef4444' }}>
         <h3>Gagal Memuat Detail Aset</h3>
         <p>{error || 'Aset tidak ditemukan'}</p>
-        <button onClick={() => navigate(-1)} className="btn-primary" style={{ margin: '1rem auto' }}>Kembali</button>
+        <button onClick={() => navigate(-1)} className="bg-orange-500 text-white px-5 py-[0.6rem] rounded-custom-md font-semibold text-sm inline-flex items-center gap-2 no-underline hover:bg-orange-600 transition-colors disabled:opacity-70" style={{ margin: '1rem auto' }}>Kembali</button>
       </div>
     );
   }
@@ -91,7 +86,7 @@ const AssetDetail = () => {
   }));
 
   return (
-    <div className="page-container" style={{ paddingBottom: '3rem', height: 'auto', minHeight: '100%' }}>
+    <div className="flex flex-col gap-6" style={{ paddingBottom: '3rem', minHeight: '100%' }}>
       {showToast && <Toast message={toastMsg} onClose={() => setShowToast(false)} />}
       <style>{`
         .detail-header-card { display: flex; gap: 2.5rem; margin-bottom: 2rem; align-items: center; }
@@ -139,16 +134,16 @@ const AssetDetail = () => {
       `}</style>
 
       {/* Header with Back Button */}
-      <div className="page-header" style={{ marginBottom: '1.5rem' }}>
+      <div className="flex justify-between items-center" style={{ marginBottom: '1.5rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          <Link to="/dashboard/assets" className="btn-outline" style={{ padding: '8px', border: 'none', borderRadius: '10px' }}>
+          <Link to="/dashboard/assets" className="bg-transparent text-gray-800 dark:text-gray-100 border border-gray-200 dark:border-gray-600 px-5 py-[0.6rem] rounded-custom-md font-semibold text-sm inline-flex items-center gap-2 no-underline hover:bg-gray-100 dark:hover:bg-gray-700 transition-all" style={{ padding: '8px', border: 'none', borderRadius: '10px' }}>
             <ArrowLeft size={20} />
           </Link>
-          <h1 className="page-title" style={{ margin: 0 }}>Detail Aset</h1>
+          <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100" style={{ margin: 0 }}>Detail Aset</h1>
         </div>
         <div className="btn-action-group">
-          <button className="btn-outline" onClick={() => showNotification(`QR Code untuk ${asset.name} (${asset.id}) sedang disiapkan...`)}><QrCode size={18} /> Cetak QR</button>
-          <button className="btn-primary" onClick={() => navigate(`/dashboard/repairs/add?assetId=${asset.id}`)}><Wrench size={18} /> Lapor Kerusakan</button>
+          <button className="bg-transparent text-gray-800 dark:text-gray-100 border border-gray-200 dark:border-gray-600 px-5 py-[0.6rem] rounded-custom-md font-semibold text-sm inline-flex items-center gap-2 no-underline hover:bg-gray-100 dark:hover:bg-gray-700 transition-all" onClick={() => showNotification(`QR Code untuk ${asset.name} (${asset.id}) sedang disiapkan...`)}><QrCode size={18} /> Cetak QR</button>
+          <button className="bg-orange-500 text-white px-5 py-[0.6rem] rounded-custom-md font-semibold text-sm inline-flex items-center gap-2 no-underline hover:bg-orange-600 transition-colors disabled:opacity-70" onClick={() => navigate(`/dashboard/repairs/add?assetId=${asset.id}`)}><Wrench size={18} /> Lapor Kerusakan</button>
         </div>
       </div>
 
@@ -166,10 +161,10 @@ const AssetDetail = () => {
 
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', width: '100%' }}>
           <div className="badge-container">
-            <span className={`badge ${asset.status === 'Tersedia' ? 'badge-success' : 'badge-warning'}`} style={{ fontSize: '0.9rem', padding: '6px 14px' }}>{asset.status}</span>
-            <span className={`badge ${asset.condition === 'Baik' ? 'badge-success' : asset.condition === 'Rusak' ? 'badge-danger' : 'badge-warning'}`} style={{ fontSize: '0.9rem', padding: '6px 14px' }}>{asset.condition}</span>
+            <span className={`px-3 py-1 rounded-[2rem] text-xs font-semibold inline-block ${asset.status === 'Tersedia' ? 'bg-green-100 text-green-800' : 'bg-amber-100 text-amber-800'}`} style={{ fontSize: '0.9rem', padding: '6px 14px' }}>{asset.status}</span>
+            <span className={`px-3 py-1 rounded-[2rem] text-xs font-semibold inline-block ${asset.condition === 'Baik' ? 'bg-green-100 text-green-800' : asset.condition === 'Rusak' ? 'bg-red-100 text-red-800' : 'bg-amber-100 text-amber-800'}`} style={{ fontSize: '0.9rem', padding: '6px 14px' }}>{asset.condition}</span>
           </div>
-          <h2 className='page-title' style={{ fontSize: '2.4rem', margin: '0 0 0.8rem 0', lineHeight: 1.2 }}>{asset.name}</h2>
+          <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100" style={{ fontSize: '2.4rem', margin: '0 0 0.8rem 0', lineHeight: 1.2 }}>{asset.name}</h2>
           <p className="meta-info">
             <Hash size={20} color="#cbd5e1" /> <strong style={{ color: '#475569' }}>{asset.id}</strong> &nbsp;|&nbsp;
             <Box size={20} color="#cbd5e1" /> <strong style={{ color: '#475569' }}>{asset.category}</strong>
@@ -215,11 +210,11 @@ const AssetDetail = () => {
       </div>
 
       {/* Tab Content */}
-      <div className="card" style={{ padding: '2rem', overflow: 'visible' }}>
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-custom-sm border border-gray-200 dark:border-gray-700 overflow-hidden flex flex-col" style={{ padding: '2rem', overflow: 'visible' }}>
         {activeTab === 'info' && (
           <div className="detail-info-grid">
             <div>
-              <h3 className='page-title' style={{ borderBottom: '1px solid #e2e8f0', paddingBottom: '0.5rem', marginBottom: '1.5rem' }}>Detail Pembelian</h3>
+              <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-100" style={{ borderBottom: '1px solid #e2e8f0', paddingBottom: '0.5rem', marginBottom: '1.5rem', fontSize: '1.25rem' }}>Detail Pembelian</h3>
               <div style={{ display: 'grid', gridTemplateColumns: '150px 1fr', gap: '1.2rem', marginBottom: '1rem' }}>
                 <span style={{ color: '#64748b' }}>Harga Beli</span>
                 <span style={{ fontWeight: 600, color: '#1e293b' }}>{formatRupiah(asset.price)}</span>
@@ -235,15 +230,15 @@ const AssetDetail = () => {
               </div>
             </div>
             <div>
-              <h3 className='page-title' style={{ borderBottom: '1px solid #e2e8f0', paddingBottom: '0.5rem', marginBottom: '1.5rem' }}>Dokumen Tambahan</h3>
+              <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-100" style={{ borderBottom: '1px solid #e2e8f0', paddingBottom: '0.5rem', marginBottom: '1.5rem', fontSize: '1.25rem' }}>Dokumen Tambahan</h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1rem', border: '1px solid #e2e8f0', borderRadius: '12px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontWeight: 500 }}><FileText size={20} color="#f97316" /> Manual Book.pdf</div>
-                  <button className="btn-outline" style={{ padding: '6px 14px', fontSize: '0.85rem' }} onClick={() => showNotification('Mengunduh Manual Book.pdf...')}><Download size={14} /> Unduh</button>
+                  <button className="bg-transparent text-gray-800 dark:text-gray-100 border border-gray-200 dark:border-gray-600 px-5 py-[0.6rem] rounded-custom-md font-semibold text-sm inline-flex items-center gap-2 no-underline hover:bg-gray-100 dark:hover:bg-gray-700 transition-all" style={{ padding: '6px 14px', fontSize: '0.85rem' }} onClick={() => showNotification('Mengunduh Manual Book.pdf...')}><Download size={14} /> Unduh</button>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1rem', border: '1px solid #e2e8f0', borderRadius: '12px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontWeight: 500 }}><FileText size={20} color="#f97316" /> Invoice Pembelian.pdf</div>
-                  <button className="btn-outline" style={{ padding: '6px 14px', fontSize: '0.85rem' }} onClick={() => showNotification('Mengunduh Invoice Pembelian.pdf...')}><Download size={14} /> Unduh</button>
+                  <button className="bg-transparent text-gray-800 dark:text-gray-100 border border-gray-200 dark:border-gray-600 px-5 py-[0.6rem] rounded-custom-md font-semibold text-sm inline-flex items-center gap-2 no-underline hover:bg-gray-100 dark:hover:bg-gray-700 transition-all" style={{ padding: '6px 14px', fontSize: '0.85rem' }} onClick={() => showNotification('Mengunduh Invoice Pembelian.pdf...')}><Download size={14} /> Unduh</button>
                 </div>
               </div>
             </div>
@@ -251,25 +246,25 @@ const AssetDetail = () => {
         )}
 
         {activeTab === 'mutasi' && (
-          <div className="table-wrapper">
-            <table className="data-table">
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse text-left">
               <thead>
                 <tr>
-                  <th>ID Mutasi</th>
-                  <th>Tanggal</th>
-                  <th>Dari Ruangan</th>
-                  <th>Ke Ruangan</th>
-                  <th>Penanggung Jawab</th>
+                  <th className="bg-white dark:bg-gray-800 px-6 py-4 font-semibold text-sm text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">ID Mutasi</th>
+                  <th className="bg-white dark:bg-gray-800 px-6 py-4 font-semibold text-sm text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">Tanggal</th>
+                  <th className="bg-white dark:bg-gray-800 px-6 py-4 font-semibold text-sm text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">Dari Ruangan</th>
+                  <th className="bg-white dark:bg-gray-800 px-6 py-4 font-semibold text-sm text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">Ke Ruangan</th>
+                  <th className="bg-white dark:bg-gray-800 px-6 py-4 font-semibold text-sm text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">Penanggung Jawab</th>
                 </tr>
               </thead>
               <tbody>
                 {mutationHistory.map(mut => (
-                  <tr key={mut.id}>
-                    <td style={{ fontWeight: 600, color: '#0f172a' }}>{mut.id}</td>
-                    <td>{mut.date}</td>
-                    <td>{mut.from}</td>
-                    <td style={{ fontWeight: 600 }}><MapPin size={14} color="#f97316" style={{ display: 'inline', marginRight: '4px' }} /> {mut.to}</td>
-                    <td>{mut.by}</td>
+                  <tr key={mut.id} className="hover:bg-gray-50 dark:hover:bg-gray-900">
+                    <td className="px-6 py-4 text-sm border-b border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100 align-middle" style={{ fontWeight: 600, color: '#0f172a' }}>{mut.id}</td>
+                    <td className="px-6 py-4 text-sm border-b border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100 align-middle">{mut.date}</td>
+                    <td className="px-6 py-4 text-sm border-b border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100 align-middle">{mut.from}</td>
+                    <td className="px-6 py-4 text-sm border-b border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100 align-middle" style={{ fontWeight: 600 }}><MapPin size={14} color="#f97316" style={{ display: 'inline', marginRight: '4px' }} /> {mut.to}</td>
+                    <td className="px-6 py-4 text-sm border-b border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100 align-middle">{mut.by}</td>
                   </tr>
                 ))}
               </tbody>
@@ -278,25 +273,25 @@ const AssetDetail = () => {
         )}
 
         {activeTab === 'perbaikan' && (
-          <div className="table-wrapper">
-            <table className="data-table">
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse text-left">
               <thead>
                 <tr>
-                  <th>ID Tiket</th>
-                  <th>Tanggal Lapor</th>
-                  <th>Kendala / Kerusakan</th>
-                  <th>Teknisi</th>
-                  <th>Status</th>
+                  <th className="bg-white dark:bg-gray-800 px-6 py-4 font-semibold text-sm text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">ID Tiket</th>
+                  <th className="bg-white dark:bg-gray-800 px-6 py-4 font-semibold text-sm text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">Tanggal Lapor</th>
+                  <th className="bg-white dark:bg-gray-800 px-6 py-4 font-semibold text-sm text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">Kendala / Kerusakan</th>
+                  <th className="bg-white dark:bg-gray-800 px-6 py-4 font-semibold text-sm text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">Teknisi</th>
+                  <th className="bg-white dark:bg-gray-800 px-6 py-4 font-semibold text-sm text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">Status</th>
                 </tr>
               </thead>
               <tbody>
                 {repairHistory.map(rep => (
-                  <tr key={rep.id}>
-                    <td style={{ fontWeight: 600, color: '#0f172a' }}>{rep.id}</td>
-                    <td>{rep.date}</td>
-                    <td>{rep.issue}</td>
-                    <td>{rep.technician}</td>
-                    <td><span className="badge badge-success">{rep.status}</span></td>
+                  <tr key={rep.id} className="hover:bg-gray-50 dark:hover:bg-gray-900">
+                    <td className="px-6 py-4 text-sm border-b border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100 align-middle" style={{ fontWeight: 600, color: '#0f172a' }}>{rep.id}</td>
+                    <td className="px-6 py-4 text-sm border-b border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100 align-middle">{rep.date}</td>
+                    <td className="px-6 py-4 text-sm border-b border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100 align-middle">{rep.issue}</td>
+                    <td className="px-6 py-4 text-sm border-b border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100 align-middle">{rep.technician}</td>
+                    <td className="px-6 py-4 text-sm border-b border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100 align-middle"><span className="px-3 py-1 rounded-[2rem] text-xs font-semibold inline-block bg-green-100 text-green-800">{rep.status}</span></td>
                   </tr>
                 ))}
               </tbody>
@@ -305,25 +300,25 @@ const AssetDetail = () => {
         )}
 
         {activeTab === 'kalibrasi' && (
-          <div className="table-wrapper">
-            <table className="data-table">
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse text-left">
               <thead>
                 <tr>
-                  <th>ID Kalibrasi</th>
-                  <th>Tanggal Uji</th>
-                  <th>Lembaga Penguji</th>
-                  <th>Hasil</th>
-                  <th>Jadwal Berikutnya</th>
+                  <th className="bg-white dark:bg-gray-800 px-6 py-4 font-semibold text-sm text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">ID Kalibrasi</th>
+                  <th className="bg-white dark:bg-gray-800 px-6 py-4 font-semibold text-sm text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">Tanggal Uji</th>
+                  <th className="bg-white dark:bg-gray-800 px-6 py-4 font-semibold text-sm text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">Lembaga Penguji</th>
+                  <th className="bg-white dark:bg-gray-800 px-6 py-4 font-semibold text-sm text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">Hasil</th>
+                  <th className="bg-white dark:bg-gray-800 px-6 py-4 font-semibold text-sm text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">Jadwal Berikutnya</th>
                 </tr>
               </thead>
               <tbody>
                 {calibrationHistory.map(cal => (
-                  <tr key={cal.id}>
-                    <td style={{ fontWeight: 600, color: '#0f172a' }}>{cal.id}</td>
-                    <td>{cal.date}</td>
-                    <td>{cal.agency}</td>
-                    <td><span className="badge badge-success">{cal.result}</span></td>
-                    <td style={{ fontWeight: 700, color: '#f97316' }}><Calendar size={14} style={{ display: 'inline', marginRight: '4px', verticalAlign: 'text-bottom' }} /> {cal.nextDue}</td>
+                  <tr key={cal.id} className="hover:bg-gray-50 dark:hover:bg-gray-900">
+                    <td className="px-6 py-4 text-sm border-b border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100 align-middle" style={{ fontWeight: 600, color: '#0f172a' }}>{cal.id}</td>
+                    <td className="px-6 py-4 text-sm border-b border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100 align-middle">{cal.date}</td>
+                    <td className="px-6 py-4 text-sm border-b border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100 align-middle">{cal.agency}</td>
+                    <td className="px-6 py-4 text-sm border-b border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100 align-middle"><span className="px-3 py-1 rounded-[2rem] text-xs font-semibold inline-block bg-green-100 text-green-800">{cal.result}</span></td>
+                    <td className="px-6 py-4 text-sm border-b border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100 align-middle" style={{ fontWeight: 700, color: '#f97316' }}><Calendar size={14} style={{ display: 'inline', marginRight: '4px', verticalAlign: 'text-bottom' }} /> {cal.nextDue}</td>
                   </tr>
                 ))}
               </tbody>

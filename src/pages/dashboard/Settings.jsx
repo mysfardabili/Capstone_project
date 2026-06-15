@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Save, User, Shield, BellRing, Loader2 } from 'lucide-react';
 import { api } from '../../services/api';
-import '../../components/SharedUI.css';
 import Toast from '../../components/Toast';
 
 const Settings = () => {
@@ -32,7 +31,6 @@ const Settings = () => {
     weeklyReport: false,
   });
 
-  // Password state
   const [passwords, setPasswords] = useState({
     currentPassword: '',
     newPassword: '',
@@ -60,7 +58,6 @@ const Settings = () => {
   };
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchProfile();
   }, []);
 
@@ -80,14 +77,12 @@ const Settings = () => {
         profilePicture: updatedUser.profilePicture
       }));
 
-      // Update local storage including profilePicture so topbar avatar re-renders
       localStorage.setItem('user', JSON.stringify({
         name: updatedUser.name,
         email: updatedUser.email,
         role: updatedUser.role,
         profilePicture: updatedUser.profilePicture || ''
       }));
-      // Notify DashboardLayout to reload user data
       window.dispatchEvent(new Event('userProfileUpdated'));
       setToastMsg('Profil berhasil diperbarui!');
       setShowToast(true);
@@ -150,41 +145,29 @@ const Settings = () => {
 
   if (isFetching) {
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '60vh', gap: '1rem', color: 'var(--text-muted)' }}>
-        <Loader2 size={40} className="spin" style={{ color: 'var(--primary)' }} />
+      <div className="flex flex-col items-center justify-center h-[60vh] gap-4 text-gray-500 dark:text-gray-400">
+        <Loader2 size={40} className="animate-spin text-orange-500" />
         <span>Memuat data profil...</span>
-        <style>{`
-          .spin { animation: spin 1s linear infinite; }
-          @keyframes spin { 100% { transform: rotate(360deg); } }
-        `}</style>
       </div>
     );
   }
 
   return (
-    <div className="page-container">
+    <div className="flex flex-col gap-6 h-full">
       {showToast && <Toast message={toastMsg} onClose={() => setShowToast(false)} />}
 
-      <div className="page-header">
-        <h2 className="page-title">Pengaturan</h2>
+      <div className="flex justify-between items-center">
+        <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">Pengaturan</h2>
       </div>
 
-      <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
-        {/* Sidebar Settings */}
-        <div style={{ width: '100%', maxWidth: '250px', flexShrink: 0 }}>
-          <div className="card" style={{ padding: '1rem' }}>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+      <div className="flex gap-8 flex-wrap">
+        <div className="w-full max-w-[250px] shrink-0">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-custom-sm border border-gray-200 dark:border-gray-700 overflow-hidden flex flex-col p-4">
+            <ul className="list-none p-0 m-0 flex flex-col gap-2">
               <li>
                 <button
                   onClick={() => setSearchParams({ tab: 'profile' }, { replace: true })}
-                  style={{
-                    width: '100%', textAlign: 'left', padding: '0.75rem 1rem', borderRadius: 'var(--radius-md)',
-                    background: activeTab === 'profile' ? 'var(--primary-bg)' : 'transparent',
-                    color: activeTab === 'profile' ? 'var(--primary)' : 'var(--text-main)',
-                    fontWeight: activeTab === 'profile' ? 600 : 400,
-                    display: 'flex', alignItems: 'center', gap: '10px',
-                    border: 'none', cursor: 'pointer'
-                  }}
+                  className={`w-full text-left px-4 py-3 rounded-custom-md flex items-center gap-2.5 border-0 cursor-pointer ${activeTab === 'profile' ? 'bg-orange-50 text-orange-500 font-semibold' : 'text-gray-800 dark:text-gray-100 font-normal'}`}
                 >
                   <User size={18} /> Profil Pengguna
                 </button>
@@ -192,14 +175,7 @@ const Settings = () => {
               <li>
                 <button
                   onClick={() => setSearchParams({ tab: 'security' }, { replace: true })}
-                  style={{
-                    width: '100%', textAlign: 'left', padding: '0.75rem 1rem', borderRadius: 'var(--radius-md)',
-                    background: activeTab === 'security' ? 'var(--primary-bg)' : 'transparent',
-                    color: activeTab === 'security' ? 'var(--primary)' : 'var(--text-main)',
-                    fontWeight: activeTab === 'security' ? 600 : 400,
-                    display: 'flex', alignItems: 'center', gap: '10px',
-                    border: 'none', cursor: 'pointer'
-                  }}
+                  className={`w-full text-left px-4 py-3 rounded-custom-md flex items-center gap-2.5 border-0 cursor-pointer ${activeTab === 'security' ? 'bg-orange-50 text-orange-500 font-semibold' : 'text-gray-800 dark:text-gray-100 font-normal'}`}
                 >
                   <Shield size={18} /> Keamanan
                 </button>
@@ -207,14 +183,7 @@ const Settings = () => {
               <li>
                 <button
                   onClick={() => setSearchParams({ tab: 'preferences' }, { replace: true })}
-                  style={{
-                    width: '100%', textAlign: 'left', padding: '0.75rem 1rem', borderRadius: 'var(--radius-md)',
-                    background: activeTab === 'preferences' ? 'var(--primary-bg)' : 'transparent',
-                    color: activeTab === 'preferences' ? 'var(--primary)' : 'var(--text-main)',
-                    fontWeight: activeTab === 'preferences' ? 600 : 400,
-                    display: 'flex', alignItems: 'center', gap: '10px',
-                    border: 'none', cursor: 'pointer'
-                  }}
+                  className={`w-full text-left px-4 py-3 rounded-custom-md flex items-center gap-2.5 border-0 cursor-pointer ${activeTab === 'preferences' ? 'bg-orange-50 text-orange-500 font-semibold' : 'text-gray-800 dark:text-gray-100 font-normal'}`}
                 >
                   <BellRing size={18} /> Preferensi Sistem
                 </button>
@@ -223,26 +192,25 @@ const Settings = () => {
           </div>
         </div>
 
-        {/* Content Settings */}
-        <div style={{ flex: 1 }}>
-          <div className="form-container" style={{ maxWidth: '100%' }}>
+        <div className="flex-1">
+          <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-custom-sm border border-gray-200 dark:border-gray-700 max-w-full">
 
             {activeTab === 'profile' && (
               <form onSubmit={handleProfileSubmit}>
-                <h3 style={{ marginBottom: '1.5rem', color: 'var(--text-main)' }}>Profil Pengguna</h3>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '2rem', marginBottom: '2rem' }}>
-                  <div style={{ width: '80px', height: '80px', borderRadius: '50%', background: 'var(--primary)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2.2rem', fontWeight: 'bold', overflow: 'hidden' }}>
+                <h3 className="mb-6 text-gray-800 dark:text-gray-100">Profil Pengguna</h3>
+                <div className="flex items-center gap-8 mb-8">
+                  <div className="w-20 h-20 rounded-full bg-orange-500 text-white flex items-center justify-center text-[2.2rem] font-bold overflow-hidden shrink-0">
                     {adminUser.profilePicture ? (
-                      <img src={`http://localhost:5000${adminUser.profilePicture}`} alt="Foto Profil" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      <img src={`http://localhost:5000${adminUser.profilePicture}`} alt="Foto Profil" className="w-full h-full object-cover" />
                     ) : getInitials(adminUser.name)}
                   </div>
-                  <div style={{ position: 'relative' }}>
-                    <button type="button" className="btn-outline">Ubah Foto</button>
+                  <div className="relative">
+                    <button type="button" className="bg-transparent text-gray-800 dark:text-gray-100 border border-gray-200 dark:border-gray-600 px-5 py-[0.6rem] rounded-custom-md font-semibold text-sm inline-flex items-center gap-2 no-underline hover:bg-gray-100 dark:hover:bg-gray-700 transition-all">Ubah Foto</button>
                     <input
                       type="file"
                       name="profilePicture"
                       accept="image/*"
-                      style={{ position: 'absolute', left: 0, top: 0, opacity: 0, width: '100%', height: '100%', cursor: 'pointer' }}
+                      className="absolute left-0 top-0 opacity-0 w-full h-full cursor-pointer"
                       onChange={(e) => {
                         if (e.target.files && e.target.files[0]) {
                           setToastMsg('Foto dipilih. Klik Simpan Perubahan untuk mengunggah.');
@@ -253,42 +221,42 @@ const Settings = () => {
                   </div>
                 </div>
 
-                <div className="form-row">
-                  <div className="form-group">
-                    <label>Nama Lengkap</label>
+                <div className="flex flex-col md:flex-row gap-6 mb-6">
+                  <div className="flex flex-col gap-2 flex-1">
+                    <label className="text-sm font-semibold text-gray-800 dark:text-gray-100">Nama Lengkap</label>
                     <input
                       type="text"
                       name="name"
-                      className="form-control"
+                      className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]"
                       value={adminUser.name}
                       onChange={(e) => setAdminUser(prev => ({ ...prev, name: e.target.value }))}
                       required
                     />
                   </div>
-                  <div className="form-group">
-                    <label>Role</label>
-                    <input type="text" className="form-control" defaultValue={adminUser.role.toUpperCase()} disabled style={{ background: 'var(--bg-color)' }} />
+                  <div className="flex flex-col gap-2 flex-1">
+                    <label className="text-sm font-semibold text-gray-800 dark:text-gray-100">Role</label>
+                    <input type="text" className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)] bg-gray-100 dark:bg-gray-900" defaultValue={adminUser.role.toUpperCase()} disabled />
                   </div>
                 </div>
 
-                <div className="form-row">
-                  <div className="form-group">
-                    <label>Email</label>
+                <div className="flex flex-col md:flex-row gap-6 mb-6">
+                  <div className="flex flex-col gap-2 flex-1">
+                    <label className="text-sm font-semibold text-gray-800 dark:text-gray-100">Email</label>
                     <input
                       type="email"
                       name="email"
-                      className="form-control"
+                      className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]"
                       value={adminUser.email}
                       onChange={(e) => setAdminUser(prev => ({ ...prev, email: e.target.value }))}
                       required
                     />
                   </div>
-                  <div className="form-group">
-                    <label>Nomor Telepon</label>
+                  <div className="flex flex-col gap-2 flex-1">
+                    <label className="text-sm font-semibold text-gray-800 dark:text-gray-100">Nomor Telepon</label>
                     <input
                       type="text"
                       name="phone"
-                      className="form-control"
+                      className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]"
                       placeholder="Masukkan nomor telepon"
                       value={adminUser.phone}
                       onChange={(e) => setAdminUser(prev => ({ ...prev, phone: e.target.value }))}
@@ -296,10 +264,10 @@ const Settings = () => {
                   </div>
                 </div>
 
-                <div className="form-actions">
-                  <button type="submit" className="btn-primary" disabled={isLoading}>
+                <div className="flex justify-end gap-4 mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
+                  <button type="submit" className="bg-orange-500 text-white px-5 py-[0.6rem] rounded-custom-md font-semibold text-sm inline-flex items-center gap-2 no-underline hover:bg-orange-600 transition-colors disabled:opacity-70" disabled={isLoading}>
                     {isLoading ? (
-                      <><Loader2 size={18} className="spin" /> Menyimpan...</>
+                      <><Loader2 size={18} className="animate-spin" /> Menyimpan...</>
                     ) : (
                       <><Save size={18} /> Simpan Perubahan</>
                     )}
@@ -310,44 +278,44 @@ const Settings = () => {
 
             {activeTab === 'security' && (
               <form onSubmit={handlePasswordSubmit}>
-                <h3 style={{ marginBottom: '1.5rem', color: 'var(--text-main)' }}>Ubah Password</h3>
-                <div className="form-group" style={{ marginBottom: '1.5rem' }}>
-                  <label>Password Saat Ini</label>
+                <h3 className="mb-6 text-gray-800 dark:text-gray-100">Ubah Password</h3>
+                <div className="flex flex-col gap-2 flex-1 mb-6">
+                  <label className="text-sm font-semibold text-gray-800 dark:text-gray-100">Password Saat Ini</label>
                   <input
                     type="password"
-                    className="form-control"
+                    className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]"
                     placeholder="Masukkan password saat ini"
                     value={passwords.currentPassword}
                     onChange={(e) => setPasswords(prev => ({ ...prev, currentPassword: e.target.value }))}
                     required
                   />
                 </div>
-                <div className="form-group" style={{ marginBottom: '1.5rem' }}>
-                  <label>Password Baru</label>
+                <div className="flex flex-col gap-2 flex-1 mb-6">
+                  <label className="text-sm font-semibold text-gray-800 dark:text-gray-100">Password Baru</label>
                   <input
                     type="password"
-                    className="form-control"
+                    className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]"
                     placeholder="Masukkan password baru"
                     value={passwords.newPassword}
                     onChange={(e) => setPasswords(prev => ({ ...prev, newPassword: e.target.value }))}
                     required
                   />
                 </div>
-                <div className="form-group" style={{ marginBottom: '1.5rem' }}>
-                  <label>Konfirmasi Password Baru</label>
+                <div className="flex flex-col gap-2 flex-1 mb-6">
+                  <label className="text-sm font-semibold text-gray-800 dark:text-gray-100">Konfirmasi Password Baru</label>
                   <input
                     type="password"
-                    className="form-control"
+                    className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]"
                     placeholder="Ketik ulang password baru"
                     value={passwords.confirmPassword}
                     onChange={(e) => setPasswords(prev => ({ ...prev, confirmPassword: e.target.value }))}
                     required
                   />
                 </div>
-                <div className="form-actions">
-                  <button type="submit" className="btn-primary" disabled={isLoading}>
+                <div className="flex justify-end gap-4 mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
+                  <button type="submit" className="bg-orange-500 text-white px-5 py-[0.6rem] rounded-custom-md font-semibold text-sm inline-flex items-center gap-2 no-underline hover:bg-orange-600 transition-colors disabled:opacity-70" disabled={isLoading}>
                     {isLoading ? (
-                      <><Loader2 size={18} className="spin" /> Memperbarui...</>
+                      <><Loader2 size={18} className="animate-spin" /> Memperbarui...</>
                     ) : (
                       <><Save size={18} /> Update Password</>
                     )}
@@ -358,42 +326,42 @@ const Settings = () => {
 
             {activeTab === 'preferences' && (
               <form onSubmit={handlePreferencesSubmit}>
-                <h3 style={{ marginBottom: '1.5rem', color: 'var(--text-main)' }}>Preferensi Notifikasi</h3>
+                <h3 className="mb-6 text-gray-800 dark:text-gray-100">Preferensi Notifikasi</h3>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '2rem' }}>
-                  <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer' }}>
+                <div className="flex flex-col gap-4 mb-8">
+                  <label className="flex items-center gap-2.5 cursor-pointer">
                     <input
                       type="checkbox"
                       checked={adminUser.emailNewRequest}
                       onChange={(e) => setAdminUser(prev => ({ ...prev, emailNewRequest: e.target.checked }))}
-                      style={{ width: '18px', height: '18px' }}
+                      className="w-[18px] h-[18px]"
                     />
-                    <span style={{ color: 'var(--text-main)' }}>Notifikasi Email untuk Permintaan Baru</span>
+                    <span className="text-gray-800 dark:text-gray-100">Notifikasi Email untuk Permintaan Baru</span>
                   </label>
-                  <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer' }}>
+                  <label className="flex items-center gap-2.5 cursor-pointer">
                     <input
                       type="checkbox"
                       checked={adminUser.emailCalibrationDue}
                       onChange={(e) => setAdminUser(prev => ({ ...prev, emailCalibrationDue: e.target.checked }))}
-                      style={{ width: '18px', height: '18px' }}
+                      className="w-[18px] h-[18px]"
                     />
-                    <span style={{ color: 'var(--text-main)' }}>Notifikasi Email untuk Jadwal Kalibrasi (H-7)</span>
+                    <span className="text-gray-800 dark:text-gray-100">Notifikasi Email untuk Jadwal Kalibrasi (H-7)</span>
                   </label>
-                  <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer' }}>
+                  <label className="flex items-center gap-2.5 cursor-pointer">
                     <input
                       type="checkbox"
                       checked={adminUser.weeklyReport}
                       onChange={(e) => setAdminUser(prev => ({ ...prev, weeklyReport: e.target.checked }))}
-                      style={{ width: '18px', height: '18px' }}
+                      className="w-[18px] h-[18px]"
                     />
-                    <span style={{ color: 'var(--text-main)' }}>Laporan Rekapitulasi Mingguan via Email</span>
+                    <span className="text-gray-800 dark:text-gray-100">Laporan Rekapitulasi Mingguan via Email</span>
                   </label>
                 </div>
 
-                <div className="form-actions">
-                  <button type="submit" className="btn-primary" disabled={isLoading}>
+                <div className="flex justify-end gap-4 mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
+                  <button type="submit" className="bg-orange-500 text-white px-5 py-[0.6rem] rounded-custom-md font-semibold text-sm inline-flex items-center gap-2 no-underline hover:bg-orange-600 transition-colors disabled:opacity-70" disabled={isLoading}>
                     {isLoading ? (
-                      <><Loader2 size={18} className="spin" /> Menyimpan...</>
+                      <><Loader2 size={18} className="animate-spin" /> Menyimpan...</>
                     ) : (
                       <><Save size={18} /> Simpan Preferensi</>
                     )}
@@ -405,10 +373,6 @@ const Settings = () => {
           </div>
         </div>
       </div>
-      <style>{`
-        .spin { animation: spin 1s linear infinite; }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-      `}</style>
     </div>
   );
 };

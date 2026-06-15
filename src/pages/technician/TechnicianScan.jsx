@@ -145,7 +145,7 @@ const TechnicianScan = () => {
       </div>
 
       {/* Konten Utama */}
-      <div style={{ position: 'relative', zIndex: 10, flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '0 1.5rem', gap: '1.5rem' }}>
+        <div style={{ position: 'relative', zIndex: 10, flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '0 1rem md:px-6', gap: '1.5rem', maxWidth: '600px', margin: '0 auto', width: '100%' }}>
 
         {/* Loading overlay */}
         {scanState === 'loading' && (

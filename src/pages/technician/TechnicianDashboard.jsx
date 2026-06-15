@@ -17,7 +17,6 @@ const TechnicianDashboard = () => {
   const [calibrationItems, setCalibrationItems] = useState([]);
 
   useEffect(() => {
-    // Load username from localStorage
     const savedUser = localStorage.getItem('user');
     if (savedUser) {
       try {
@@ -39,10 +38,8 @@ const TechnicianDashboard = () => {
         const pendingList = repairsData.filter(r => r.status !== 'Selesai' && r.status !== 'Completed');
         const waitingCalibrations = calibrationsData.filter(c => c.status === 'Menunggu');
 
-        // Save calibration items for the modal
         setCalibrationItems(waitingCalibrations);
 
-        // Find most urgent repair (the latest Pending repair)
         const urgent = pendingList.find(r => r.status === 'Pending') || pendingList[0] || null;
 
         setStats({
@@ -63,8 +60,8 @@ const TechnicianDashboard = () => {
 
   if (isLoading) {
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '60vh', gap: '1rem', color: 'var(--text-muted)' }}>
-        <Loader2 size={40} className="spin" style={{ color: 'var(--primary)' }} />
+      <div className="flex flex-col items-center justify-center h-[60vh] gap-4 text-slate-400 dark:text-slate-500">
+        <Loader2 size={40} className="spin text-orange-500" />
         <span>Memuat dashboard teknisi...</span>
         <style>{`
           .spin { animation: spin 1s linear infinite; }
@@ -74,130 +71,120 @@ const TechnicianDashboard = () => {
     );
   }
 
-  // Calculate performa ratio
   const totalRepairs = stats.completed + stats.pending;
   const ratioPct = totalRepairs > 0 ? Math.round((stats.completed / totalRepairs) * 100) : 100;
 
   return (
     <div style={{ animation: 'fadeIn 0.3s ease-in-out' }}>
       
-      {/* 1. Urgent Banner */}
       {stats.urgentItem && (
-        <div className="urgent-banner">
+        <div className="bg-gradient-to-br from-red-500 to-red-600 text-white px-6 py-4 flex items-center gap-3 -mx-6 -mt-6 mb-6 shadow-[0_4px_15px_rgba(239,68,68,0.3)] animate-pulse-red">
           <AlertTriangle size={24} color="white" />
           <div>
-            <h4 style={{ margin: 0, fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '1px', fontWeight: '800' }}>Prioritas Darurat</h4>
-            <p style={{ margin: '2px 0 0 0', fontSize: '0.95rem', fontWeight: '600' }}>{stats.urgentItem}</p>
+            <h4 className="m-0 text-xs uppercase tracking-[1px] font-extrabold">Prioritas Darurat</h4>
+            <p className="mt-[2px] m-0 text-[0.95rem] font-semibold">{stats.urgentItem}</p>
           </div>
         </div>
       )}
 
-      {/* Greeting */}
-      <div style={{ marginBottom: '1.5rem' }}>
-        <p style={{ color: '#f97316', fontWeight: '800', fontSize: '0.75rem', marginBottom: '0.25rem', letterSpacing: '0.5px' }}>
+      <div className="mb-6">
+        <p className="text-orange-500 font-extrabold text-xs mb-1 tracking-[0.5px]">
           STATUS SHIFT: AKTIF
         </p>
-        <h1 style={{ margin: 0, fontSize: '1.8rem', fontWeight: '800', textTransform: 'uppercase', color: '#0f172a', letterSpacing: '-0.5px' }}>
+        <h1 className="m-0 text-[1.8rem] font-extrabold uppercase text-slate-900 dark:text-white tracking-[-0.5px]">
           Hello, {userName}
         </h1>
       </div>
 
-      {/* Progress Bar (Gamification) */}
-      <div style={{ marginBottom: '2rem' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '4px' }}>
-          <span style={{ fontSize: '0.85rem', fontWeight: '700', color: '#475569' }}>Performa Harian</span>
-          <span style={{ fontSize: '0.9rem', fontWeight: '800', color: '#3b82f6' }}>{stats.completed} / {totalRepairs} Selesai</span>
+      <div className="mb-8">
+        <div className="flex justify-between items-end mb-1">
+          <span className="text-sm font-bold text-slate-600 dark:text-slate-400">Performa Harian</span>
+          <span className="text-[0.9rem] font-extrabold text-blue-500">{stats.completed} / {totalRepairs} Selesai</span>
         </div>
-        <div className="progress-container">
-          <div className="progress-bar-fill" style={{ width: `${ratioPct}%` }}></div>
+        <div className="bg-black/5 dark:bg-white/10 rounded-[20px] h-2 w-full overflow-hidden mt-4">
+          <div className="bg-gradient-to-r from-blue-500 to-blue-400 h-full rounded-[20px] transition-all duration-1000" style={{ width: `${ratioPct}%` }}></div>
         </div>
       </div>
 
-      {/* Bento Grid System */}
-      <div className="bento-grid">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
         
-        {/* Main Card (Span 2) */}
-        <div className="tech-card tech-card-blue bento-main">
-          <div className="tech-card-header">
+        <div className="bg-white dark:bg-slate-800 rounded-[20px] p-6 shadow-card mb-[1.2rem] relative overflow-hidden border border-white/80 dark:border-slate-700 transition-all duration-300 active:scale-[0.98] bg-[linear-gradient(145deg,#ffffff_0%,#f0f7ff_100%)] dark:bg-[linear-gradient(145deg,#1e293b_0%,#0f172a_100%)] border-l-[6px] border-l-blue-600 sm:col-span-2">
+          <div className="flex justify-between items-start relative z-[2]">
             <div>
-              <h3 className="tech-card-title">Perbaikan Tertunda</h3>
-              <p className="tech-card-number">{stats.pending}</p>
+              <h3 className="text-base text-slate-500 dark:text-slate-400 font-bold m-0 mb-1">Perbaikan Tertunda</h3>
+              <p className="text-[3rem] font-extrabold m-0 text-slate-900 dark:text-white leading-none tracking-tight">{stats.pending}</p>
             </div>
-            <Link to="/technician/repairs" className="tech-card-link" style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+            <Link to="/technician/repairs" className="text-xs text-blue-600 font-bold no-underline bg-blue-100/50 dark:bg-blue-900/50 px-3 py-[6px] rounded-[20px] hover:bg-blue-100 dark:hover:bg-blue-900 transition-colors flex items-center gap-1">
               <Zap size={14} /> Proses
             </Link>
           </div>
-          <ClipboardList size={80} color="#2563eb" className="tech-icon-large" style={{ right: '10px', bottom: '-20px' }} />
+          <ClipboardList size={80} color="#2563eb" className="absolute right-[10px] bottom-[-20px] opacity-15 -rotate-15 w-[120px] h-[120px] z-0" />
         </div>
 
-        {/* Small Card Left - CLICKABLE: navigates to history */}
         <div 
-          className="tech-card tech-card-orange" 
-          style={{ padding: '1rem', cursor: 'pointer', transition: 'transform 0.2s, box-shadow 0.2s' }}
+          className="bg-white dark:bg-slate-800 rounded-[20px] shadow-card mb-[1.2rem] relative overflow-hidden border border-white/80 dark:border-slate-700 transition-all duration-300 active:scale-[0.98] bg-[linear-gradient(145deg,#ffffff_0%,#fff7ed_100%)] dark:bg-[linear-gradient(145deg,#1e293b_0%,#422006_100%)] border-l-[6px] border-l-orange-500 p-4 cursor-pointer transition-[transform,box-shadow] duration-200"
           onClick={() => navigate('/technician/history')}
           onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.03)'; e.currentTarget.style.boxShadow = '0 8px 25px rgba(249,115,22,0.2)'; }}
           onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = ''; }}
         >
-          <div className="tech-card-header" style={{ flexDirection: 'column', gap: '10px' }}>
-            <h3 className="tech-card-title" style={{ fontSize: '0.85rem' }}>Selesai</h3>
-            <p className="tech-card-number" style={{ fontSize: '2rem' }}>{stats.completed}</p>
+          <div className="flex flex-col gap-[10px] items-start relative z-[2]">
+            <h3 className="text-sm text-slate-500 dark:text-slate-400 font-bold m-0 mb-1">Selesai</h3>
+            <p className="text-[2rem] font-extrabold m-0 text-slate-900 dark:text-white leading-none tracking-tight">{stats.completed}</p>
           </div>
-          <CheckCircle size={60} color="#f97316" className="tech-icon-large" style={{ right: '-15px', bottom: '-15px' }} />
+          <CheckCircle size={60} color="#f97316" className="absolute right-[-15px] bottom-[-15px] opacity-15 -rotate-15 w-[120px] h-[120px] z-0" />
         </div>
 
-        {/* Small Card Right - CLICKABLE: opens calibration modal */}
         <div 
-          className="tech-card tech-card-red" 
-          style={{ padding: '1rem', cursor: 'pointer', transition: 'transform 0.2s, box-shadow 0.2s' }}
+          className="bg-white dark:bg-slate-800 rounded-[20px] shadow-card mb-[1.2rem] relative overflow-hidden border border-white/80 dark:border-slate-700 transition-all duration-300 active:scale-[0.98] bg-[linear-gradient(145deg,#ffffff_0%,#fef2f2_100%)] dark:bg-[linear-gradient(145deg,#1e293b_0%,#450a0a_100%)] border-l-[6px] border-l-red-500 p-4 cursor-pointer transition-[transform,box-shadow] duration-200"
           onClick={() => setShowCalibrationModal(true)}
           onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.03)'; e.currentTarget.style.boxShadow = '0 8px 25px rgba(239,68,68,0.2)'; }}
           onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = ''; }}
         >
-          <div className="tech-card-header" style={{ flexDirection: 'column', gap: '10px' }}>
-            <h3 className="tech-card-title" style={{ fontSize: '0.85rem' }}>Kalibrasi</h3>
-            <p className="tech-card-number" style={{ fontSize: '2rem' }}>{stats.calibrations}</p>
+          <div className="flex flex-col gap-[10px] items-start relative z-[2]">
+            <h3 className="text-sm text-slate-500 dark:text-slate-400 font-bold m-0 mb-1">Kalibrasi</h3>
+            <p className="text-[2rem] font-extrabold m-0 text-slate-900 dark:text-white leading-none tracking-tight">{stats.calibrations}</p>
           </div>
-          <CalendarDays size={60} color="#ef4444" className="tech-icon-large" style={{ right: '-15px', bottom: '-15px' }} />
+          <CalendarDays size={60} color="#ef4444" className="absolute right-[-15px] bottom-[-15px] opacity-15 -rotate-15 w-[120px] h-[120px] z-0" />
         </div>
 
       </div>
 
-      {/* Calibration Modal */}
       {showCalibrationModal && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(4px)', animation: 'fadeIn 0.2s ease-in-out' }}
+        <div className="fixed inset-0 bg-black/50 z-[1000] flex items-center justify-center backdrop-blur-sm"
           onClick={() => setShowCalibrationModal(false)}
         >
           <div 
-            style={{ background: 'white', borderRadius: '24px', padding: '1.5rem', maxWidth: '400px', width: '90%', maxHeight: '80vh', overflow: 'auto', boxShadow: '0 20px 60px rgba(0,0,0,0.15)', animation: 'slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1)' }}
+            className="bg-white dark:bg-slate-800 rounded-[24px] p-6 max-w-[400px] w-[90%] max-h-[80vh] overflow-auto shadow-[0_20px_60px_rgba(0,0,0,0.15)]"
+            style={{ animation: 'slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1)' }}
             onClick={(e) => e.stopPropagation()}
           >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
-              <h3 style={{ margin: 0, fontSize: '1.2rem', fontWeight: '800', color: '#0f172a' }}>Kalibrasi Menunggu</h3>
-              <button onClick={() => setShowCalibrationModal(false)} style={{ background: '#f1f5f9', border: 'none', borderRadius: '12px', padding: '8px', cursor: 'pointer', display: 'flex' }}>
-                <X size={18} color="#64748b" />
+            <div className="flex justify-between items-center mb-5">
+              <h3 className="m-0 text-xl font-extrabold text-slate-900 dark:text-white">Kalibrasi Menunggu</h3>
+              <button onClick={() => setShowCalibrationModal(false)} className="bg-slate-100 dark:bg-slate-700 border-none rounded-xl p-2 cursor-pointer flex">
+                <X size={18} className="text-slate-500 dark:text-slate-400" />
               </button>
             </div>
 
             {calibrationItems.length === 0 ? (
-              <div style={{ textAlign: 'center', padding: '2rem 1rem', color: '#94a3b8' }}>
-                <CalendarDays size={40} style={{ opacity: 0.3, marginBottom: '0.75rem' }} />
-                <p style={{ margin: 0, fontWeight: '600' }}>Tidak ada kalibrasi menunggu</p>
+              <div className="text-center p-8 text-slate-400">
+                <CalendarDays size={40} className="opacity-30 mb-3 mx-auto" />
+                <p className="m-0 font-semibold">Tidak ada kalibrasi menunggu</p>
               </div>
             ) : (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+              <div className="flex flex-col gap-3">
                 {calibrationItems.map(cal => (
-                  <div key={cal.id} style={{ background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '16px', padding: '1rem' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '6px' }}>
-                      <h4 style={{ margin: 0, fontSize: '0.95rem', fontWeight: '800', color: '#0f172a' }}>{cal.asset?.name || 'Aset'}</h4>
-                      <span style={{ fontSize: '0.7rem', fontWeight: '700', padding: '3px 8px', borderRadius: '8px', background: '#ef4444', color: 'white' }}>Menunggu</span>
+                  <div key={cal.id} className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-2xl p-4">
+                    <div className="flex justify-between items-start mb-1.5">
+                      <h4 className="m-0 text-[0.95rem] font-extrabold text-slate-900 dark:text-white">{cal.asset?.name || 'Aset'}</h4>
+                      <span className="text-[0.7rem] font-bold px-2 py-[3px] rounded-lg bg-red-500 text-white">Menunggu</span>
                     </div>
-                    <p style={{ margin: '0 0 4px 0', fontSize: '0.8rem', color: '#64748b' }}>ID: {cal.assetId} (Tiket: {cal.id})</p>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.8rem', color: '#ef4444', fontWeight: '700' }}>
+                    <p className="m-0 mb-1 text-sm text-slate-500 dark:text-slate-400">ID: {cal.assetId} (Tiket: {cal.id})</p>
+                    <div className="flex items-center gap-1.5 text-sm text-red-500 font-bold">
                       <CalendarDays size={14} />
                       <span>Jadwal: {cal.nextCalibrationDate ? new Date(cal.nextCalibrationDate).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }) : '-'}</span>
                     </div>
                     {cal.asset?.room && (
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.8rem', color: '#64748b', marginTop: '4px' }}>
+                      <div className="flex items-center gap-1.5 text-sm text-slate-500 dark:text-slate-400 mt-1">
                         <MapPin size={14} />
                         <span>{cal.asset.room}</span>
                       </div>
