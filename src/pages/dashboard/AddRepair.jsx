@@ -5,6 +5,26 @@ import { Html5Qrcode } from 'html5-qrcode';
 import { api } from '../../services/api';
 import Toast from '../../components/Toast';
 
+// Utilitas untuk mengekstrak Asset ID dari teks QR Code (bisa berupa teks biasa atau URL)
+const extractAssetId = (text) => {
+  const trimmed = text.trim();
+  try {
+    const url = new URL(trimmed);
+    const id = url.searchParams.get('assetId') || url.searchParams.get('id');
+    if (id) return id.toUpperCase();
+
+    const paths = url.pathname.split('/');
+    const last = paths[paths.length - 1];
+    if (last && last.toUpperCase().startsWith('AST-')) {
+      return last.toUpperCase();
+    }
+  } catch (e) {
+    // Bukan URL, gunakan teks mentah
+  }
+  return trimmed.toUpperCase();
+};
+
+
 const AddRepair = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -75,7 +95,7 @@ const AddRepair = () => {
             aspectRatio: 1.0,
           },
           async (decodedText) => {
-            setAssetId(decodedText.trim().toUpperCase());
+            setAssetId(extractAssetId(decodedText));
             await stopScanner();
           },
           () => {

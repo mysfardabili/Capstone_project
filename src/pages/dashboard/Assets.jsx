@@ -19,6 +19,7 @@ const Assets = () => {
   const [showToast, setShowToast] = useState(false);
   const [toastMsg, setToastMsg] = useState('');
   const [deleteTarget, setDeleteTarget] = useState(null);
+  const [qrModalAsset, setQrModalAsset] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
@@ -74,8 +75,15 @@ const Assets = () => {
   };
 
   const handlePrintQR = (asset) => {
-    setToastMsg(`QR Code untuk ${asset.name} (${asset.id}) sedang disiapkan untuk dicetak...`);
-    setShowToast(true);
+    setQrModalAsset(asset);
+  };
+
+  const handlePrint = () => {
+    if (!qrModalAsset) return;
+    const qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + encodeURIComponent(window.location.origin + '/technician/scan?assetId=' + qrModalAsset.id);
+    const printWindow = window.open('', '_blank');
+    printWindow.document.write('<html><head><title>Cetak QR - ' + qrModalAsset.id + '</title><style>@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap");body{font-family:"Inter",sans-serif;display:flex;justify-content:center;align-items:center;height:100vh;margin:0;background-color:#fff}.label-card{border:3px solid #0f172a;border-radius:16px;padding:20px;width:300px;text-align:center;box-shadow:0 4px 6px rgba(0,0,0,0.05)}.header{font-size:0.8rem;font-weight:800;color:#f97316;letter-spacing:1px;margin-bottom:12px;border-bottom:2px solid #f1f5f9;padding-bottom:8px}.qr-img{width:180px;height:180px;margin:10px auto}.asset-id{font-size:1.25rem;font-weight:800;color:#0f172a;margin:10px 0 5px 0}.asset-name{font-size:0.95rem;font-weight:600;color:#475569;margin:0 0 5px 0}.asset-room{font-size:0.8rem;font-weight:600;color:#64748b;margin:0}.footer-text{font-size:0.65rem;color:#94a3b8;margin-top:15px;border-top:1px solid #f1f5f9;padding-top:8px}</style></head><body><div class="label-card"><div class="header">ASETRA HOSPITAL MANAGEMENT</div><img class="qr-img" src="' + qrUrl + '" alt="QR Code" /><div class="asset-id">' + qrModalAsset.id + '</div><div class="asset-name">' + qrModalAsset.name + '</div><div class="asset-room">Ruangan: ' + qrModalAsset.room + '</div><div class="footer-text">Pindai dengan Kamera HP untuk Lapor / Detail</div></div><script>window.onload=function(){window.print();setTimeout(function(){window.close();},500);};</script></body></html>');
+    printWindow.document.close();
   };
 
   return (
@@ -199,6 +207,41 @@ const Assets = () => {
           )}
         </div>
       </div>
+
+      {qrModalAsset && (
+        <div className="fixed inset-0 bg-black/40 z-[1000] flex items-center justify-center backdrop-blur-sm">
+          <div className="bg-surface rounded-[24px] p-6 max-w-[360px] w-[90%] shadow-[0_25px_50px_rgba(0,0,0,0.15)] text-center border border-gray-100 dark:border-gray-700 flex flex-col items-center">
+            <h3 className="m-0 mb-4 text-[1.2rem] text-text-main font-bold font-sans">Label QR Code Aset</h3>
+            
+            <div className="border-2 border-slate-800 dark:border-slate-600 rounded-2xl p-5 w-full bg-white text-slate-900 flex flex-col items-center shadow-sm mb-6">
+              <div className="text-[0.75rem] font-extrabold text-orange-500 tracking-wider mb-2">ASETRA HOSPITAL MANAGEMENT</div>
+              <img 
+                src={`https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent(`${window.location.origin}/technician/scan?assetId=${qrModalAsset.id}`)}`} 
+                alt="QR Code Preview" 
+                className="w-[160px] h-[160px] my-2"
+              />
+              <div className="text-lg font-black tracking-tight text-slate-900 mt-2">{qrModalAsset.id}</div>
+              <div className="text-sm font-bold text-slate-700 mt-0.5">{qrModalAsset.name}</div>
+              <div className="text-xs text-slate-500 mt-0.5">Ruangan: {qrModalAsset.room}</div>
+            </div>
+
+            <div className="flex gap-2 w-full">
+              <button 
+                onClick={() => setQrModalAsset(null)} 
+                className="flex-1 bg-transparent text-text-main border border-gray-200 dark:border-gray-600 px-5 py-[0.6rem] rounded-custom-md font-semibold text-sm inline-flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-700 transition-all"
+              >
+                Tutup
+              </button>
+              <button 
+                onClick={handlePrint} 
+                className="flex-1 bg-orange-500 hover:bg-orange-600 text-white px-5 py-[0.6rem] rounded-custom-md font-semibold text-sm inline-flex items-center justify-center gap-2 transition-all"
+              >
+                Cetak Label
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

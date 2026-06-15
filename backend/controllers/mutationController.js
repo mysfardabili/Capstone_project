@@ -29,6 +29,12 @@ export const createMutation = async (req, res) => {
       return res.status(404).json({ message: 'Aset tidak ditemukan' });
     }
 
+    if (asset.condition !== 'Baik') {
+      return res.status(400).json({ 
+        message: `Aset tidak dapat dimutasi karena sedang dalam kondisi ${asset.condition.toLowerCase()}.` 
+      });
+    }
+
     // Generate MUT-001...
     const lastMut = await Mutation.findOne({
       order: [['id', 'DESC']],

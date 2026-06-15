@@ -1,11 +1,32 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { AlertTriangle, Scan, Search, MapPin, CalendarCheck, CheckCircle2, RotateCcw, Loader2, QrCode, Camera, CameraOff, X } from 'lucide-react';
 import { Html5Qrcode } from 'html5-qrcode';
 import { api } from '../../services/api';
 
+// Utilitas untuk mengekstrak Asset ID dari teks QR Code (bisa berupa teks biasa atau URL)
+const extractAssetId = (text) => {
+  const trimmed = text.trim();
+  try {
+    const url = new URL(trimmed);
+    const id = url.searchParams.get('assetId') || url.searchParams.get('id');
+    if (id) return id.toUpperCase();
+
+    const paths = url.pathname.split('/');
+    const last = paths[paths.length - 1];
+    if (last && last.toUpperCase().startsWith('AST-')) {
+      return last.toUpperCase();
+    }
+  } catch (e) {
+    // Bukan URL, gunakan teks mentah
+  }
+  return trimmed.toUpperCase();
+};
+
+
 const TechnicianScan = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [scanState, setScanState] = useState('idle'); // 'idle', 'camera', 'loading', 'result', 'error'
   const [scannedAsset, setScannedAsset] = useState(null);
   const [assetIdInput, setAssetIdInput] = useState('');
@@ -59,7 +80,8 @@ const TechnicianScan = () => {
         async (decodedText) => {
           // QR berhasil terbaca
           await stopCamera();
-          fetchAsset(decodedText.trim().toUpperCase());
+          const assetId = extractAssetId(decodedText);
+          fetchAsset(assetId);
         },
         (errorMessage) => {
           // Ignore scan errors (terjadi terus saat tidak ada QR)
@@ -88,6 +110,14 @@ const TechnicianScan = () => {
       setIsLoading(false);
     }
   };
+
+  // Auto-fetch jika assetId dilewatkan via URL query parameter (misal: scan kamera HP bawaan)
+  useEffect(() => {
+    const assetId = searchParams.get('assetId') || searchParams.get('id');
+    if (assetId) {
+      fetchAsset(assetId.trim().toUpperCase());
+    }
+  }, [searchParams]);
 
   const handleManualSearch = async (e) => {
     e.preventDefault();
