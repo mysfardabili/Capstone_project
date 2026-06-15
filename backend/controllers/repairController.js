@@ -1,6 +1,8 @@
 import Repair from '../models/Repair.js';
 import Asset from '../models/Asset.js';
 import Notification from '../models/Notification.js';
+import { logActivity } from '../middleware/auditLogger.js';
+import { uploadToCloudinary } from '../services/cloudinaryService.js';
 
 // @desc    Get all repairs
 // @route   GET /api/repairs
@@ -42,10 +44,14 @@ export const createRepair = async (req, res) => {
     }
     const id = `REP-${String(nextNum).padStart(3, '0')}`;
 
-    // Handle photo file
+    // Handle photo upload ke Cloudinary
     let photo = null;
     if (req.file) {
-      photo = `/uploads/${req.file.filename}`;
+      const uploaded = await uploadToCloudinary(
+        req.file.buffer,
+        'asetra/repairs'
+      );
+      photo = uploaded.url;
     }
 
     const newRepair = await Repair.create({
@@ -70,6 +76,21 @@ export const createRepair = async (req, res) => {
       relatedId: id,
     });
 
+    await logActivity(req, {
+      action: 'CREATE',
+      entityName: 'Repair',
+      entityId: newRepair.id,
+      newValues: newRepair
+    });
+
+    await logActivity(req, {
+      action: 'UPDATE',
+      entityName: 'Asset',
+      entityId: asset.id,
+      oldValues: { ...asset.dataValues, condition: 'Baik' },
+      newValues: asset
+    });
+
     res.status(201).json(newRepair);
   } catch (error) {
     res.status(500).json({ message: 'Gagal membuat laporan perbaikan', error: error.message });
@@ -91,6 +112,8 @@ export const updateRepair = async (req, res) => {
     }
 
     const asset = await Asset.findByPk(repair.assetId);
+    const oldRepairValues = { ...repair.dataValues };
+    const oldAssetValues = asset ? { ...asset.dataValues } : null;
 
     // Map status strings
     let mappedStatus = status;
@@ -102,7 +125,11 @@ export const updateRepair = async (req, res) => {
     repair.technicianName = technicianName || repair.technicianName || req.user.name;
 
     if (req.file) {
-      repair.photo = `/uploads/${req.file.filename}`;
+      const uploaded = await uploadToCloudinary(
+        req.file.buffer,
+        'asetra/repairs'
+      );
+      repair.photo = uploaded.url;
     }
 
     if (mappedStatus === 'Selesai') {
@@ -119,6 +146,24 @@ export const updateRepair = async (req, res) => {
     }
 
     await repair.save();
+
+    if (asset) {
+      await logActivity(req, {
+        action: 'UPDATE',
+        entityName: 'Asset',
+        entityId: asset.id,
+        oldValues: oldAssetValues,
+        newValues: asset
+      });
+    }
+
+    await logActivity(req, {
+      action: 'UPDATE',
+      entityName: 'Repair',
+      entityId: repair.id,
+      oldValues: oldRepairValues,
+      newValues: repair
+    });
 
     res.json(repair);
   } catch (error) {
@@ -141,6 +186,8 @@ export const updateRepairStatus = async (req, res) => {
     }
 
     const asset = await Asset.findByPk(repair.assetId);
+    const oldRepairValues = { ...repair.dataValues };
+    const oldAssetValues = asset ? { ...asset.dataValues } : null;
 
     // Map status strings
     let mappedStatus = status;
@@ -152,7 +199,11 @@ export const updateRepairStatus = async (req, res) => {
     repair.technicianName = technicianName || repair.technicianName || req.user.name;
 
     if (req.file) {
-      repair.photo = `/uploads/${req.file.filename}`;
+      const uploaded = await uploadToCloudinary(
+        req.file.buffer,
+        'asetra/repairs'
+      );
+      repair.photo = uploaded.url;
     }
 
     if (mappedStatus === 'Selesai') {
@@ -169,6 +220,24 @@ export const updateRepairStatus = async (req, res) => {
     }
 
     await repair.save();
+
+    if (asset) {
+      await logActivity(req, {
+        action: 'UPDATE',
+        entityName: 'Asset',
+        entityId: asset.id,
+        oldValues: oldAssetValues,
+        newValues: asset
+      });
+    }
+
+    await logActivity(req, {
+      action: 'UPDATE',
+      entityName: 'Repair',
+      entityId: repair.id,
+      oldValues: oldRepairValues,
+      newValues: repair
+    });
 
     res.json(repair);
   } catch (error) {

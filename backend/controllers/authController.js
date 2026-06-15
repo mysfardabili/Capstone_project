@@ -1,9 +1,14 @@
 import User from '../models/User.js';
 import jwt from 'jsonwebtoken';
 
+/**
+ * Token expires dalam 8 jam.
+ * Lebih aman dari 30 hari (token lama tidak bisa disalahgunakan jika bocor).
+ * Jika user perlu sesi lebih lama, frontend bisa auto-refresh saat token hampir habis.
+ */
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: '30d',
+    expiresIn: '8h',
   });
 };
 
@@ -13,8 +18,12 @@ const generateToken = (id) => {
 export const login = async (req, res) => {
   const { email, password } = req.body;
 
+  if (!email || !password) {
+    return res.status(400).json({ message: 'Email dan kata sandi wajib diisi' });
+  }
+
   try {
-    const user = await User.findOne({ where: { email } });
+    const user = await User.findOne({ where: { email: email.toLowerCase().trim() } });
 
     if (user && (await user.comparePassword(password))) {
       res.json({
@@ -26,6 +35,8 @@ export const login = async (req, res) => {
         token: generateToken(user.id),
       });
     } else {
+      // Respon yang sama untuk email tidak ditemukan vs password salah
+      // Ini mencegah enumerasi akun (user enumeration attack)
       res.status(401).json({ message: 'Email atau kata sandi salah' });
     }
   } catch (error) {

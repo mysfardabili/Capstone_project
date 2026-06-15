@@ -9,21 +9,19 @@ import {
   deleteAsset,
 } from '../controllers/assetController.js';
 import { protect, authorize } from '../middleware/auth.js';
+import { validateAsset } from '../middleware/validator.js';
 
 const router = express.Router();
 
-// Multer Config for Image/PDF Uploads
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/');
-  },
-  filename: (req, file, cb) => {
-    cb(null, `${Date.now()}-${file.originalname}`);
-  },
-});
-
+// ============================================
+// Multer: gunakan memoryStorage agar file tidak
+// disimpan ke disk lokal — langsung dikirim ke Cloudinary
+// ============================================
 const upload = multer({
-  storage,
+  storage: multer.memoryStorage(),
+  limits: {
+    fileSize: 10 * 1024 * 1024, // Batas 10MB per file
+  },
   fileFilter: (req, file, cb) => {
     const filetypes = /jpeg|jpg|png|webp|pdf/;
     const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
@@ -42,11 +40,11 @@ router.use(protect);
 
 router.route('/')
   .get(authorize('admin', 'technician'), getAssets)
-  .post(authorize('admin'), upload.fields([{ name: 'image', maxCount: 1 }, { name: 'document', maxCount: 1 }]), createAsset);
+  .post(authorize('admin'), upload.fields([{ name: 'image', maxCount: 1 }, { name: 'document', maxCount: 1 }]), validateAsset, createAsset);
 
 router.route('/:id')
   .get(authorize('admin', 'technician'), getAssetById)
-  .put(authorize('admin'), upload.fields([{ name: 'image', maxCount: 1 }, { name: 'document', maxCount: 1 }]), updateAsset)
+  .put(authorize('admin'), upload.fields([{ name: 'image', maxCount: 1 }, { name: 'document', maxCount: 1 }]), validateAsset, updateAsset)
   .delete(authorize('admin'), deleteAsset);
 
 export default router;

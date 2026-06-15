@@ -101,7 +101,7 @@ const DashboardLayout = () => {
   ];
 
   return (
-    <div className="flex h-screen overflow-hidden bg-background text-gray-800 dark:text-gray-100 transition-colors duration-300">
+    <div className="flex h-screen overflow-hidden bg-background text-text-main transition-colors duration-300">
 
       {/* Sidebar Overlay for Mobile */}
       {isSidebarOpen && (
@@ -112,7 +112,7 @@ const DashboardLayout = () => {
       )}
 
       {/* Sidebar */}
-      <aside className={`fixed md:relative z-[1000] md:z-auto h-full w-[250px] bg-orange-500 dark:bg-gray-800 text-white flex flex-col shrink-0 transition-all duration-300 -translate-x-full md:translate-x-0 ${isSidebarOpen ? 'translate-x-0' : ''}`}>
+      <aside className={`fixed md:relative z-[1000] md:z-auto h-full w-[250px] bg-sidebar-bg text-white flex flex-col shrink-0 transition-all duration-300 -translate-x-full md:translate-x-0 ${isSidebarOpen ? 'translate-x-0' : ''}`}>
         <div className="px-8 py-6 flex items-center justify-center">
           <img
             src="/asetra-putih.png"
@@ -145,7 +145,7 @@ const DashboardLayout = () => {
 
         <div className="p-6">
           <button
-            className="w-full flex items-center justify-center gap-2 bg-gray-100 dark:bg-gray-700 text-orange-500 dark:text-orange-400 p-3 rounded-lg font-semibold hover:bg-orange-50 dark:hover:bg-gray-600 transition-colors"
+            className="w-full flex items-center justify-center gap-2 bg-gray-100 dark:bg-gray-700 text-primary p-3 rounded-lg font-semibold hover:bg-orange-50 dark:hover:bg-gray-600 transition-colors"
             onClick={handleSignOut}
           >
             <LogOut size={18} /> Sign Out
@@ -156,27 +156,27 @@ const DashboardLayout = () => {
       {/* Main Content */}
       <main className="flex-1 flex flex-col overflow-hidden">
         {/* Topbar */}
-        <header className="flex items-center justify-between px-8 py-4 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 transition-colors duration-300">
+        <header className="flex items-center justify-between px-8 py-4 bg-surface border-b border-border transition-colors duration-300">
           <div className="flex items-center gap-[10px]">
             <button className="block md:hidden bg-none border-none text-orange-500 dark:text-blue-400 text-2xl cursor-pointer" onClick={toggleSidebar}>
-              <Menu size={24} className="text-gray-800 dark:text-gray-100" />
+              <Menu size={24} className="text-text-main" />
             </button>
             <h1 className="text-2xl font-bold text-orange-500 dark:text-blue-400">Dashboard</h1>
           </div>
 
-          <form onSubmit={handleSearchSubmit} className="hidden md:flex items-center bg-gray-100 dark:bg-gray-700 rounded-[2rem] px-4 py-2 w-[300px] gap-2 border border-gray-200 dark:border-gray-600 transition-colors duration-300">
-            <Search size={18} className="text-gray-500 dark:text-gray-400" />
+          <form onSubmit={handleSearchSubmit} className="hidden md:flex items-center bg-gray-100 dark:bg-gray-700 rounded-[2rem] px-4 py-2 w-[300px] gap-2 border border-border transition-colors duration-300">
+            <Search size={18} className="text-text-muted" />
             <input
               type="text"
               placeholder="Search by asset id"
               value={searchVal}
               onChange={(e) => setSearchVal(e.target.value)}
-              className="border-none bg-transparent outline-none w-full text-sm text-gray-800 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
+              className="border-none bg-transparent outline-none w-full text-sm text-text-main placeholder-gray-500 dark:placeholder-gray-400"
             />
           </form>
 
           <div className="flex items-center gap-5">
-            <button onClick={() => setIsDarkMode(!isDarkMode)} className="cursor-pointer p-[5px] rounded-full bg-gray-100 dark:bg-gray-700">
+            <button onClick={() => setIsDarkMode(!isDarkMode)} className="cursor-pointer p-[5px] rounded-full bg-gray-100 dark:bg-gray-700 transition-colors duration-300">
               {isDarkMode ? <Sun size={20} color="#f59e0b" /> : <Moon size={20} className="text-gray-500" />}
             </button>
             <div
@@ -185,7 +185,7 @@ const DashboardLayout = () => {
             >
               <Bell size={22} className="text-orange-500 dark:text-blue-400 cursor-pointer hover:opacity-70 transition-opacity" />
               {unreadCount > 0 && (
-                <div className="absolute top-0 right-0 w-[10px] h-[10px] bg-red-500 rounded-full border-2 border-white dark:border-gray-800"></div>
+                <div className="absolute top-0 right-0 w-[10px] h-[10px] bg-danger rounded-full border-2 border-surface"></div>
               )}
             </div>
             <Settings
@@ -210,7 +210,7 @@ const DashboardLayout = () => {
         </header>
 
         {/* Dynamic Page Content */}
-        <div className="flex-1 p-4 md:p-8 overflow-y-auto bg-background text-gray-800 dark:text-gray-100 transition-colors duration-300">
+        <div className="flex-1 p-4 md:p-8 overflow-y-auto bg-background text-text-main transition-colors duration-300">
           <Outlet />
         </div>
       </main>

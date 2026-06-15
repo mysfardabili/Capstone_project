@@ -5,17 +5,26 @@
 @tailwind utilities;
 
 :root {
-  --primary: #f97316; /* Orange 500 */
-  --primary-dark: #ea580c; /* Orange 600 */
-  --primary-light: #fed7aa; /* Orange 200 */
-  --primary-bg: #fff7ed; /* Orange 50 */
-  --bg-color: #f3f4f6; /* Gray 100 */
-  --bg-dark: #1e293b; /* Slate 800 */
+  --primary: #f97316;
+  /* Orange 500 */
+  --primary-dark: #ea580c;
+  /* Orange 600 */
+  --primary-light: #fed7aa;
+  /* Orange 200 */
+  --primary-bg: #fff7ed;
+  /* Orange 50 */
+  --bg-color: #f3f4f6;
+  /* Gray 100 */
+  --bg-dark: #1e293b;
+  /* Slate 800 */
   --surface: #ffffff;
-  --text-main: #1f2937; /* Gray 800 */
-  --text-muted: #6b7280; /* Gray 500 */
+  --text-main: #1f2937;
+  /* Gray 800 */
+  --text-muted: #6b7280;
+  /* Gray 500 */
   --text-inverse: #ffffff;
-  --border: #e5e7eb; /* Gray 200 */
+  --border: #e5e7eb;
+  /* Gray 200 */
   --danger: #ef4444;
   --success: #10b981;
   --warning: #f59e0b;
@@ -25,7 +34,7 @@
   --radius-md: 0.5rem;
   --radius-lg: 1rem;
   --radius-full: 9999px;
-  
+
   /* Icon & Badge Colors */
   --icon-bg-blue: #e0e7ff;
   --icon-color-blue: #4f46e5;
@@ -38,19 +47,27 @@
   --table-header: #ffffff;
   --table-row-hover: #f9fafb;
 
+  --sidebar-bg: #f97316;
+
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .dark {
-  --bg-color: #0f172a; /* Slate 900 */
-  --surface: #1e293b; /* Slate 800 */
-  --text-main: #f1f5f9; /* Slate 100 */
-  --text-muted: #94a3b8; /* Slate 400 */
-  --border: #334155; /* Slate 700 */
-  --primary-bg: #431407; /* Orange 950/Darker */
+  --bg-color: #0f172a;
+  /* Slate 900 */
+  --surface: #1e293b;
+  /* Slate 800 */
+  --text-main: #f1f5f9;
+  /* Slate 100 */
+  --text-muted: #94a3b8;
+  /* Slate 400 */
+  --border: #334155;
+  /* Slate 700 */
+  --primary-bg: #431407;
+  /* Orange 950/Darker */
   --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
   --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
-  
+
   /* Icon & Badge Colors (Dark) */
   --icon-bg-blue: rgba(79, 70, 229, 0.2);
   --icon-color-blue: #818cf8;
@@ -62,6 +79,7 @@
   --icon-color-green: #34d399;
   --table-header: #1e293b;
   --table-row-hover: #0f172a;
+  --sidebar-bg: #1e293b;
 }
 
 * {
@@ -91,17 +109,8 @@ button {
   background: none;
 }
 
-input, textarea, select {
+input,
+textarea,
+select {
   font-family: 'Inter', sans-serif;
 }
-
-/* Utilities */
-.flex { display: flex; }
-.flex-col { display: flex; flex-direction: column; }
-.items-center { align-items: center; }
-.justify-center { justify-content: center; }
-.justify-between { justify-content: space-between; }
-.w-full { width: 100%; }
-.h-full { height: 100%; }
-.min-h-screen { min-height: 100vh; }
-.text-center { text-align: center; }

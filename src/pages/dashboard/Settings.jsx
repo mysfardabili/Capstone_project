@@ -145,7 +145,7 @@ const Settings = () => {
 
   if (isFetching) {
     return (
-      <div className="flex flex-col items-center justify-center h-[60vh] gap-4 text-gray-500 dark:text-gray-400">
+      <div className="flex flex-col items-center justify-center h-[60vh] gap-4 text-text-muted">
         <Loader2 size={40} className="animate-spin text-orange-500" />
         <span>Memuat data profil...</span>
       </div>
@@ -157,17 +157,17 @@ const Settings = () => {
       {showToast && <Toast message={toastMsg} onClose={() => setShowToast(false)} />}
 
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">Pengaturan</h2>
+        <h2 className="text-2xl font-bold text-text-main">Pengaturan</h2>
       </div>
 
       <div className="flex gap-8 flex-wrap">
         <div className="w-full max-w-[250px] shrink-0">
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-custom-sm border border-gray-200 dark:border-gray-700 overflow-hidden flex flex-col p-4">
+          <div className="bg-surface rounded-xl shadow-custom-sm border border-border overflow-hidden flex flex-col p-4">
             <ul className="list-none p-0 m-0 flex flex-col gap-2">
               <li>
                 <button
                   onClick={() => setSearchParams({ tab: 'profile' }, { replace: true })}
-                  className={`w-full text-left px-4 py-3 rounded-custom-md flex items-center gap-2.5 border-0 cursor-pointer ${activeTab === 'profile' ? 'bg-orange-50 text-orange-500 font-semibold' : 'text-gray-800 dark:text-gray-100 font-normal'}`}
+                  className={`w-full text-left px-4 py-3 rounded-custom-md flex items-center gap-2.5 border-0 cursor-pointer ${activeTab === 'profile' ? 'bg-orange-50 text-orange-500 font-semibold' : 'text-text-main font-normal'}`}
                 >
                   <User size={18} /> Profil Pengguna
                 </button>
@@ -175,7 +175,7 @@ const Settings = () => {
               <li>
                 <button
                   onClick={() => setSearchParams({ tab: 'security' }, { replace: true })}
-                  className={`w-full text-left px-4 py-3 rounded-custom-md flex items-center gap-2.5 border-0 cursor-pointer ${activeTab === 'security' ? 'bg-orange-50 text-orange-500 font-semibold' : 'text-gray-800 dark:text-gray-100 font-normal'}`}
+                  className={`w-full text-left px-4 py-3 rounded-custom-md flex items-center gap-2.5 border-0 cursor-pointer ${activeTab === 'security' ? 'bg-orange-50 text-orange-500 font-semibold' : 'text-text-main font-normal'}`}
                 >
                   <Shield size={18} /> Keamanan
                 </button>
@@ -183,7 +183,7 @@ const Settings = () => {
               <li>
                 <button
                   onClick={() => setSearchParams({ tab: 'preferences' }, { replace: true })}
-                  className={`w-full text-left px-4 py-3 rounded-custom-md flex items-center gap-2.5 border-0 cursor-pointer ${activeTab === 'preferences' ? 'bg-orange-50 text-orange-500 font-semibold' : 'text-gray-800 dark:text-gray-100 font-normal'}`}
+                  className={`w-full text-left px-4 py-3 rounded-custom-md flex items-center gap-2.5 border-0 cursor-pointer ${activeTab === 'preferences' ? 'bg-orange-50 text-orange-500 font-semibold' : 'text-text-main font-normal'}`}
                 >
                   <BellRing size={18} /> Preferensi Sistem
                 </button>
@@ -193,11 +193,11 @@ const Settings = () => {
         </div>
 
         <div className="flex-1">
-          <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-custom-sm border border-gray-200 dark:border-gray-700 max-w-full">
+          <div className="bg-surface p-8 rounded-xl shadow-custom-sm border border-border max-w-full">
 
             {activeTab === 'profile' && (
               <form onSubmit={handleProfileSubmit}>
-                <h3 className="mb-6 text-gray-800 dark:text-gray-100">Profil Pengguna</h3>
+                <h3 className="mb-6 text-text-main">Profil Pengguna</h3>
                 <div className="flex items-center gap-8 mb-8">
                   <div className="w-20 h-20 rounded-full bg-orange-500 text-white flex items-center justify-center text-[2.2rem] font-bold overflow-hidden shrink-0">
                     {adminUser.profilePicture ? (
@@ -205,7 +205,7 @@ const Settings = () => {
                     ) : getInitials(adminUser.name)}
                   </div>
                   <div className="relative">
-                    <button type="button" className="bg-transparent text-gray-800 dark:text-gray-100 border border-gray-200 dark:border-gray-600 px-5 py-[0.6rem] rounded-custom-md font-semibold text-sm inline-flex items-center gap-2 no-underline hover:bg-gray-100 dark:hover:bg-gray-700 transition-all">Ubah Foto</button>
+                    <button type="button" className="bg-transparent text-text-main border border-gray-200 dark:border-gray-600 px-5 py-[0.6rem] rounded-custom-md font-semibold text-sm inline-flex items-center gap-2 no-underline hover:bg-gray-100 dark:hover:bg-gray-700 transition-all">Ubah Foto</button>
                     <input
                       type="file"
                       name="profilePicture"
@@ -223,40 +223,40 @@ const Settings = () => {
 
                 <div className="flex flex-col md:flex-row gap-6 mb-6">
                   <div className="flex flex-col gap-2 flex-1">
-                    <label className="text-sm font-semibold text-gray-800 dark:text-gray-100">Nama Lengkap</label>
+                    <label className="text-sm font-semibold text-text-main">Nama Lengkap</label>
                     <input
                       type="text"
                       name="name"
-                      className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]"
+                      className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-surface text-text-main transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]"
                       value={adminUser.name}
                       onChange={(e) => setAdminUser(prev => ({ ...prev, name: e.target.value }))}
                       required
                     />
                   </div>
                   <div className="flex flex-col gap-2 flex-1">
-                    <label className="text-sm font-semibold text-gray-800 dark:text-gray-100">Role</label>
-                    <input type="text" className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)] bg-gray-100 dark:bg-gray-900" defaultValue={adminUser.role.toUpperCase()} disabled />
+                    <label className="text-sm font-semibold text-text-main">Role</label>
+                    <input type="text" className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-surface text-text-main transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)] bg-gray-100 dark:bg-gray-900" defaultValue={adminUser.role.toUpperCase()} disabled />
                   </div>
                 </div>
 
                 <div className="flex flex-col md:flex-row gap-6 mb-6">
                   <div className="flex flex-col gap-2 flex-1">
-                    <label className="text-sm font-semibold text-gray-800 dark:text-gray-100">Email</label>
+                    <label className="text-sm font-semibold text-text-main">Email</label>
                     <input
                       type="email"
                       name="email"
-                      className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]"
+                      className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-surface text-text-main transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]"
                       value={adminUser.email}
                       onChange={(e) => setAdminUser(prev => ({ ...prev, email: e.target.value }))}
                       required
                     />
                   </div>
                   <div className="flex flex-col gap-2 flex-1">
-                    <label className="text-sm font-semibold text-gray-800 dark:text-gray-100">Nomor Telepon</label>
+                    <label className="text-sm font-semibold text-text-main">Nomor Telepon</label>
                     <input
                       type="text"
                       name="phone"
-                      className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]"
+                      className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-surface text-text-main transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]"
                       placeholder="Masukkan nomor telepon"
                       value={adminUser.phone}
                       onChange={(e) => setAdminUser(prev => ({ ...prev, phone: e.target.value }))}
@@ -264,7 +264,7 @@ const Settings = () => {
                   </div>
                 </div>
 
-                <div className="flex justify-end gap-4 mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
+                <div className="flex justify-end gap-4 mt-8 pt-6 border-t border-border">
                   <button type="submit" className="bg-orange-500 text-white px-5 py-[0.6rem] rounded-custom-md font-semibold text-sm inline-flex items-center gap-2 no-underline hover:bg-orange-600 transition-colors disabled:opacity-70" disabled={isLoading}>
                     {isLoading ? (
                       <><Loader2 size={18} className="animate-spin" /> Menyimpan...</>
@@ -278,12 +278,12 @@ const Settings = () => {
 
             {activeTab === 'security' && (
               <form onSubmit={handlePasswordSubmit}>
-                <h3 className="mb-6 text-gray-800 dark:text-gray-100">Ubah Password</h3>
+                <h3 className="mb-6 text-text-main">Ubah Password</h3>
                 <div className="flex flex-col gap-2 flex-1 mb-6">
-                  <label className="text-sm font-semibold text-gray-800 dark:text-gray-100">Password Saat Ini</label>
+                  <label className="text-sm font-semibold text-text-main">Password Saat Ini</label>
                   <input
                     type="password"
-                    className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]"
+                    className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-surface text-text-main transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]"
                     placeholder="Masukkan password saat ini"
                     value={passwords.currentPassword}
                     onChange={(e) => setPasswords(prev => ({ ...prev, currentPassword: e.target.value }))}
@@ -291,10 +291,10 @@ const Settings = () => {
                   />
                 </div>
                 <div className="flex flex-col gap-2 flex-1 mb-6">
-                  <label className="text-sm font-semibold text-gray-800 dark:text-gray-100">Password Baru</label>
+                  <label className="text-sm font-semibold text-text-main">Password Baru</label>
                   <input
                     type="password"
-                    className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]"
+                    className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-surface text-text-main transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]"
                     placeholder="Masukkan password baru"
                     value={passwords.newPassword}
                     onChange={(e) => setPasswords(prev => ({ ...prev, newPassword: e.target.value }))}
@@ -302,17 +302,17 @@ const Settings = () => {
                   />
                 </div>
                 <div className="flex flex-col gap-2 flex-1 mb-6">
-                  <label className="text-sm font-semibold text-gray-800 dark:text-gray-100">Konfirmasi Password Baru</label>
+                  <label className="text-sm font-semibold text-text-main">Konfirmasi Password Baru</label>
                   <input
                     type="password"
-                    className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]"
+                    className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-surface text-text-main transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]"
                     placeholder="Ketik ulang password baru"
                     value={passwords.confirmPassword}
                     onChange={(e) => setPasswords(prev => ({ ...prev, confirmPassword: e.target.value }))}
                     required
                   />
                 </div>
-                <div className="flex justify-end gap-4 mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
+                <div className="flex justify-end gap-4 mt-8 pt-6 border-t border-border">
                   <button type="submit" className="bg-orange-500 text-white px-5 py-[0.6rem] rounded-custom-md font-semibold text-sm inline-flex items-center gap-2 no-underline hover:bg-orange-600 transition-colors disabled:opacity-70" disabled={isLoading}>
                     {isLoading ? (
                       <><Loader2 size={18} className="animate-spin" /> Memperbarui...</>
@@ -326,7 +326,7 @@ const Settings = () => {
 
             {activeTab === 'preferences' && (
               <form onSubmit={handlePreferencesSubmit}>
-                <h3 className="mb-6 text-gray-800 dark:text-gray-100">Preferensi Notifikasi</h3>
+                <h3 className="mb-6 text-text-main">Preferensi Notifikasi</h3>
 
                 <div className="flex flex-col gap-4 mb-8">
                   <label className="flex items-center gap-2.5 cursor-pointer">
@@ -336,7 +336,7 @@ const Settings = () => {
                       onChange={(e) => setAdminUser(prev => ({ ...prev, emailNewRequest: e.target.checked }))}
                       className="w-[18px] h-[18px]"
                     />
-                    <span className="text-gray-800 dark:text-gray-100">Notifikasi Email untuk Permintaan Baru</span>
+                    <span className="text-text-main">Notifikasi Email untuk Permintaan Baru</span>
                   </label>
                   <label className="flex items-center gap-2.5 cursor-pointer">
                     <input
@@ -345,7 +345,7 @@ const Settings = () => {
                       onChange={(e) => setAdminUser(prev => ({ ...prev, emailCalibrationDue: e.target.checked }))}
                       className="w-[18px] h-[18px]"
                     />
-                    <span className="text-gray-800 dark:text-gray-100">Notifikasi Email untuk Jadwal Kalibrasi (H-7)</span>
+                    <span className="text-text-main">Notifikasi Email untuk Jadwal Kalibrasi (H-7)</span>
                   </label>
                   <label className="flex items-center gap-2.5 cursor-pointer">
                     <input
@@ -354,11 +354,11 @@ const Settings = () => {
                       onChange={(e) => setAdminUser(prev => ({ ...prev, weeklyReport: e.target.checked }))}
                       className="w-[18px] h-[18px]"
                     />
-                    <span className="text-gray-800 dark:text-gray-100">Laporan Rekapitulasi Mingguan via Email</span>
+                    <span className="text-text-main">Laporan Rekapitulasi Mingguan via Email</span>
                   </label>
                 </div>
 
-                <div className="flex justify-end gap-4 mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
+                <div className="flex justify-end gap-4 mt-8 pt-6 border-t border-border">
                   <button type="submit" className="bg-orange-500 text-white px-5 py-[0.6rem] rounded-custom-md font-semibold text-sm inline-flex items-center gap-2 no-underline hover:bg-orange-600 transition-colors disabled:opacity-70" disabled={isLoading}>
                     {isLoading ? (
                       <><Loader2 size={18} className="animate-spin" /> Menyimpan...</>

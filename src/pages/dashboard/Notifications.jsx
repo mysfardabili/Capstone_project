@@ -105,22 +105,22 @@ const Notifications = () => {
       {showToast && <Toast message={toastMsg} onClose={() => setShowToast(false)} />}
       
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 md:gap-0">
-        <h2 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-gray-100">Notifikasi {unreadCount > 0 && <span className="bg-red-500 text-white text-sm px-2 py-0.5 rounded-full ml-2">{unreadCount} Baru</span>}</h2>
-        <button className="bg-transparent text-gray-800 dark:text-gray-100 border border-gray-200 dark:border-gray-600 px-5 py-[0.6rem] rounded-custom-md font-semibold text-sm inline-flex items-center gap-2 no-underline hover:bg-gray-100 dark:hover:bg-gray-700 transition-all justify-center w-full md:w-auto" onClick={markAllAsRead} disabled={unreadCount === 0}>
+        <h2 className="text-xl md:text-2xl font-bold text-text-main">Notifikasi {unreadCount > 0 && <span className="bg-red-500 text-white text-sm px-2 py-0.5 rounded-full ml-2">{unreadCount} Baru</span>}</h2>
+        <button className="bg-transparent text-text-main border border-gray-200 dark:border-gray-600 px-5 py-[0.6rem] rounded-custom-md font-semibold text-sm inline-flex items-center gap-2 no-underline hover:bg-gray-100 dark:hover:bg-gray-700 transition-all justify-center w-full md:w-auto" onClick={markAllAsRead} disabled={unreadCount === 0}>
           <CheckCircle size={18} /> Tandai Semua Dibaca
         </button>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-custom-sm border border-gray-200 dark:border-gray-700 overflow-hidden flex flex-col p-6">
+      <div className="bg-surface rounded-xl shadow-custom-sm border border-border overflow-hidden flex flex-col p-6">
         {isLoading ? (
-          <div className="flex flex-col items-center justify-center py-16 gap-4 text-gray-500 dark:text-gray-400">
+          <div className="flex flex-col items-center justify-center py-16 gap-4 text-text-muted">
             <Loader2 size={36} className="animate-spin text-orange-500" />
             <span>Memuat notifikasi...</span>
           </div>
         ) : notifications.length === 0 ? (
-          <div className="text-center p-12 text-gray-500 dark:text-gray-400">
+          <div className="text-center p-12 text-text-muted">
             <Bell size={48} className="opacity-50 mb-4" />
-            <h3 className="font-semibold text-lg text-gray-800 dark:text-gray-100">Belum Ada Notifikasi</h3>
+            <h3 className="font-semibold text-lg text-text-main">Belum Ada Notifikasi</h3>
             <p>Anda belum memiliki notifikasi baru saat ini.</p>
           </div>
         ) : (
@@ -129,7 +129,7 @@ const Notifications = () => {
               <div 
                 key={notif.id} 
                 onClick={() => handleNotificationClick(notif)}
-                className={`flex gap-4 p-4 border border-gray-200 dark:border-gray-700 rounded-custom-md transition-all cursor-pointer ${notif.isRead ? '' : 'bg-[var(--table-row-hover)]'}`}
+                className={`flex gap-4 p-4 border border-border rounded-custom-md transition-all cursor-pointer ${notif.isRead ? '' : 'bg-[var(--table-row-hover)]'}`}
               >
                 <div 
                   style={{ background: getBg(notif.type) }}
@@ -139,12 +139,12 @@ const Notifications = () => {
                 </div>
                 <div className="flex-1">
                   <div className="flex justify-between mb-1">
-                    <h4 className={`m-0 text-base ${notif.isRead ? 'font-medium' : 'font-bold'} text-gray-800 dark:text-gray-100`}>{getTitle(notif.type)}</h4>
-                    <span className="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1">
+                    <h4 className={`m-0 text-base ${notif.isRead ? 'font-medium' : 'font-bold'} text-text-main`}>{getTitle(notif.type)}</h4>
+                    <span className="text-xs text-text-muted flex items-center gap-1">
                       <Clock size={12} /> {formatTimeDiff(notif.date)}
                     </span>
                   </div>
-                  <p className="m-0 text-sm text-gray-500 dark:text-gray-400">{notif.message}</p>
+                  <p className="m-0 text-sm text-text-muted">{notif.message}</p>
                 </div>
                 {!notif.isRead && (
                   <div className="w-2.5 h-2.5 bg-orange-500 rounded-full self-center"></div>

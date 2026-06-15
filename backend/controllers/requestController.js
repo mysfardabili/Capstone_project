@@ -1,4 +1,6 @@
 import Request from '../models/Request.js';
+import { logActivity } from '../middleware/auditLogger.js';
+import { sendEmail } from '../services/emailService.js';
 
 // @desc    Get all requests
 // @route   GET /api/requests
@@ -45,6 +47,20 @@ export const createRequest = async (req, res) => {
       status: 'Pending',
     });
 
+    await logActivity(req, {
+      action: 'CREATE',
+      entityName: 'Request',
+      entityId: newRequest.id,
+      newValues: newRequest
+    });
+
+    // Kirim notifikasi email ke Admin
+    await sendEmail({
+      to: 'admin@asetra.com',
+      subject: `[ASETRA] Pengajuan Aset Baru - ${newRequest.id}`,
+      text: `Halo Admin,\n\nAda pengajuan aset baru dengan detail:\nID Pengajuan: ${newRequest.id}\nNama Aset: ${newRequest.assetName}\nKategori: ${newRequest.category}\nJumlah: ${newRequest.qty}\nDiajukan Oleh: ${newRequest.requesterName} (${newRequest.department})\nCatatan: ${newRequest.notes || '-'}\n\nSilakan tinjau pengajuan ini di dashboard ASETRA.`,
+    });
+
     res.status(201).json(newRequest);
   } catch (error) {
     res.status(500).json({ message: 'Gagal membuat permintaan baru', error: error.message });
@@ -69,8 +85,24 @@ export const updateRequestStatus = async (req, res) => {
     if (status === 'Approved') mappedStatus = 'Disetujui';
     if (status === 'Rejected') mappedStatus = 'Ditolak';
 
+    const oldValues = { ...request.dataValues };
     request.status = mappedStatus;
     await request.save();
+
+    await logActivity(req, {
+      action: 'UPDATE',
+      entityName: 'Request',
+      entityId: request.id,
+      oldValues: oldValues,
+      newValues: request
+    });
+
+    // Notifikasi email status pengajuan
+    await sendEmail({
+      to: 'requester@asetra.com',
+      subject: `[ASETRA] Status Pengajuan Aset ${request.id} - ${request.status}`,
+      text: `Halo,\n\nPengajuan aset Anda (${request.assetName}) telah diperbarui dengan status: ${request.status}.\n\nSalam,\nTim ASETRA`,
+    });
 
     res.json(request);
   } catch (error) {
@@ -91,8 +123,23 @@ export const approveRequest = async (req, res) => {
       return res.status(404).json({ message: 'Permintaan tidak ditemukan' });
     }
 
+    const oldValues = { ...request.dataValues };
     request.status = 'Disetujui';
     await request.save();
+
+    await logActivity(req, {
+      action: 'UPDATE',
+      entityName: 'Request',
+      entityId: request.id,
+      oldValues: oldValues,
+      newValues: request
+    });
+
+    await sendEmail({
+      to: 'requester@asetra.com',
+      subject: `[ASETRA] Pengajuan Aset Disetujui - ${request.id}`,
+      text: `Halo,\n\nKabar baik! Pengajuan aset Anda (${request.assetName}) telah DISETUJUI oleh Admin.\n\nSalam,\nTim ASETRA`,
+    });
 
     res.json(request);
   } catch (error) {
@@ -113,8 +160,23 @@ export const rejectRequest = async (req, res) => {
       return res.status(404).json({ message: 'Permintaan tidak ditemukan' });
     }
 
+    const oldValues = { ...request.dataValues };
     request.status = 'Ditolak';
     await request.save();
+
+    await logActivity(req, {
+      action: 'UPDATE',
+      entityName: 'Request',
+      entityId: request.id,
+      oldValues: oldValues,
+      newValues: request
+    });
+
+    await sendEmail({
+      to: 'requester@asetra.com',
+      subject: `[ASETRA] Pengajuan Aset Ditolak - ${request.id}`,
+      text: `Halo,\n\nMohon maaf, pengajuan aset Anda (${request.assetName}) ditolak.\n\nSalam,\nTim ASETRA`,
+    });
 
     res.json(request);
   } catch (error) {

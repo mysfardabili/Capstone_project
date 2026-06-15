@@ -1,6 +1,8 @@
 import Calibration from '../models/Calibration.js';
 import Asset from '../models/Asset.js';
 import { Op } from 'sequelize';
+import { logActivity } from '../middleware/auditLogger.js';
+import { uploadToCloudinary } from '../services/cloudinaryService.js';
 
 // @desc    Get all calibrations
 // @route   GET /api/calibrations
@@ -51,6 +53,13 @@ export const createCalibration = async (req, res) => {
       notes,
     });
 
+    await logActivity(req, {
+      action: 'CREATE',
+      entityName: 'Calibration',
+      entityId: newCalibration.id,
+      newValues: newCalibration
+    });
+
     res.status(201).json(newCalibration);
   } catch (error) {
     res.status(500).json({ message: 'Gagal menjadwalkan kalibrasi', error: error.message });
@@ -71,6 +80,8 @@ export const updateCalibration = async (req, res) => {
       return res.status(404).json({ message: 'Data kalibrasi tidak ditemukan' });
     }
 
+    const oldValues = { ...calibration.dataValues };
+
     calibration.status = status || calibration.status;
     calibration.certificateNumber = certificateNumber !== undefined ? certificateNumber : calibration.certificateNumber;
     calibration.notes = notes !== undefined ? notes : calibration.notes;
@@ -81,10 +92,22 @@ export const updateCalibration = async (req, res) => {
     }
 
     if (req.file) {
-      calibration.certificateUrl = `/uploads/${req.file.filename}`;
+      const uploaded = await uploadToCloudinary(
+        req.file.buffer,
+        'asetra/calibrations'
+      );
+      calibration.certificateUrl = uploaded.url;
     }
 
     await calibration.save();
+
+    await logActivity(req, {
+      action: 'UPDATE',
+      entityName: 'Calibration',
+      entityId: calibration.id,
+      oldValues: oldValues,
+      newValues: calibration
+    });
 
     res.json(calibration);
   } catch (error) {

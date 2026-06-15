@@ -1,5 +1,6 @@
 import Mutation from '../models/Mutation.js';
 import Asset from '../models/Asset.js';
+import { logActivity } from '../middleware/auditLogger.js';
 
 // @desc    Get all mutations
 // @route   GET /api/mutations
@@ -60,6 +61,13 @@ export const createMutation = async (req, res) => {
       status: 'Pending',
     });
 
+    await logActivity(req, {
+      action: 'CREATE',
+      entityName: 'Mutation',
+      entityId: newMutation.id,
+      newValues: newMutation
+    });
+
     res.status(201).json(newMutation);
   } catch (error) {
     res.status(500).json({ message: 'Gagal mengajukan mutasi', error: error.message });
@@ -80,6 +88,7 @@ export const updateMutationStatus = async (req, res) => {
       return res.status(404).json({ message: 'Data mutasi tidak ditemukan' });
     }
 
+    const oldValues = { ...mutation.dataValues };
     mutation.status = status;
     await mutation.save();
 
@@ -87,10 +96,27 @@ export const updateMutationStatus = async (req, res) => {
     if (status === 'Approved') {
       const asset = await Asset.findByPk(mutation.assetId);
       if (asset) {
+        const oldAssetValues = { ...asset.dataValues };
         asset.room = mutation.targetLocation;
         await asset.save();
+
+        await logActivity(req, {
+          action: 'UPDATE',
+          entityName: 'Asset',
+          entityId: asset.id,
+          oldValues: oldAssetValues,
+          newValues: asset
+        });
       }
     }
+
+    await logActivity(req, {
+      action: 'UPDATE',
+      entityName: 'Mutation',
+      entityId: mutation.id,
+      oldValues: oldValues,
+      newValues: mutation
+    });
 
     res.json(mutation);
   } catch (error) {

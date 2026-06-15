@@ -117,11 +117,11 @@ const AddRepair = () => {
     <div className="flex flex-col gap-6 h-full">
       {showToast && <Toast message="Laporan kerusakan berhasil dikirim!" onClose={() => setShowToast(false)} />}
       <div className="flex justify-between items-center" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-        <button className="bg-transparent text-gray-800 dark:text-gray-100 border border-gray-200 dark:border-gray-600 px-5 py-[0.6rem] rounded-custom-md font-semibold text-sm inline-flex items-center gap-2 no-underline hover:bg-gray-100 dark:hover:bg-gray-700 transition-all" onClick={() => navigate(-1)}><ArrowLeft size={24} /></button>
-        <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100" style={{ margin: 0 }}>Form Pelaporan Kerusakan</h1>
+        <button className="bg-transparent text-text-main border border-gray-200 dark:border-gray-600 px-5 py-[0.6rem] rounded-custom-md font-semibold text-sm inline-flex items-center gap-2 no-underline hover:bg-gray-100 dark:hover:bg-gray-700 transition-all" onClick={() => navigate(-1)}><ArrowLeft size={24} /></button>
+        <h1 className="text-2xl font-bold text-text-main" style={{ margin: 0 }}>Form Pelaporan Kerusakan</h1>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-custom-sm border border-gray-200 dark:border-gray-700 max-w-[800px] border-t-4 border-t-red-500">
+      <div className="bg-surface p-8 rounded-xl shadow-custom-sm border border-border max-w-[800px] border-t-4 border-t-red-500">
         {errorMsg && (
           <div className="text-red-500 bg-red-100 p-3 rounded-[10px] mb-6 text-sm font-medium">
             {errorMsg}
@@ -131,12 +131,12 @@ const AddRepair = () => {
         <form onSubmit={handleSubmit}>
           <div className="flex flex-col md:flex-row gap-6 mb-6">
             <div className="flex flex-col gap-2 flex-1">
-              <label className="text-sm font-semibold text-gray-800 dark:text-gray-100">ID Aset / Scan QR</label>
+              <label className="text-sm font-semibold text-text-main">ID Aset / Scan QR</label>
               <div style={{ display: 'flex', gap: '0.5rem' }}>
                 <input
                   type="text"
                   name="assetId"
-                  className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]"
+                  className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-surface text-text-main transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]"
                   placeholder="Contoh: AST-002"
                   required
                   style={{ flex: 1 }}
@@ -145,7 +145,7 @@ const AddRepair = () => {
                 />
                 <button
                   type="button"
-                  className="bg-transparent text-gray-800 dark:text-gray-100 border border-gray-200 dark:border-gray-600 px-5 py-[0.6rem] rounded-custom-md font-semibold text-sm inline-flex items-center gap-2 no-underline hover:bg-gray-100 dark:hover:bg-gray-700 transition-all"
+                  className="bg-transparent text-text-main border border-gray-200 dark:border-gray-600 px-5 py-[0.6rem] rounded-custom-md font-semibold text-sm inline-flex items-center gap-2 no-underline hover:bg-gray-100 dark:hover:bg-gray-700 transition-all"
                   style={{ padding: '0 1rem' }}
                   title="Scan QR Code"
                   onClick={startScanner}
@@ -155,8 +155,8 @@ const AddRepair = () => {
               </div>
             </div>
             <div className="flex flex-col gap-2 flex-1">
-              <label className="text-sm font-semibold text-gray-800 dark:text-gray-100">Tingkat Prioritas</label>
-              <select name="priority" className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]" required defaultValue="sedang">
+              <label className="text-sm font-semibold text-text-main">Tingkat Prioritas</label>
+              <select name="priority" className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-surface text-text-main transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]" required defaultValue="sedang">
                 <option value="rendah">Rendah (Dapat ditunda)</option>
                 <option value="sedang">Sedang (Perlu penanganan)</option>
                 <option value="tinggi">Tinggi (Berpengaruh pada pasien / Cito)</option>
@@ -168,23 +168,23 @@ const AddRepair = () => {
           <input type="hidden" name="reporterName" value={reporterName} />
 
           <div className="flex flex-col gap-2 flex-1 mb-6">
-            <label className="text-sm font-semibold text-gray-800 dark:text-gray-100">Deskripsi Kerusakan</label>
-            <textarea name="description" className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]" placeholder="Jelaskan secara rinci kerusakan yang terjadi..." required></textarea>
+            <label className="text-sm font-semibold text-text-main">Deskripsi Kerusakan</label>
+            <textarea name="description" className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-surface text-text-main transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]" placeholder="Jelaskan secara rinci kerusakan yang terjadi..." required></textarea>
           </div>
 
           <div className="flex flex-col gap-2 flex-1 mb-6">
-            <label className="text-sm font-semibold text-gray-800 dark:text-gray-100">Unggah Foto Bukti Kerusakan (Opsional)</label>
+            <label className="text-sm font-semibold text-text-main">Unggah Foto Bukti Kerusakan (Opsional)</label>
             <input
               type="file"
               name="image"
               accept="image/*"
-              className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]"
+              className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-surface text-text-main transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]"
               style={{ padding: '0.5rem', background: '#f8fafc' }}
             />
           </div>
 
-          <div className="flex justify-end gap-4 mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
-            <Link to="/dashboard/repairs" className="bg-transparent text-gray-800 dark:text-gray-100 border border-gray-200 dark:border-gray-600 px-5 py-[0.6rem] rounded-custom-md font-semibold text-sm inline-flex items-center gap-2 no-underline hover:bg-gray-100 dark:hover:bg-gray-700 transition-all">Batal</Link>
+          <div className="flex justify-end gap-4 mt-8 pt-6 border-t border-border">
+            <Link to="/dashboard/repairs" className="bg-transparent text-text-main border border-gray-200 dark:border-gray-600 px-5 py-[0.6rem] rounded-custom-md font-semibold text-sm inline-flex items-center gap-2 no-underline hover:bg-gray-100 dark:hover:bg-gray-700 transition-all">Batal</Link>
             <button type="submit" className="bg-red-500 text-white px-5 py-[0.6rem] rounded-custom-md font-semibold text-sm inline-flex items-center gap-2 no-underline hover:bg-red-600 transition-colors disabled:opacity-70" disabled={isLoading} style={{ opacity: isLoading ? 0.7 : 1 }}>
               {isLoading ? (
                 <><Loader2 size={18} className="spin" /> Melaporkan...</>
@@ -203,21 +203,21 @@ const AddRepair = () => {
 
       {isScanning && (
         <div className="fixed inset-0 z-[1000] flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)' }}>
-          <div className="bg-white dark:bg-gray-800 rounded-[20px] p-6 max-w-[400px] w-[90%] shadow-custom-lg border border-gray-200 dark:border-gray-700">
-            <h3 className="m-0 mb-4 text-gray-800 dark:text-gray-100">Scan QR Code Aset</h3>
+          <div className="bg-surface rounded-[20px] p-6 max-w-[400px] w-[90%] shadow-custom-lg border border-border">
+            <h3 className="m-0 mb-4 text-text-main">Scan QR Code Aset</h3>
 
             {cameraError ? (
               <div className="text-red-500 bg-red-100 p-3 rounded-[10px] text-sm font-medium mb-4">
                 {cameraError}
               </div>
             ) : (
-              <div className="w-full rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700 mb-4">
+              <div className="w-full rounded-xl overflow-hidden border border-border mb-4">
                 <div id={scannerDivId} className="w-full" />
               </div>
             )}
 
             <div className="flex justify-end">
-              <button type="button" className="bg-transparent text-gray-800 dark:text-gray-100 border border-gray-200 dark:border-gray-600 px-5 py-[0.6rem] rounded-custom-md font-semibold text-sm inline-flex items-center gap-2 no-underline hover:bg-gray-100 dark:hover:bg-gray-700 transition-all" onClick={stopScanner}>Tutup</button>
+              <button type="button" className="bg-transparent text-text-main border border-gray-200 dark:border-gray-600 px-5 py-[0.6rem] rounded-custom-md font-semibold text-sm inline-flex items-center gap-2 no-underline hover:bg-gray-100 dark:hover:bg-gray-700 transition-all" onClick={stopScanner}>Tutup</button>
             </div>
           </div>
         </div>

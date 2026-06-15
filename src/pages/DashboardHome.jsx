@@ -52,7 +52,7 @@ const DashboardHome = () => {
     return (
       <div className="flex flex-col items-center justify-center h-[60vh] gap-4">
         <Loader2 size={40} className="animate-spin text-orange-500" />
-        <span className="text-gray-500 dark:text-gray-400">Memuat ringkasan dashboard...</span>
+        <span className="text-text-muted">Memuat ringkasan dashboard...</span>
       </div>
     );
   }
@@ -96,70 +96,70 @@ const DashboardHome = () => {
       </section>
 
       <section className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Link to="/dashboard/assets/add" className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-custom-md p-4 flex items-center justify-center gap-3 font-semibold text-gray-800 dark:text-gray-100 transition-all shadow-custom-sm no-underline hover:-translate-y-[2px] hover:shadow-custom-md hover:border-orange-500 hover:text-orange-600">
+        <Link to="/dashboard/assets/add" className="bg-surface border border-border rounded-custom-md p-4 flex items-center justify-center gap-3 font-semibold text-text-main transition-all shadow-custom-sm no-underline hover:-translate-y-[2px] hover:shadow-custom-md hover:border-orange-500 hover:text-orange-600">
           <div className="bg-orange-50 text-orange-500 p-2 rounded-custom-md flex"><Package size={20} /></div>
           Tambah Aset
         </Link>
-        <Link to="/dashboard/repairs/add" className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-custom-md p-4 flex items-center justify-center gap-3 font-semibold text-gray-800 dark:text-gray-100 transition-all shadow-custom-sm no-underline hover:-translate-y-[2px] hover:shadow-custom-md hover:border-orange-500 hover:text-orange-600">
+        <Link to="/dashboard/repairs/add" className="bg-surface border border-border rounded-custom-md p-4 flex items-center justify-center gap-3 font-semibold text-text-main transition-all shadow-custom-sm no-underline hover:-translate-y-[2px] hover:shadow-custom-md hover:border-orange-500 hover:text-orange-600">
           <div className="bg-orange-50 text-orange-500 p-2 rounded-custom-md flex"><AlertTriangle size={20} /></div>
           Lapor Kerusakan
         </Link>
-        <Link to="/dashboard/mutation/add" className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-custom-md p-4 flex items-center justify-center gap-3 font-semibold text-gray-800 dark:text-gray-100 transition-all shadow-custom-sm no-underline hover:-translate-y-[2px] hover:shadow-custom-md hover:border-orange-500 hover:text-orange-600">
+        <Link to="/dashboard/mutation/add" className="bg-surface border border-border rounded-custom-md p-4 flex items-center justify-center gap-3 font-semibold text-text-main transition-all shadow-custom-sm no-underline hover:-translate-y-[2px] hover:shadow-custom-md hover:border-orange-500 hover:text-orange-600">
           <div className="bg-orange-50 text-orange-500 p-2 rounded-custom-md flex"><RefreshCw size={20} /></div>
           Ajukan Mutasi
         </Link>
-        <Link to="/dashboard/calibration/add" className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-custom-md p-4 flex items-center justify-center gap-3 font-semibold text-gray-800 dark:text-gray-100 transition-all shadow-custom-sm no-underline hover:-translate-y-[2px] hover:shadow-custom-md hover:border-orange-500 hover:text-orange-600">
+        <Link to="/dashboard/calibration/add" className="bg-surface border border-border rounded-custom-md p-4 flex items-center justify-center gap-3 font-semibold text-text-main transition-all shadow-custom-sm no-underline hover:-translate-y-[2px] hover:shadow-custom-md hover:border-orange-500 hover:text-orange-600">
           <div className="bg-green-100 text-green-500 dark:bg-green-900/20 dark:text-green-400 p-2 rounded-custom-md flex"><Clock size={20} /></div>
           Jadwal Kalibrasi
         </Link>
       </section>
 
       <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-white dark:bg-gray-800 rounded-custom-lg p-6 flex items-center gap-4 border border-gray-200 dark:border-gray-700 shadow-custom-sm hover:-translate-y-[3px] hover:shadow-custom-md transition-all duration-200">
+        <div className="bg-surface rounded-custom-lg p-6 flex items-center gap-4 border border-border shadow-custom-sm hover:-translate-y-[3px] hover:shadow-custom-md transition-all duration-200">
           <div className="bg-blue-100 text-indigo-600 dark:bg-blue-900/20 dark:text-indigo-400 w-12 h-12 rounded-custom-md flex items-center justify-center shrink-0">
             <Package size={24} />
           </div>
           <div className="flex flex-col">
-            <span className="text-sm text-gray-500 dark:text-gray-400 font-medium mb-1">Total Aset</span>
-            <span className="text-2xl font-bold text-gray-800 dark:text-gray-100">{summary.totalAssets}</span>
+            <span className="text-sm text-text-muted font-medium mb-1">Total Aset</span>
+            <span className="text-2xl font-bold text-text-main">{summary.totalAssets}</span>
           </div>
         </div>
         
-        <div className="bg-white dark:bg-gray-800 rounded-custom-lg p-6 flex items-center gap-4 border border-gray-200 dark:border-gray-700 shadow-custom-sm hover:-translate-y-[3px] hover:shadow-custom-md transition-all duration-200">
+        <div className="bg-surface rounded-custom-lg p-6 flex items-center gap-4 border border-border shadow-custom-sm hover:-translate-y-[3px] hover:shadow-custom-md transition-all duration-200">
           <div className="bg-red-100 text-red-500 dark:bg-red-900/20 dark:text-red-400 w-12 h-12 rounded-custom-md flex items-center justify-center shrink-0">
             <AlertTriangle size={24} />
           </div>
           <div className="flex flex-col">
-            <span className="text-sm text-gray-500 dark:text-gray-400 font-medium mb-1">Perbaikan Aktif</span>
-            <span className="text-2xl font-bold text-gray-800 dark:text-gray-100">{summary.activeRepairs}</span>
+            <span className="text-sm text-text-muted font-medium mb-1">Perbaikan Aktif</span>
+            <span className="text-2xl font-bold text-text-main">{summary.activeRepairs}</span>
           </div>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-custom-lg p-6 flex items-center gap-4 border border-gray-200 dark:border-gray-700 shadow-custom-sm hover:-translate-y-[3px] hover:shadow-custom-md transition-all duration-200">
+        <div className="bg-surface rounded-custom-lg p-6 flex items-center gap-4 border border-border shadow-custom-sm hover:-translate-y-[3px] hover:shadow-custom-md transition-all duration-200">
           <div className="bg-amber-100 text-amber-500 dark:bg-amber-900/20 dark:text-amber-400 w-12 h-12 rounded-custom-md flex items-center justify-center shrink-0">
             <ClipboardList size={24} />
           </div>
           <div className="flex flex-col">
-            <span className="text-sm text-gray-500 dark:text-gray-400 font-medium mb-1">Permintaan Tertunda</span>
-            <span className="text-2xl font-bold text-gray-800 dark:text-gray-100">{summary.pendingRequests}</span>
+            <span className="text-sm text-text-muted font-medium mb-1">Permintaan Tertunda</span>
+            <span className="text-2xl font-bold text-text-main">{summary.pendingRequests}</span>
           </div>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-custom-lg p-6 flex items-center gap-4 border border-gray-200 dark:border-gray-700 shadow-custom-sm hover:-translate-y-[3px] hover:shadow-custom-md transition-all duration-200">
+        <div className="bg-surface rounded-custom-lg p-6 flex items-center gap-4 border border-border shadow-custom-sm hover:-translate-y-[3px] hover:shadow-custom-md transition-all duration-200">
           <div className="bg-green-100 text-green-500 dark:bg-green-900/20 dark:text-green-400 w-12 h-12 rounded-custom-md flex items-center justify-center shrink-0">
             <RefreshCw size={24} />
           </div>
           <div className="flex flex-col">
-            <span className="text-sm text-gray-500 dark:text-gray-400 font-medium mb-1">Mutasi Bulan Ini</span>
-            <span className="text-2xl font-bold text-gray-800 dark:text-gray-100">{summary.mutationsThisMonth}</span>
+            <span className="text-sm text-text-muted font-medium mb-1">Mutasi Bulan Ini</span>
+            <span className="text-2xl font-bold text-text-main">{summary.mutationsThisMonth}</span>
           </div>
         </div>
       </section>
 
       <section className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         
-        <div className="bg-white dark:bg-gray-800 rounded-custom-lg p-6 border border-gray-200 dark:border-gray-700 shadow-custom-sm">
-          <div className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-6 flex justify-between items-center">
+        <div className="bg-surface rounded-custom-lg p-6 border border-border shadow-custom-sm">
+          <div className="text-lg font-semibold text-text-main mb-6 flex justify-between items-center">
             <span>Kondisi Aset Saat Ini</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '2rem', padding: '1rem 0' }}>
@@ -170,16 +170,16 @@ const DashboardHome = () => {
                 <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#10b981" strokeWidth="3" strokeDasharray={`${baikPct}, 100`} strokeDashoffset={`${-perbaikanPct}`} />
               </svg>
               <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', textAlign: 'center' }}>
-                <span className="text-lg font-bold text-gray-800 dark:text-gray-100">{condTotal}</span>
-                <span className="text-[0.7rem] text-gray-500 dark:text-gray-400 block">Total</span>
+                <span className="text-lg font-bold text-text-main">{condTotal}</span>
+                <span className="text-[0.7rem] text-text-muted block">Total</span>
               </div>
             </div>
             
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
               <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
-                  <span className="text-[0.85rem] text-gray-500 dark:text-gray-400 font-medium"><span style={{ color: '#10b981' }}>●</span> Baik ({baikPct}%)</span>
-                  <span className="text-[0.85rem] text-gray-800 dark:text-gray-100 font-semibold">{cond.baik}</span>
+                  <span className="text-[0.85rem] text-text-muted font-medium"><span style={{ color: '#10b981' }}>●</span> Baik ({baikPct}%)</span>
+                  <span className="text-[0.85rem] text-text-main font-semibold">{cond.baik}</span>
                 </div>
                 <div className="w-full h-[6px] bg-gray-200 dark:bg-gray-700 rounded-[4px]">
                   <div style={{ width: `${baikPct}%`, height: '100%', background: '#10b981', borderRadius: '4px' }}></div>
@@ -187,8 +187,8 @@ const DashboardHome = () => {
               </div>
               <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
-                  <span className="text-[0.85rem] text-gray-500 dark:text-gray-400 font-medium"><span style={{ color: '#f59e0b' }}>●</span> Perbaikan ({perbaikanPct}%)</span>
-                  <span className="text-[0.85rem] text-gray-800 dark:text-gray-100 font-semibold">{cond.perbaikan}</span>
+                  <span className="text-[0.85rem] text-text-muted font-medium"><span style={{ color: '#f59e0b' }}>●</span> Perbaikan ({perbaikanPct}%)</span>
+                  <span className="text-[0.85rem] text-text-main font-semibold">{cond.perbaikan}</span>
                 </div>
                 <div className="w-full h-[6px] bg-gray-200 dark:bg-gray-700 rounded-[4px]">
                   <div style={{ width: `${perbaikanPct}%`, height: '100%', background: '#f59e0b', borderRadius: '4px' }}></div>
@@ -196,8 +196,8 @@ const DashboardHome = () => {
               </div>
               <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
-                  <span className="text-[0.85rem] text-gray-500 dark:text-gray-400 font-medium"><span style={{ color: '#ef4444' }}>●</span> Rusak ({rusakPct}%)</span>
-                  <span className="text-[0.85rem] text-gray-800 dark:text-gray-100 font-semibold">{cond.rusak}</span>
+                  <span className="text-[0.85rem] text-text-muted font-medium"><span style={{ color: '#ef4444' }}>●</span> Rusak ({rusakPct}%)</span>
+                  <span className="text-[0.85rem] text-text-main font-semibold">{cond.rusak}</span>
                 </div>
                 <div className="w-full h-[6px] bg-gray-200 dark:bg-gray-700 rounded-[4px]">
                   <div style={{ width: `${rusakPct}%`, height: '100%', background: '#ef4444', borderRadius: '4px' }}></div>
@@ -207,8 +207,8 @@ const DashboardHome = () => {
           </div>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-custom-lg p-6 border border-gray-200 dark:border-gray-700 shadow-custom-sm">
-          <div className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-6 flex justify-between items-center">
+        <div className="bg-surface rounded-custom-lg p-6 border border-border shadow-custom-sm">
+          <div className="text-lg font-semibold text-text-main mb-6 flex justify-between items-center">
             <span>Aktivitas Terbaru</span>
             <Link to="/dashboard/mutation" className="text-sm text-orange-500 font-medium no-underline">Lihat Semua</Link>
           </div>
@@ -216,16 +216,16 @@ const DashboardHome = () => {
           <div className="flex flex-col gap-4">
             {recentActivities.length > 0 ? (
               recentActivities.map((act, index) => (
-                <div className="flex items-start gap-4 pb-4 border-b border-gray-200 dark:border-gray-700 last:border-b-0 last:pb-0" key={index}>
+                <div className="flex items-start gap-4 pb-4 border-b border-border last:border-b-0 last:pb-0" key={index}>
                   {act.type === 'repair' ? (
                     <AlertTriangle className="mt-1 text-orange-500" size={18} style={{ color: '#ef4444' }} />
                   ) : (
                     <RefreshCw className="mt-1 text-orange-500" size={18} />
                   )}
                   <div>
-                    <h4 className="text-sm font-semibold text-gray-800 dark:text-gray-100 mb-1">{act.title}</h4>
-                    <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">{act.description}</p>
-                    <span className="text-xs text-gray-500 dark:text-gray-400">
+                    <h4 className="text-sm font-semibold text-text-main mb-1">{act.title}</h4>
+                    <p className="text-sm text-text-muted mb-1">{act.description}</p>
+                    <span className="text-xs text-text-muted">
                       <Clock size={12} style={{ display: 'inline', marginRight: '4px', verticalAlign: 'text-bottom' }} /> 
                       {new Date(act.date).toLocaleDateString('id-ID', { hour: '2-digit', minute: '2-digit' })} WIB
                     </span>
@@ -233,7 +233,7 @@ const DashboardHome = () => {
                 </div>
               ))
             ) : (
-              <div className="text-gray-500 dark:text-gray-400 text-center p-8">Tidak ada aktivitas terbaru.</div>
+              <div className="text-text-muted text-center p-8">Tidak ada aktivitas terbaru.</div>
             )}
           </div>
         </div>
@@ -241,8 +241,8 @@ const DashboardHome = () => {
 
       <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
         
-        <div className="bg-white dark:bg-gray-800 rounded-custom-lg p-6 border border-gray-200 dark:border-gray-700 shadow-custom-sm">
-          <div className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-6 flex justify-between items-center">
+        <div className="bg-surface rounded-custom-lg p-6 border border-border shadow-custom-sm">
+          <div className="text-lg font-semibold text-text-main mb-6 flex justify-between items-center">
             <span>Kalibrasi Mendekat</span>
             <Link to="/dashboard/calibration" className="text-sm text-orange-500 font-medium no-underline">Kelola</Link>
           </div>
@@ -254,7 +254,7 @@ const DashboardHome = () => {
                 const urgentColor = isUrgent ? 'text-red-500 dark:text-red-400' : 'text-amber-500 dark:text-amber-400';
                 return (
                   <div 
-                    className={`flex items-start gap-2 p-3 rounded-[0.5rem] items-center ${urgentBg} border border-gray-200 dark:border-gray-700 last:border-b-0 last:pb-0`}
+                    className={`flex items-start gap-2 p-3 rounded-[0.5rem] items-center ${urgentBg} border border-border last:border-b-0 last:pb-0`}
                     key={index}
                     style={{ gap: '0.5rem' }}
                   >
@@ -265,7 +265,7 @@ const DashboardHome = () => {
                     )}
                     <div>
                       <h4 className={`text-sm font-semibold mb-1 ${urgentColor}`} style={{ margin: 0 }}>{cal.assetName}</h4>
-                      <span className="text-xs text-gray-500 dark:text-gray-400">
+                      <span className="text-xs text-text-muted">
                         {cal.daysLeft < 0 
                           ? `Terlewat ${Math.abs(cal.daysLeft)} hari yang lalu`
                           : cal.daysLeft === 0 
@@ -278,23 +278,23 @@ const DashboardHome = () => {
                 );
               })
             ) : (
-              <div className="text-gray-500 dark:text-gray-400 text-center p-6">Aman. Semua kalibrasi terpenuhi.</div>
+              <div className="text-text-muted text-center p-6">Aman. Semua kalibrasi terpenuhi.</div>
             )}
           </div>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-custom-lg p-6 border border-gray-200 dark:border-gray-700 shadow-custom-sm">
-          <div className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-6 flex justify-between items-center">
+        <div className="bg-surface rounded-custom-lg p-6 border border-border shadow-custom-sm">
+          <div className="text-lg font-semibold text-text-main mb-6 flex justify-between items-center">
             <span>Menunggu Persetujuan</span>
             <Link to="/dashboard/requests" className="text-sm text-orange-500 font-medium no-underline">Lihat</Link>
           </div>
           <div>
             {approvalsList.length > 0 ? (
               approvalsList.map((item, index) => (
-                <div className="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-custom-md mb-2" key={index}>
+                <div className="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-900 border border-border rounded-custom-md mb-2" key={index}>
                   <div>
                     <h4 className="text-sm mb-1">{item.title}</h4>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">{item.subtitle}</p>
+                    <p className="text-xs text-text-muted">{item.subtitle}</p>
                   </div>
                   <div className="bg-emerald-500 text-white rounded-custom-md p-[0.4rem] flex cursor-pointer hover:bg-emerald-600 transition-colors" title="Setujui Pengajuan" onClick={() => handleApprove(item)}>
                     {item.type === 'request' ? <Package size={16} /> : <RefreshCw size={16} />}
@@ -302,13 +302,13 @@ const DashboardHome = () => {
                 </div>
               ))
             ) : (
-              <div className="text-gray-500 dark:text-gray-400 text-center p-6">Tidak ada pengajuan tertunda.</div>
+              <div className="text-text-muted text-center p-6">Tidak ada pengajuan tertunda.</div>
             )}
           </div>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-custom-lg p-6 border border-gray-200 dark:border-gray-700 shadow-custom-sm">
-          <div className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-6 flex justify-between items-center">
+        <div className="bg-surface rounded-custom-lg p-6 border border-border shadow-custom-sm">
+          <div className="text-lg font-semibold text-text-main mb-6 flex justify-between items-center">
             <span>Aset per Ruangan</span>
           </div>
           <div>
@@ -332,7 +332,7 @@ const DashboardHome = () => {
                 );
               })
             ) : (
-              <div className="text-gray-500 dark:text-gray-400 text-center p-6">Belum ada data ruangan.</div>
+              <div className="text-text-muted text-center p-6">Belum ada data ruangan.</div>
             )}
           </div>
         </div>

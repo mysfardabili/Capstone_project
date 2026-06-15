@@ -74,11 +74,11 @@ const AddCalibration = () => {
     <div className="flex flex-col gap-6 h-full">
       {showToast && <Toast message="Data kalibrasi berhasil disimpan!" onClose={() => setShowToast(false)} />}
       <div className="flex justify-between items-center gap-4">
-        <button className="bg-transparent text-gray-800 dark:text-gray-100 border border-gray-200 dark:border-gray-600 px-5 py-[0.6rem] rounded-custom-md font-semibold text-sm inline-flex items-center gap-2 no-underline hover:bg-gray-100 dark:hover:bg-gray-700 transition-all" onClick={() => navigate(-1)}><ArrowLeft size={24} /></button>
-        <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100 m-0">Catat Kalibrasi Baru</h1>
+        <button className="bg-transparent text-text-main border border-gray-200 dark:border-gray-600 px-5 py-[0.6rem] rounded-custom-md font-semibold text-sm inline-flex items-center gap-2 no-underline hover:bg-gray-100 dark:hover:bg-gray-700 transition-all" onClick={() => navigate(-1)}><ArrowLeft size={24} /></button>
+        <h1 className="text-2xl font-bold text-text-main m-0">Catat Kalibrasi Baru</h1>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-custom-sm border border-gray-200 dark:border-gray-700 max-w-[800px]">
+      <div className="bg-surface p-8 rounded-xl shadow-custom-sm border border-border max-w-[800px]">
         {errorMsg && (
           <div className="text-red-500 bg-red-100 p-3 rounded-[10px] mb-6 text-[0.9rem] font-medium">
             {errorMsg}
@@ -88,8 +88,8 @@ const AddCalibration = () => {
         <form onSubmit={handleSubmit}>
           <div className="flex flex-col md:flex-row gap-6 mb-6">
             <div className="flex flex-col gap-2 flex-1">
-              <label className="text-sm font-semibold text-gray-800 dark:text-gray-100">Pilih Aset</label>
-              <select name="assetId" className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]" required defaultValue="">
+              <label className="text-sm font-semibold text-text-main">Pilih Aset</label>
+              <select name="assetId" className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-surface text-text-main transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]" required defaultValue="">
                 <option value="" disabled>-- Pilih Aset --</option>
                 {assets.map(asset => (
                   <option key={asset.id} value={asset.id}>
@@ -102,29 +102,29 @@ const AddCalibration = () => {
 
           <div className="flex flex-col md:flex-row gap-6 mb-6">
             <div className="flex flex-col gap-2 flex-1">
-              <label className="text-sm font-semibold text-gray-800 dark:text-gray-100">Tanggal Pelaksanaan Kalibrasi</label>
-              <input type="date" name="calibrationDate" className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]" required />
-              <small className="text-gray-500 dark:text-gray-400 mt-1 block">
+              <label className="text-sm font-semibold text-text-main">Tanggal Pelaksanaan Kalibrasi</label>
+              <input type="date" name="calibrationDate" className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-surface text-text-main transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]" required />
+              <small className="text-text-muted mt-1 block">
                 *Jadwal kalibrasi berikutnya akan otomatis diset 1 tahun dari tanggal ini.
               </small>
             </div>
             <div className="flex flex-col gap-2 flex-1">
-              <label className="text-sm font-semibold text-gray-800 dark:text-gray-100">Teknisi / Lembaga Pelaksana</label>
-              <input type="text" name="vendor" className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]" placeholder="Nama instansi kalibrasi" required />
+              <label className="text-sm font-semibold text-text-main">Teknisi / Lembaga Pelaksana</label>
+              <input type="text" name="vendor" className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-surface text-text-main transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]" placeholder="Nama instansi kalibrasi" required />
             </div>
           </div>
 
           <div className="flex flex-col md:flex-row gap-6 mb-6">
             <div className="flex flex-col gap-2 flex-1">
-              <label className="text-sm font-semibold text-gray-800 dark:text-gray-100">Nomor Sertifikat Kalibrasi</label>
-              <input type="text" name="certificateNumber" className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]" placeholder="Contoh: CERT-USG-2026-001" />
+              <label className="text-sm font-semibold text-text-main">Nomor Sertifikat Kalibrasi</label>
+              <input type="text" name="certificateNumber" className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-surface text-text-main transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]" placeholder="Contoh: CERT-USG-2026-001" />
             </div>
           </div>
 
           <div className="flex flex-col gap-2 flex-1">
-            <label className="text-sm font-semibold text-gray-800 dark:text-gray-100">Upload Sertifikat (PDF) - Opsional</label>
+            <label className="text-sm font-semibold text-text-main">Upload Sertifikat (PDF) - Opsional</label>
             <div
-              className="border-2 border-dashed border-gray-200 dark:border-gray-700 rounded-lg p-8 text-center bg-gray-50 dark:bg-gray-800/50 cursor-pointer relative"
+              className="border-2 border-dashed border-border rounded-lg p-8 text-center bg-gray-50 dark:bg-gray-800/50 cursor-pointer relative"
             >
               <input
                 type="file"
@@ -136,17 +136,17 @@ const AddCalibration = () => {
               <p className="m-0 font-medium">
                 {fileName ? fileName : 'Klik atau drag file sertifikat ke sini'}
               </p>
-              {!fileName && <p className="mt-[5px] text-[0.8rem] text-gray-500 dark:text-gray-400">Maksimal ukuran file: 5MB</p>}
+              {!fileName && <p className="mt-[5px] text-[0.8rem] text-text-muted">Maksimal ukuran file: 5MB</p>}
             </div>
           </div>
 
           <div className="flex flex-col gap-2 flex-1 mb-6">
-            <label className="text-sm font-semibold text-gray-800 dark:text-gray-100">Catatan Hasil Kalibrasi</label>
-            <textarea name="notes" className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]" placeholder="Tuliskan catatan atau rekomendasi dari teknisi"></textarea>
+            <label className="text-sm font-semibold text-text-main">Catatan Hasil Kalibrasi</label>
+            <textarea name="notes" className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-surface text-text-main transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]" placeholder="Tuliskan catatan atau rekomendasi dari teknisi"></textarea>
           </div>
 
-          <div className="flex justify-end gap-4 mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
-            <Link to="/dashboard/calibration" className="bg-transparent text-gray-800 dark:text-gray-100 border border-gray-200 dark:border-gray-600 px-5 py-[0.6rem] rounded-custom-md font-semibold text-sm inline-flex items-center gap-2 no-underline hover:bg-gray-100 dark:hover:bg-gray-700 transition-all">Batal</Link>
+          <div className="flex justify-end gap-4 mt-8 pt-6 border-t border-border">
+            <Link to="/dashboard/calibration" className="bg-transparent text-text-main border border-gray-200 dark:border-gray-600 px-5 py-[0.6rem] rounded-custom-md font-semibold text-sm inline-flex items-center gap-2 no-underline hover:bg-gray-100 dark:hover:bg-gray-700 transition-all">Batal</Link>
             <button type="submit" className="bg-orange-500 text-white px-5 py-[0.6rem] rounded-custom-md font-semibold text-sm inline-flex items-center gap-2 no-underline hover:bg-orange-600 transition-colors disabled:opacity-70" disabled={isLoading}>
               {isLoading ? (
                 <><Loader2 size={18} className="spin" /> Menyimpan...</>

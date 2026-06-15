@@ -14,7 +14,7 @@ const Toast = ({ message, type = 'success', onClose }) => {
   const Icon = type === 'success' ? CheckCircle : XCircle;
 
   return (
-    <div className={`fixed bottom-5 right-5 bg-white dark:bg-gray-800 border-l-4 ${borderClass} shadow-custom-md p-[15px_20px] rounded-lg flex items-center gap-3 z-[9999] animate-[slideIn_0.3s_ease-out_forwards]`}>
+    <div className={`fixed bottom-5 right-5 bg-surface border-l-4 ${borderClass} shadow-custom-md p-[15px_20px] rounded-lg flex items-center gap-3 z-[9999] animate-[slideIn_0.3s_ease-out_forwards]`}>
       <Icon size={24} className={iconColor} />
       <span className="font-medium text-slate-800 dark:text-slate-200">{message}</span>
       <button onClick={onClose} className="bg-transparent border-none cursor-pointer ml-2.5 flex items-center justify-center">

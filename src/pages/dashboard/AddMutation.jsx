@@ -71,11 +71,11 @@ const AddMutation = () => {
     <div className="flex flex-col gap-6 h-full">
       {showToast && <Toast message="Pengajuan mutasi berhasil dikirim!" onClose={() => setShowToast(false)} />}
       <div className="flex justify-between items-center gap-4">
-        <button className="bg-transparent text-gray-800 dark:text-gray-100 border border-gray-200 dark:border-gray-600 px-5 py-[0.6rem] rounded-custom-md font-semibold text-sm inline-flex items-center gap-2 no-underline hover:bg-gray-100 dark:hover:bg-gray-700 transition-all" onClick={() => navigate(-1)}><ArrowLeft size={24} /></button>
-        <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100 m-0">Form Pengajuan Mutasi Aset</h1>
+        <button className="bg-transparent text-text-main border border-gray-200 dark:border-gray-600 px-5 py-[0.6rem] rounded-custom-md font-semibold text-sm inline-flex items-center gap-2 no-underline hover:bg-gray-100 dark:hover:bg-gray-700 transition-all" onClick={() => navigate(-1)}><ArrowLeft size={24} /></button>
+        <h1 className="text-2xl font-bold text-text-main m-0">Form Pengajuan Mutasi Aset</h1>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-custom-sm border border-gray-200 dark:border-gray-700 max-w-[800px]">
+      <div className="bg-surface p-8 rounded-xl shadow-custom-sm border border-border max-w-[800px]">
         {errorMsg && (
           <div className="text-red-500 bg-red-100 p-3 rounded-[10px] mb-6 text-[0.9rem] font-medium">
             {errorMsg}
@@ -85,37 +85,37 @@ const AddMutation = () => {
         <form onSubmit={handleSubmit}>
           <div className="flex flex-col md:flex-row gap-6 mb-6">
             <div className="flex flex-col gap-2 flex-1">
-              <label className="text-sm font-semibold text-gray-800 dark:text-gray-100">ID Aset / Scan QR</label>
+              <label className="text-sm font-semibold text-text-main">ID Aset / Scan QR</label>
               <input 
                 type="text" 
                 value={assetId}
                 onChange={(e) => setAssetId(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]" 
+                className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-surface text-text-main transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]" 
                 placeholder="Contoh: AST-001" 
                 required 
               />
             </div>
             <div className="flex flex-col gap-2 flex-1">
-              <label className="text-sm font-semibold text-gray-800 dark:text-gray-100">Penanggung Jawab Pemindahan</label>
-              <input type="text" name="requesterName" className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]" placeholder="Nama petugas/perawat" required />
+              <label className="text-sm font-semibold text-text-main">Penanggung Jawab Pemindahan</label>
+              <input type="text" name="requesterName" className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-surface text-text-main transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]" placeholder="Nama petugas/perawat" required />
             </div>
           </div>
 
           <div className="flex flex-col md:flex-row gap-6 mb-6">
             <div className="flex flex-col gap-2 flex-1">
-              <label className="text-sm font-semibold text-gray-800 dark:text-gray-100">Lokasi Asal (Otomatis)</label>
+              <label className="text-sm font-semibold text-text-main">Lokasi Asal (Otomatis)</label>
               <input 
                 type="text" 
-                className={`w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-white dark:bg-gray-800 transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)] ${
-                  sourceLocation === 'Aset tidak ditemukan' ? 'text-red-500 font-bold' : 'text-gray-800 dark:text-gray-100'
+                className={`w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-surface transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)] ${
+                  sourceLocation === 'Aset tidak ditemukan' ? 'text-red-500 font-bold' : 'text-text-main'
                 }`} 
                 value={sourceLocation} 
                 disabled 
               />
             </div>
             <div className="flex flex-col gap-2 flex-1">
-              <label className="text-sm font-semibold text-gray-800 dark:text-gray-100">Lokasi Tujuan</label>
-              <select name="targetLocation" className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]" required defaultValue="">
+              <label className="text-sm font-semibold text-text-main">Lokasi Tujuan</label>
+              <select name="targetLocation" className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-surface text-text-main transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]" required defaultValue="">
                 <option value="" disabled>Pilih Ruangan Tujuan</option>
                 <option value="IGD">IGD</option>
                 <option value="Ruang Radiologi 1">Radiologi 1</option>
@@ -129,12 +129,12 @@ const AddMutation = () => {
           </div>
 
           <div className="flex flex-col gap-2 flex-1 mb-6">
-            <label className="text-sm font-semibold text-gray-800 dark:text-gray-100">Alasan Mutasi</label>
-            <textarea name="notes" className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]" placeholder="Jelaskan alasan pemindahan (misal: permintaan dokter bedah, perbaikan ruangan, dll)" required></textarea>
+            <label className="text-sm font-semibold text-text-main">Alasan Mutasi</label>
+            <textarea name="notes" className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-surface text-text-main transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]" placeholder="Jelaskan alasan pemindahan (misal: permintaan dokter bedah, perbaikan ruangan, dll)" required></textarea>
           </div>
 
-          <div className="flex justify-end gap-4 mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
-            <Link to="/dashboard/mutation" className="bg-transparent text-gray-800 dark:text-gray-100 border border-gray-200 dark:border-gray-600 px-5 py-[0.6rem] rounded-custom-md font-semibold text-sm inline-flex items-center gap-2 no-underline hover:bg-gray-100 dark:hover:bg-gray-700 transition-all">Batal</Link>
+          <div className="flex justify-end gap-4 mt-8 pt-6 border-t border-border">
+            <Link to="/dashboard/mutation" className="bg-transparent text-text-main border border-gray-200 dark:border-gray-600 px-5 py-[0.6rem] rounded-custom-md font-semibold text-sm inline-flex items-center gap-2 no-underline hover:bg-gray-100 dark:hover:bg-gray-700 transition-all">Batal</Link>
             <button type="submit" className="bg-orange-500 text-white px-5 py-[0.6rem] rounded-custom-md font-semibold text-sm inline-flex items-center gap-2 no-underline hover:bg-orange-600 transition-colors disabled:opacity-70" disabled={isLoading || sourceLocation === 'Aset tidak ditemukan' || !sourceLocation}>
               {isLoading ? (
                 <><Loader2 size={18} className="spin" /> Mengajukan...</>

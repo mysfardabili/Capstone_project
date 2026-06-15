@@ -52,8 +52,8 @@ const Login = () => {
               className="w-[160px] md:w-[200px] object-contain"
             />
           </div>
-          <h2 className="text-xl md:text-[1.75rem] text-gray-800 dark:text-gray-100 mb-2">Selamat Datang Kembali</h2>
-          <p className="text-gray-500 dark:text-gray-400">Silakan masuk ke akun Anda</p>
+          <h2 className="text-xl md:text-[1.75rem] text-text-main mb-2">Selamat Datang Kembali</h2>
+          <p className="text-text-muted">Silakan masuk ke akun Anda</p>
         </div>
         
         {errorMsg && (
@@ -64,11 +64,11 @@ const Login = () => {
 
         <form className="flex flex-col gap-6" onSubmit={handleLogin}>
           <div className="flex flex-col gap-2">
-            <label htmlFor="email" className="text-sm font-medium text-gray-800 dark:text-gray-100">Email / ID Pengguna</label>
+            <label htmlFor="email" className="text-sm font-medium text-text-main">Email / ID Pengguna</label>
             <input 
               type="text" 
               id="email"
-              className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md outline-none transition-[border-color,box-shadow] duration-200 focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)] bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100" 
+              className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md outline-none transition-[border-color,box-shadow] duration-200 focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)] bg-surface text-text-main" 
               placeholder="Masukkan email atau ID Anda"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -77,11 +77,11 @@ const Login = () => {
           </div>
           
           <div className="flex flex-col gap-2">
-            <label htmlFor="password" className="text-sm font-medium text-gray-800 dark:text-gray-100">Kata Sandi</label>
+            <label htmlFor="password" className="text-sm font-medium text-text-main">Kata Sandi</label>
             <input 
               type="password" 
               id="password"
-              className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md outline-none transition-[border-color,box-shadow] duration-200 focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)] bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100" 
+              className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md outline-none transition-[border-color,box-shadow] duration-200 focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)] bg-surface text-text-main" 
               placeholder="Masukkan kata sandi"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -94,7 +94,7 @@ const Login = () => {
           </button>
         </form>
 
-        <Link to="/" className="flex items-center justify-center gap-2 mt-6 text-gray-500 dark:text-gray-400 text-sm hover:text-orange-500 transition-colors">
+        <Link to="/" className="flex items-center justify-center gap-2 mt-6 text-text-muted text-sm hover:text-orange-500 transition-colors">
           <ArrowLeft size={16} /> Kembali ke Beranda
         </Link>
       </div>

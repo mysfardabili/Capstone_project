@@ -8,20 +8,16 @@ import {
   updateRepairStatus,
 } from '../controllers/repairController.js';
 import { protect, authorize } from '../middleware/auth.js';
+import { validateRepair } from '../middleware/validator.js';
 
 const router = express.Router();
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/');
-  },
-  filename: (req, file, cb) => {
-    cb(null, `${Date.now()}-${file.originalname}`);
-  },
-});
-
+// Multer: pakai memoryStorage agar foto kerusakan langsung ke Cloudinary
 const upload = multer({
-  storage,
+  storage: multer.memoryStorage(),
+  limits: {
+    fileSize: 10 * 1024 * 1024, // Batas 10MB
+  },
   fileFilter: (req, file, cb) => {
     const filetypes = /jpeg|jpg|png|webp/;
     const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
@@ -39,7 +35,7 @@ router.use(protect);
 
 router.route('/')
   .get(authorize('admin', 'technician'), getRepairs)
-  .post(authorize('admin', 'technician', 'nurse'), upload.single('image'), createRepair);
+  .post(authorize('admin', 'technician', 'nurse'), upload.single('image'), validateRepair, createRepair);
 
 router.route('/:id')
   .put(authorize('admin', 'technician'), upload.single('image'), updateRepair);

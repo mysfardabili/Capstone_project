@@ -3,6 +3,8 @@ import Repair from '../models/Repair.js';
 import Calibration from '../models/Calibration.js';
 import Mutation from '../models/Mutation.js';
 import { Op } from 'sequelize';
+import { logActivity } from '../middleware/auditLogger.js';
+import { uploadToCloudinary } from '../services/cloudinaryService.js';
 
 // @desc    Get all assets (with search and filters)
 // @route   GET /api/assets
@@ -110,15 +112,23 @@ export const createAsset = async (req, res) => {
       id = `AST-${String(nextNum).padStart(3, '0')}`;
     }
 
-    // Handle file uploads (image and document)
+    // Handle file uploads ke Cloudinary
     let img = null;
     let manualBook = null;
     if (req.files) {
       if (req.files['image'] && req.files['image'].length > 0) {
-        img = `/uploads/${req.files['image'][0].filename}`;
+        const uploaded = await uploadToCloudinary(
+          req.files['image'][0].buffer,
+          'asetra/assets/images'
+        );
+        img = uploaded.url;
       }
       if (req.files['document'] && req.files['document'].length > 0) {
-        manualBook = `/uploads/${req.files['document'][0].filename}`;
+        const uploaded = await uploadToCloudinary(
+          req.files['document'][0].buffer,
+          'asetra/assets/documents'
+        );
+        manualBook = uploaded.url;
       }
     }
 
@@ -155,6 +165,13 @@ export const createAsset = async (req, res) => {
       description,
     });
 
+    await logActivity(req, {
+      action: 'CREATE',
+      entityName: 'Asset',
+      entityId: newAsset.id,
+      newValues: newAsset
+    });
+
     res.status(201).json(newAsset);
   } catch (error) {
     res.status(500).json({ message: 'Gagal membuat aset baru', error: error.message });
@@ -187,16 +204,24 @@ export const updateAsset = async (req, res) => {
       description,
     } = req.body;
 
-    // Handle file uploads update
+    // Handle file uploads ke Cloudinary
     let img = asset.img;
     let manualBook = asset.manualBook;
-    
+
     if (req.files) {
       if (req.files['image'] && req.files['image'].length > 0) {
-        img = `/uploads/${req.files['image'][0].filename}`;
+        const uploaded = await uploadToCloudinary(
+          req.files['image'][0].buffer,
+          'asetra/assets/images'
+        );
+        img = uploaded.url;
       }
       if (req.files['document'] && req.files['document'].length > 0) {
-        manualBook = `/uploads/${req.files['document'][0].filename}`;
+        const uploaded = await uploadToCloudinary(
+          req.files['document'][0].buffer,
+          'asetra/assets/documents'
+        );
+        manualBook = uploaded.url;
       }
     }
 
@@ -217,6 +242,8 @@ export const updateAsset = async (req, res) => {
     if (category && catMap[category]) category = catMap[category];
     if (room && roomMap[room]) room = roomMap[room];
 
+    const oldValues = { ...asset.dataValues };
+
     await asset.update({
       name: name !== undefined ? name : asset.name,
       category: category !== undefined ? category : asset.category,
@@ -230,6 +257,14 @@ export const updateAsset = async (req, res) => {
       img,
       manualBook,
       description: description !== undefined ? description : asset.description,
+    });
+
+    await logActivity(req, {
+      action: 'UPDATE',
+      entityName: 'Asset',
+      entityId: asset.id,
+      oldValues: oldValues,
+      newValues: asset
     });
 
     res.json(asset);
@@ -251,7 +286,16 @@ export const deleteAsset = async (req, res) => {
       return res.status(404).json({ message: 'Aset tidak ditemukan' });
     }
 
+    const oldValues = { ...asset.dataValues };
     await asset.destroy();
+    
+    await logActivity(req, {
+      action: 'DELETE',
+      entityName: 'Asset',
+      entityId: id,
+      oldValues: oldValues
+    });
+
     res.json({ message: 'Aset berhasil dihapus' });
   } catch (error) {
     res.status(500).json({ message: 'Gagal menghapus aset', error: error.message });

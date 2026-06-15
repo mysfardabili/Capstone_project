@@ -1,4 +1,5 @@
 import User from '../models/User.js';
+import { uploadToCloudinary } from '../services/cloudinaryService.js';
 
 // @desc    Update user profile
 // @route   PUT /api/users/profile
@@ -17,7 +18,11 @@ export const updateUserProfile = async (req, res) => {
     user.phone = phone !== undefined ? phone : user.phone;
 
     if (req.file) {
-      user.profilePicture = `/uploads/${req.file.filename}`;
+      const uploaded = await uploadToCloudinary(
+        req.file.buffer,
+        'asetra/profiles'
+      );
+      user.profilePicture = uploaded.url;
     }
 
     await user.save();

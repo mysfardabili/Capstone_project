@@ -6,6 +6,7 @@ import Repair from './Repair.js';
 import Calibration from './Calibration.js';
 import Mutation from './Mutation.js';
 import Notification from './Notification.js';
+import AuditLog from './AuditLog.js';
 
 // Define associations
 Asset.hasMany(Repair, { foreignKey: 'assetId', as: 'repairs', onDelete: 'CASCADE' });
@@ -16,6 +17,9 @@ Calibration.belongsTo(Asset, { foreignKey: 'assetId', as: 'asset' });
 
 Asset.hasMany(Mutation, { foreignKey: 'assetId', as: 'mutations', onDelete: 'CASCADE' });
 Mutation.belongsTo(Asset, { foreignKey: 'assetId', as: 'asset' });
+
+User.hasMany(AuditLog, { foreignKey: 'userId', as: 'auditLogs', onDelete: 'SET NULL' });
+AuditLog.belongsTo(User, { foreignKey: 'userId', as: 'user' });
 
 const seedDatabase = async () => {
   try {
@@ -181,5 +185,6 @@ export {
   Calibration,
   Mutation,
   Notification,
+  AuditLog,
   seedDatabase,
 };
