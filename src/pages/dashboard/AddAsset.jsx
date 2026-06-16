@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { ArrowLeft, Save, Loader2, FileText, Image } from 'lucide-react';
+import { ArrowLeft, Save, Loader2 } from 'lucide-react';
 import { api } from '../../services/api';
 import Toast from '../../components/Toast';
 
@@ -54,13 +54,6 @@ const AddAsset = () => {
         )}
 
         <form onSubmit={handleSubmit}>
-          {isLama && (
-            <div className="flex flex-col gap-2 mb-6">
-              <label className="text-sm font-semibold text-text-main">ID Aset</label>
-              <input type="text" name="id" className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-surface text-text-main transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]" placeholder="Contoh: AST-010" required />
-            </div>
-          )}
-
           <div className="flex flex-col md:flex-row gap-6 mb-6">
             <div className="flex flex-col gap-2 flex-1">
               <label className="text-sm font-semibold text-text-main">Nama Aset</label>

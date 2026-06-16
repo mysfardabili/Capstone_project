@@ -83,6 +83,9 @@ export const getAssetById = async (req, res) => {
 // @access  Private
 export const createAsset = async (req, res) => {
   try {
+    console.log('[AssetController] req.body:', req.body);
+    console.log('[AssetController] req.files:', req.files ? Object.keys(req.files) : 'none');
+
     let {
       id,
       name,

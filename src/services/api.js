@@ -28,7 +28,11 @@ const handleResponse = async (response) => {
   }
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
-    throw new Error(errorData.message || 'Terjadi kesalahan pada server');
+    let msg = errorData.message || 'Terjadi kesalahan pada server';
+    if (errorData.details && errorData.details.length > 0) {
+      msg += ': ' + errorData.details.join(', ');
+    }
+    throw new Error(msg);
   }
   return response.json();
 };
