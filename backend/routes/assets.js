@@ -40,11 +40,11 @@ router.use(protect);
 
 router.route('/')
   .get(authorize('admin', 'technician'), getAssets)
-  .post(authorize('admin'), upload.fields([{ name: 'image', maxCount: 1 }, { name: 'document', maxCount: 1 }]), validateAsset, createAsset);
+  .post(authorize('admin'), upload.fields([{ name: 'image', maxCount: 1 }, { name: 'document', maxCount: 1 }, { name: 'invoice', maxCount: 1 }]), validateAsset, createAsset);
 
 router.route('/:id')
   .get(authorize('admin', 'technician'), getAssetById)
-  .put(authorize('admin'), upload.fields([{ name: 'image', maxCount: 1 }, { name: 'document', maxCount: 1 }]), validateAsset, updateAsset)
+  .put(authorize('admin'), upload.fields([{ name: 'image', maxCount: 1 }, { name: 'document', maxCount: 1 }, { name: 'invoice', maxCount: 1 }]), validateAsset, updateAsset)
   .delete(authorize('admin'), deleteAsset);
 
 export default router;

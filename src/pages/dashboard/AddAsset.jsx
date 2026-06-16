@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Save, Loader2 } from 'lucide-react';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { ArrowLeft, Save, Loader2, FileText, Image } from 'lucide-react';
 import { api } from '../../services/api';
 import Toast from '../../components/Toast';
 
 const AddAsset = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const type = searchParams.get('type') || 'baru';
+  const isLama = type === 'lama';
+
   const [isLoading, setIsLoading] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
@@ -29,7 +33,7 @@ const AddAsset = () => {
       }, 1500);
     } catch (err) {
       console.error(err);
-      setErrorMsg(err.message || 'Gagal menyimpan aset baru');
+      setErrorMsg(err.message || 'Gagal menyimpan aset');
       setIsLoading(false);
     }
   };
@@ -37,19 +41,26 @@ const AddAsset = () => {
   return (
     <div className="flex flex-col gap-6 h-full">
       {showToast && <Toast message="Aset berhasil ditambahkan!" onClose={() => setShowToast(false)} />}
-      <div className="flex justify-between items-center" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+      <div className="flex items-center gap-4">
         <button className="bg-transparent text-text-main border border-gray-200 dark:border-gray-600 px-5 py-[0.6rem] rounded-custom-md font-semibold text-sm inline-flex items-center gap-2 no-underline hover:bg-gray-100 dark:hover:bg-gray-700 transition-all" onClick={() => navigate(-1)}><ArrowLeft size={24} /></button>
-        <h1 className="text-2xl font-bold text-text-main" style={{ margin: 0 }}>Tambah Aset Baru</h1>
+        <h1 className="text-2xl font-bold text-text-main m-0">{isLama ? 'Tambah Aset Lama' : 'Tambah Aset Baru'}</h1>
       </div>
 
       <div className="bg-surface p-8 rounded-xl shadow-custom-sm border border-border max-w-[800px]">
         {errorMsg && (
-          <div style={{ color: '#ef4444', backgroundColor: '#fee2e2', padding: '0.75rem', borderRadius: '10px', marginBottom: '1.5rem', fontSize: '0.9rem', fontWeight: '500' }}>
+          <div className="text-red-500 bg-red-100 dark:bg-red-900/30 p-3 rounded-[10px] mb-6 text-sm font-medium">
             {errorMsg}
           </div>
         )}
 
         <form onSubmit={handleSubmit}>
+          {isLama && (
+            <div className="flex flex-col gap-2 mb-6">
+              <label className="text-sm font-semibold text-text-main">ID Aset</label>
+              <input type="text" name="id" className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-surface text-text-main transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]" placeholder="Contoh: AST-010" required />
+            </div>
+          )}
+
           <div className="flex flex-col md:flex-row gap-6 mb-6">
             <div className="flex flex-col gap-2 flex-1">
               <label className="text-sm font-semibold text-text-main">Nama Aset</label>
@@ -82,6 +93,7 @@ const AddAsset = () => {
               </select>
             </div>
           </div>
+
           <div className="flex flex-col md:flex-row gap-6 mb-6">
             <div className="flex flex-col gap-2 flex-1">
               <label className="text-sm font-semibold text-text-main">Ruangan / Lokasi Awal</label>
@@ -98,6 +110,7 @@ const AddAsset = () => {
               <input type="number" name="price" className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-surface text-text-main transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]" placeholder="Masukkan harga aset" required />
             </div>
           </div>
+
           <div className="flex flex-col md:flex-row gap-6 mb-6">
             <div className="flex flex-col gap-2 flex-1">
               <label className="text-sm font-semibold text-text-main">Status Ketersediaan</label>
@@ -123,9 +136,20 @@ const AddAsset = () => {
             </div>
           </div>
 
+          <div className="flex flex-col md:flex-row gap-6 mb-6">
+            <div className="flex flex-col gap-2 flex-1">
+              <label className="text-sm font-semibold text-text-main">Foto Aset</label>
+              <input type="file" name="image" accept="image/*" className="file:mr-4 file:py-2 file:px-4 file:rounded-custom-md file:border-0 file:text-sm file:font-semibold file:bg-orange-50 dark:file:bg-orange-900/30 file:text-orange-700 dark:file:text-orange-400 hover:file:bg-orange-100 dark:hover:file:bg-orange-900/50 w-full px-4 py-[0.6rem] border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm bg-surface text-text-main transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)] file:cursor-pointer cursor-pointer" />
+            </div>
+            <div className="flex flex-col gap-2 flex-1">
+              <label className="text-sm font-semibold text-text-main">Buku Manual (PDF)</label>
+              <input type="file" name="document" accept=".pdf,image/*" className="file:mr-4 file:py-2 file:px-4 file:rounded-custom-md file:border-0 file:text-sm file:font-semibold file:bg-orange-50 dark:file:bg-orange-900/30 file:text-orange-700 dark:file:text-orange-400 hover:file:bg-orange-100 dark:hover:file:bg-orange-900/50 w-full px-4 py-[0.6rem] border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm bg-surface text-text-main transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)] file:cursor-pointer cursor-pointer" />
+            </div>
+          </div>
+
           <div className="flex flex-col gap-2 flex-1 mb-6">
-            <label className="text-sm font-semibold text-text-main">Foto Aset</label>
-            <input type="file" name="image" accept="image/*" className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-surface text-text-main transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]" style={{ padding: '0.5rem' }} />
+            <label className="text-sm font-semibold text-text-main">Upload Invoice (Opsional)</label>
+            <input type="file" name="invoice" accept=".pdf,image/*" className="file:mr-4 file:py-2 file:px-4 file:rounded-custom-md file:border-0 file:text-sm file:font-semibold file:bg-orange-50 dark:file:bg-orange-900/30 file:text-orange-700 dark:file:text-orange-400 hover:file:bg-orange-100 dark:hover:file:bg-orange-900/50 w-full px-4 py-[0.6rem] border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm bg-surface text-text-main transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)] file:cursor-pointer cursor-pointer" />
           </div>
 
           <div className="flex flex-col gap-2 flex-1 mb-6">

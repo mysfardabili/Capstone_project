@@ -115,6 +115,7 @@ export const createAsset = async (req, res) => {
     // Handle file uploads ke Cloudinary
     let img = null;
     let manualBook = null;
+    let invoice = null;
     if (req.files) {
       if (req.files['image'] && req.files['image'].length > 0) {
         const uploaded = await uploadToCloudinary(
@@ -129,6 +130,13 @@ export const createAsset = async (req, res) => {
           'asetra/assets/documents'
         );
         manualBook = uploaded.url;
+      }
+      if (req.files['invoice'] && req.files['invoice'].length > 0) {
+        const uploaded = await uploadToCloudinary(
+          req.files['invoice'][0].buffer,
+          'asetra/assets/invoices'
+        );
+        invoice = uploaded.url;
       }
     }
 
@@ -162,6 +170,7 @@ export const createAsset = async (req, res) => {
       warrantyEnd: warrantyEnd || null,
       img,
       manualBook,
+      invoice,
       description,
     });
 
@@ -207,6 +216,7 @@ export const updateAsset = async (req, res) => {
     // Handle file uploads ke Cloudinary
     let img = asset.img;
     let manualBook = asset.manualBook;
+    let invoice = asset.invoice;
 
     if (req.files) {
       if (req.files['image'] && req.files['image'].length > 0) {
@@ -222,6 +232,13 @@ export const updateAsset = async (req, res) => {
           'asetra/assets/documents'
         );
         manualBook = uploaded.url;
+      }
+      if (req.files['invoice'] && req.files['invoice'].length > 0) {
+        const uploaded = await uploadToCloudinary(
+          req.files['invoice'][0].buffer,
+          'asetra/assets/invoices'
+        );
+        invoice = uploaded.url;
       }
     }
 
@@ -256,6 +273,7 @@ export const updateAsset = async (req, res) => {
       warrantyEnd: warrantyEnd !== undefined ? warrantyEnd : asset.warrantyEnd,
       img,
       manualBook,
+      invoice,
       description: description !== undefined ? description : asset.description,
     });
 
