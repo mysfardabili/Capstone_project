@@ -2,6 +2,7 @@ import express from 'express';
 import multer from 'multer';
 import {
   getCalibrations,
+  getCalibration,
   createCalibration,
   updateCalibration,
   getUpcomingCalibrations,
@@ -32,6 +33,7 @@ router.route('/')
 router.get('/upcoming', authorize('admin'), getUpcomingCalibrations);
 
 router.route('/:id')
+  .get(authorize('admin'), getCalibration)
   .put(authorize('admin'), upload.single('certificate'), updateCalibration);
 
 export default router;

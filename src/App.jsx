@@ -17,6 +17,7 @@ import Repairs from './pages/dashboard/Repairs';
 import AddRepair from './pages/dashboard/AddRepair';
 import Calibration from './pages/dashboard/Calibration';
 import AddCalibration from './pages/dashboard/AddCalibration';
+import EditCalibration from './pages/dashboard/EditCalibration';
 import Mutation from './pages/dashboard/Mutation';
 import AddMutation from './pages/dashboard/AddMutation';
 import Notifications from './pages/dashboard/Notifications';
@@ -63,6 +64,7 @@ function App() {
           
           <Route path="calibration" element={<Calibration />} />
           <Route path="calibration/add" element={<AddCalibration />} />
+          <Route path="calibration/edit/:id" element={<EditCalibration />} />
           
           <Route path="mutation" element={<Mutation />} />
           <Route path="mutation/add" element={<AddMutation />} />

@@ -66,12 +66,29 @@ export const createCalibration = async (req, res) => {
   }
 };
 
+// @desc    Get single calibration by ID
+// @route   GET /api/calibrations/:id
+// @access  Private
+export const getCalibration = async (req, res) => {
+  try {
+    const calibration = await Calibration.findByPk(req.params.id, {
+      include: [{ model: Asset, as: 'asset', attributes: ['name', 'room'] }],
+    });
+    if (!calibration) {
+      return res.status(404).json({ message: 'Data kalibrasi tidak ditemukan' });
+    }
+    res.json(calibration);
+  } catch (error) {
+    res.status(500).json({ message: 'Gagal mengambil data kalibrasi', error: error.message });
+  }
+};
+
 // @desc    Update/complete calibration
 // @route   PUT /api/calibrations/:id
 // @access  Private
 export const updateCalibration = async (req, res) => {
   const { id } = req.params;
-  const { status, certificateNumber, notes, calibrationDate, nextCalibrationDate } = req.body;
+  const { status, certificateNumber, notes, calibrationDate, nextCalibrationDate, vendor, assetId } = req.body;
 
   try {
     const calibration = await Calibration.findByPk(id);
@@ -82,9 +99,11 @@ export const updateCalibration = async (req, res) => {
 
     const oldValues = { ...calibration.dataValues };
 
+    if (assetId) calibration.assetId = assetId;
     calibration.status = status || calibration.status;
     calibration.certificateNumber = certificateNumber !== undefined ? certificateNumber : calibration.certificateNumber;
     calibration.notes = notes !== undefined ? notes : calibration.notes;
+    calibration.vendor = vendor || calibration.vendor;
     calibration.calibrationDate = calibrationDate || new Date().toISOString().split('T')[0];
     
     if (nextCalibrationDate) {
