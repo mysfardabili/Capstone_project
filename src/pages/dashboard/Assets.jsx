@@ -167,13 +167,13 @@ const Assets = () => {
                     <td className="px-6 py-4 text-sm border-b border-border text-text-main align-middle">{asset.serialNumber}</td>
                     <td className="px-6 py-4 text-sm border-b border-border text-text-main align-middle">{formatRupiah(asset.price)}</td>
                     <td className="px-6 py-4 text-sm border-b border-border text-text-main align-middle">
-                      <span className={`px-3 py-1 rounded-[2rem] text-xs font-semibold inline-block ${asset.status === 'Tersedia' ? 'bg-green-100 text-green-800' : 'bg-amber-100 text-amber-800'}`}>
+                      <span className={`px-3 py-1 rounded-[2rem] text-xs font-semibold inline-block ${asset.status === 'Tersedia' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400'}`}>
                         {asset.status === 'Dipinjam' ? 'Dipinjam RS Lain' : asset.status}
                       </span>
                     </td>
                     <td className="px-6 py-4 text-sm border-b border-border text-text-main align-middle">
-                      <span className={`px-3 py-1 rounded-[2rem] text-xs font-semibold inline-block ${asset.condition === 'Baik' ? 'bg-green-100 text-green-800' :
-                          asset.condition === 'Rusak' ? 'bg-red-100 text-red-800' : 'bg-amber-100 text-amber-800'
+                      <span className={`px-3 py-1 rounded-[2rem] text-xs font-semibold inline-block ${asset.condition === 'Baik' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' :
+                          asset.condition === 'Rusak' ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400' : 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400'
                         }`}>
                         {asset.condition}
                       </span>

@@ -110,7 +110,7 @@ const AssetDetail = () => {
           position: relative;
         }
         .detail-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
-        .tabs-container { display: flex; gap: 1rem; border-bottom: 1px solid #e2e8f0; margin-bottom: 2rem; overflow-x: auto; white-space: nowrap; padding-bottom: 5px; }
+        .tabs-container { display: flex; gap: 1rem; border-bottom: 1px solid var(--border); margin-bottom: 2rem; overflow-x: auto; white-space: nowrap; padding-bottom: 5px; }
         .tabs-container::-webkit-scrollbar { height: 4px; }
         .tabs-container::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 4px; }
         .badge-container { display: flex; gap: 10px; margin-bottom: 1.5rem; }
@@ -125,6 +125,7 @@ const AssetDetail = () => {
           border: 1px solid #f1f5f9;
           flex: 1;
         }
+        .dark .info-card-small { background: #1e293b; border-color: #334155; }
 
         .btn-action-group { display: flex; gap: 10px; }
         
@@ -169,25 +170,25 @@ const AssetDetail = () => {
 
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', width: '100%' }}>
           <div className="badge-container">
-            <span className={`px-3 py-1 rounded-[2rem] text-xs font-semibold inline-block ${asset.status === 'Tersedia' ? 'bg-green-100 text-green-800' : 'bg-amber-100 text-amber-800'}`} style={{ fontSize: '0.9rem', padding: '6px 14px' }}>{asset.status}</span>
-            <span className={`px-3 py-1 rounded-[2rem] text-xs font-semibold inline-block ${asset.condition === 'Baik' ? 'bg-green-100 text-green-800' : asset.condition === 'Rusak' ? 'bg-red-100 text-red-800' : 'bg-amber-100 text-amber-800'}`} style={{ fontSize: '0.9rem', padding: '6px 14px' }}>{asset.condition}</span>
+            <span className={`px-3 py-1 rounded-[2rem] text-xs font-semibold inline-block ${asset.status === 'Tersedia' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400'}`} style={{ fontSize: '0.9rem', padding: '6px 14px' }}>{asset.status}</span>
+            <span className={`px-3 py-1 rounded-[2rem] text-xs font-semibold inline-block ${asset.condition === 'Baik' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : asset.condition === 'Rusak' ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400' : 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400'}`} style={{ fontSize: '0.9rem', padding: '6px 14px' }}>{asset.condition}</span>
           </div>
           <h2 className="text-2xl font-bold text-text-main" style={{ fontSize: '2.4rem', margin: '0 0 0.8rem 0', lineHeight: 1.2 }}>{asset.name}</h2>
           <p className="meta-info">
-            <Hash size={20} color="#cbd5e1" /> <strong style={{ color: '#475569' }}>{asset.id}</strong> &nbsp;|&nbsp;
-            <Box size={20} color="#cbd5e1" /> <strong style={{ color: '#475569' }}>{asset.category}</strong>
+            <Hash size={20} color="#cbd5e1" /> <strong className="text-text-main">{asset.id}</strong> &nbsp;|&nbsp;
+            <Box size={20} color="#cbd5e1" /> <strong className="text-text-main">{asset.category}</strong>
           </p>
 
           <div className="loc-serial-wrapper">
             <div className="info-card-small">
-              <p style={{ margin: 0, fontSize: '0.85rem', color: '#64748b', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '1px' }}>Lokasi Saat Ini</p>
-              <p style={{ margin: 0, fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px', color: '#0f172a', fontSize: '1.1rem' }}>
+              <p className="text-text-muted text-xs uppercase tracking-wider mb-2">Lokasi Saat Ini</p>
+              <p className="text-text-main font-bold flex items-center gap-2 text-lg">
                 <MapPin size={20} color="#f97316" /> {asset.room}
               </p>
             </div>
             <div className="info-card-small">
-              <p style={{ margin: 0, fontSize: '0.85rem', color: '#64748b', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '1px' }}>Nomor Seri</p>
-              <p style={{ margin: 0, fontWeight: 700, color: '#0f172a', fontSize: '1.1rem' }}>{asset.serialNumber}</p>
+              <p className="text-text-muted text-xs uppercase tracking-wider mb-2">Nomor Seri</p>
+              <p className="text-text-main font-bold text-lg">{asset.serialNumber}</p>
             </div>
           </div>
         </div>
@@ -222,31 +223,31 @@ const AssetDetail = () => {
         {activeTab === 'info' && (
           <div className="detail-info-grid">
             <div>
-              <h3 className="text-2xl font-bold text-text-main" style={{ borderBottom: '1px solid #e2e8f0', paddingBottom: '0.5rem', marginBottom: '1.5rem', fontSize: '1.25rem' }}>Detail Pembelian</h3>
-              <div style={{ display: 'grid', gridTemplateColumns: '150px 1fr', gap: '1.2rem', marginBottom: '1rem' }}>
-                <span style={{ color: '#64748b' }}>Harga Beli</span>
-                <span style={{ fontWeight: 600, color: '#1e293b' }}>{formatRupiah(asset.price)}</span>
+              <h3 className="text-xl font-bold text-text-main border-b border-border pb-2 mb-6">Detail Pembelian</h3>
+              <div className="grid grid-cols-[150px_1fr] gap-x-6 gap-y-3 mb-4 text-text-main">
+                <span className="text-text-muted">Harga Beli</span>
+                <span className="font-semibold">{formatRupiah(asset.price)}</span>
 
-                <span style={{ color: '#64748b' }}>Tanggal Beli</span>
-                <span style={{ fontWeight: 600, color: '#1e293b' }}>{asset.purchaseDate}</span>
+                <span className="text-text-muted">Tanggal Beli</span>
+                <span className="font-semibold">{asset.purchaseDate}</span>
 
-                <span style={{ color: '#64748b' }}>Vendor / Supplier</span>
-                <span style={{ fontWeight: 600, color: '#1e293b' }}>{asset.vendor}</span>
+                <span className="text-text-muted">Vendor / Supplier</span>
+                <span className="font-semibold">{asset.vendor}</span>
 
-                <span style={{ color: '#64748b' }}>Garansi Habis</span>
-                <span style={{ fontWeight: 600, color: '#1e293b' }}>{asset.warrantyEnd}</span>
+                <span className="text-text-muted">Garansi Habis</span>
+                <span className="font-semibold">{asset.warrantyEnd}</span>
               </div>
             </div>
             <div>
-              <h3 className="text-2xl font-bold text-text-main" style={{ borderBottom: '1px solid #e2e8f0', paddingBottom: '0.5rem', marginBottom: '1.5rem', fontSize: '1.25rem' }}>Dokumen Tambahan</h3>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1rem', border: '1px solid #e2e8f0', borderRadius: '12px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontWeight: 500 }}><FileText size={20} color="#f97316" /> Manual Book.pdf</div>
-                  <button className="bg-transparent text-text-main border border-gray-200 dark:border-gray-600 px-5 py-[0.6rem] rounded-custom-md font-semibold text-sm inline-flex items-center gap-2 no-underline hover:bg-gray-100 dark:hover:bg-gray-700 transition-all" style={{ padding: '6px 14px', fontSize: '0.85rem' }} onClick={() => showNotification('Mengunduh Manual Book.pdf...')}><Download size={14} /> Unduh</button>
+              <h3 className="text-xl font-bold text-text-main border-b border-border pb-2 mb-6">Dokumen Tambahan</h3>
+              <div className="flex flex-col gap-4">
+                <div className="flex items-center justify-between p-4 border border-border rounded-xl">
+                  <div className="flex items-center gap-3 font-medium text-text-main"><FileText size={20} color="#f97316" /> Manual Book.pdf</div>
+                  <button className="bg-transparent text-text-main border border-gray-200 dark:border-gray-600 px-5 py-[0.6rem] rounded-custom-md font-semibold text-sm inline-flex items-center gap-2 no-underline hover:bg-gray-100 dark:hover:bg-gray-700 transition-all text-xs px-3 py-1.5" onClick={() => showNotification('Mengunduh Manual Book.pdf...')}><Download size={14} /> Unduh</button>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1rem', border: '1px solid #e2e8f0', borderRadius: '12px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontWeight: 500 }}><FileText size={20} color="#f97316" /> Invoice Pembelian.pdf</div>
-                  <button className="bg-transparent text-text-main border border-gray-200 dark:border-gray-600 px-5 py-[0.6rem] rounded-custom-md font-semibold text-sm inline-flex items-center gap-2 no-underline hover:bg-gray-100 dark:hover:bg-gray-700 transition-all" style={{ padding: '6px 14px', fontSize: '0.85rem' }} onClick={() => showNotification('Mengunduh Invoice Pembelian.pdf...')}><Download size={14} /> Unduh</button>
+                <div className="flex items-center justify-between p-4 border border-border rounded-xl">
+                  <div className="flex items-center gap-3 font-medium text-text-main"><FileText size={20} color="#f97316" /> Invoice Pembelian.pdf</div>
+                  <button className="bg-transparent text-text-main border border-gray-200 dark:border-gray-600 px-5 py-[0.6rem] rounded-custom-md font-semibold text-sm inline-flex items-center gap-2 no-underline hover:bg-gray-100 dark:hover:bg-gray-700 transition-all text-xs px-3 py-1.5" onClick={() => showNotification('Mengunduh Invoice Pembelian.pdf...')}><Download size={14} /> Unduh</button>
                 </div>
               </div>
             </div>
@@ -268,10 +269,10 @@ const AssetDetail = () => {
               <tbody>
                 {mutationHistory.map(mut => (
                   <tr key={mut.id} className="hover:bg-gray-50 dark:hover:bg-gray-900">
-                    <td className="px-6 py-4 text-sm border-b border-border text-text-main align-middle" style={{ fontWeight: 600, color: '#0f172a' }}>{mut.id}</td>
+                    <td className="px-6 py-4 text-sm border-b border-border text-text-main align-middle font-semibold">{mut.id}</td>
                     <td className="px-6 py-4 text-sm border-b border-border text-text-main align-middle">{mut.date}</td>
                     <td className="px-6 py-4 text-sm border-b border-border text-text-main align-middle">{mut.from}</td>
-                    <td className="px-6 py-4 text-sm border-b border-border text-text-main align-middle" style={{ fontWeight: 600 }}><MapPin size={14} color="#f97316" style={{ display: 'inline', marginRight: '4px' }} /> {mut.to}</td>
+                    <td className="px-6 py-4 text-sm border-b border-border text-text-main align-middle font-semibold"><MapPin size={14} color="#f97316" style={{ display: 'inline', marginRight: '4px' }} /> {mut.to}</td>
                     <td className="px-6 py-4 text-sm border-b border-border text-text-main align-middle">{mut.by}</td>
                   </tr>
                 ))}
@@ -295,11 +296,17 @@ const AssetDetail = () => {
               <tbody>
                 {repairHistory.map(rep => (
                   <tr key={rep.id} className="hover:bg-gray-50 dark:hover:bg-gray-900">
-                    <td className="px-6 py-4 text-sm border-b border-border text-text-main align-middle" style={{ fontWeight: 600, color: '#0f172a' }}>{rep.id}</td>
+                    <td className="px-6 py-4 text-sm border-b border-border text-text-main align-middle font-semibold">{rep.id}</td>
                     <td className="px-6 py-4 text-sm border-b border-border text-text-main align-middle">{rep.date}</td>
                     <td className="px-6 py-4 text-sm border-b border-border text-text-main align-middle">{rep.issue}</td>
                     <td className="px-6 py-4 text-sm border-b border-border text-text-main align-middle">{rep.technician}</td>
-                    <td className="px-6 py-4 text-sm border-b border-border text-text-main align-middle"><span className="px-3 py-1 rounded-[2rem] text-xs font-semibold inline-block bg-green-100 text-green-800">{rep.status}</span></td>
+                    <td className="px-6 py-4 text-sm border-b border-border text-text-main align-middle">
+                      <span className={`px-3 py-1 rounded-[2rem] text-xs font-semibold inline-block ${
+                        rep.status === 'Selesai' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' :
+                        rep.status === 'Diproses' || rep.status === 'Proses' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400' :
+                        'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400'
+                      }`}>{rep.status}</span>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -322,11 +329,17 @@ const AssetDetail = () => {
               <tbody>
                 {calibrationHistory.map(cal => (
                   <tr key={cal.id} className="hover:bg-gray-50 dark:hover:bg-gray-900">
-                    <td className="px-6 py-4 text-sm border-b border-border text-text-main align-middle" style={{ fontWeight: 600, color: '#0f172a' }}>{cal.id}</td>
+                    <td className="px-6 py-4 text-sm border-b border-border text-text-main align-middle font-semibold">{cal.id}</td>
                     <td className="px-6 py-4 text-sm border-b border-border text-text-main align-middle">{cal.date}</td>
                     <td className="px-6 py-4 text-sm border-b border-border text-text-main align-middle">{cal.agency}</td>
-                    <td className="px-6 py-4 text-sm border-b border-border text-text-main align-middle"><span className="px-3 py-1 rounded-[2rem] text-xs font-semibold inline-block bg-green-100 text-green-800">{cal.result}</span></td>
-                    <td className="px-6 py-4 text-sm border-b border-border text-text-main align-middle" style={{ fontWeight: 700, color: '#f97316' }}><Calendar size={14} style={{ display: 'inline', marginRight: '4px', verticalAlign: 'text-bottom' }} /> {cal.nextDue}</td>
+                    <td className="px-6 py-4 text-sm border-b border-border text-text-main align-middle">
+                      <span className={`px-3 py-1 rounded-[2rem] text-xs font-semibold inline-block ${
+                        cal.result === 'Lulus' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' :
+                        cal.result === 'Gagal' ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400' :
+                        'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400'
+                      }`}>{cal.result}</span>
+                    </td>
+                    <td className="px-6 py-4 text-sm border-b border-border text-text-main align-middle font-bold text-orange-500"><Calendar size={14} style={{ display: 'inline', marginRight: '4px', verticalAlign: 'text-bottom' }} /> {cal.nextDue}</td>
                   </tr>
                 ))}
               </tbody>
