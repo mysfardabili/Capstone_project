@@ -145,8 +145,17 @@ const TechnicianRepairs = () => {
         ) : filteredTasks.length > 0 ? filteredTasks.map((item, idx) => (
           <div key={idx} className={`bg-white dark:bg-slate-800 rounded-[20px] p-6 mb-[1.2rem] shadow-[0_10px_30px_-5px_rgba(0,0,0,0.04)] dark:shadow-[0_10px_30px_-5px_rgba(0,0,0,0.2)] relative overflow-hidden transition-transform duration-200 before:content-[''] before:absolute before:top-0 before:left-0 before:bottom-0 before:w-[6px] before:bg-orange-500 ${item.status === 'In Progress' ? 'before:bg-slate-400 dark:before:bg-slate-500' : ''}`}>
 
-            <div className="inline-flex items-center gap-1 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 px-[10px] py-[4px] rounded-xl text-xs font-bold mb-2">
-              <MapPin size={12} color="#f97316" /> {item.asset?.room || 'Gudang Alat'}
+            <div className="flex gap-3 mb-3">
+              {item.asset?.img && (
+                <img
+                  src={item.asset.img}
+                  alt={item.asset.name}
+                  className="w-16 h-16 rounded-xl object-cover shrink-0"
+                />
+              )}
+              <div className="inline-flex items-center gap-1 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 px-[10px] py-[4px] rounded-xl text-xs font-bold self-start">
+                <MapPin size={12} color="#f97316" /> {item.asset?.room || 'Gudang Alat'}
+              </div>
             </div>
 
             <div className="flex justify-between items-start mb-4">
@@ -194,6 +203,16 @@ const TechnicianRepairs = () => {
           alt={selectedItem.asset?.name}
           className="w-full h-[220px] object-cover rounded-3xl mb-4 shadow-[0_10px_25px_rgba(0,0,0,0.05)]"
         />
+        {selectedItem.photo && (
+          <div className="mt-2">
+            <p className="text-xs font-bold mb-2 text-slate-500 dark:text-slate-400">FOTO KERUSAKAN</p>
+            <img
+              src={selectedItem.photo}
+              alt="Foto kerusakan"
+              className="w-full h-[220px] object-cover rounded-3xl shadow-[0_10px_25px_rgba(0,0,0,0.05)]"
+            />
+          </div>
+        )}
       </div>
 
       <div className="inline-flex items-center gap-1 bg-orange-50 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 px-[14px] py-[6px] rounded-xl text-xs font-bold mb-2">

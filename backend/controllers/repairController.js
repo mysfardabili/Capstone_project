@@ -10,7 +10,7 @@ import { uploadToCloudinary } from '../services/cloudinaryService.js';
 export const getRepairs = async (req, res) => {
   try {
     const repairs = await Repair.findAll({
-      include: [{ model: Asset, as: 'asset', attributes: ['name', 'room'] }],
+      include: [{ model: Asset, as: 'asset', attributes: ['name', 'room', 'img'] }],
       order: [['createdAt', 'DESC']],
     });
     res.json(repairs);
@@ -93,7 +93,8 @@ export const createRepair = async (req, res) => {
 
     res.status(201).json(newRepair);
   } catch (error) {
-    res.status(500).json({ message: 'Gagal membuat laporan perbaikan', error: error.message });
+    console.error('[RepairController] Error creating repair:', error);
+    res.status(500).json({ message: `Gagal membuat laporan perbaikan: ${error.message}` });
   }
 };
 

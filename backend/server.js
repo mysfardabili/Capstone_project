@@ -80,6 +80,20 @@ app.get('/', (req, res) => {
 // ============================================
 const PORT = process.env.PORT || 5000;
 
+// ============================================
+// Global Error Handler — catch all errors
+// ============================================
+app.use((err, req, res, next) => {
+  console.error('[Global Error]', err.message);
+  if (err.code === 'LIMIT_FILE_SIZE') {
+    return res.status(400).json({ message: `Upload error: ${err.message}` });
+  }
+  if (err.message && err.message.includes('Hanya mendukung')) {
+    return res.status(400).json({ message: err.message });
+  }
+  res.status(500).json({ message: err.message || 'Terjadi kesalahan internal server' });
+});
+
 const startServer = async () => {
   try {
     console.log('Menghubungkan ke database PostgreSQL (Supabase)...');
