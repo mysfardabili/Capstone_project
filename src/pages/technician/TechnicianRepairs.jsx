@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, ChevronLeft, CheckCircle, Image as ImageIcon, AlertTriangle, MapPin, Wrench, FileText, Loader2 } from 'lucide-react';
+import { Search, ChevronLeft, CheckCircle, AlertTriangle, MapPin, Wrench, FileText, Loader2 } from 'lucide-react';
 import { api } from '../../services/api';
 import Toast from '../../components/Toast';
 
@@ -14,7 +14,6 @@ const TechnicianRepairs = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [notes, setNotes] = useState('');
   const [jobStatus, setJobStatus] = useState('Completed');
-  const [photoFile, setPhotoFile] = useState(null);
 
   const fetchRepairs = async () => {
     try {
@@ -51,15 +50,11 @@ const TechnicianRepairs = () => {
     setIsLoading(true);
 
     try {
-      const formData = new FormData();
-      formData.append('status', 'Selesai');
-      formData.append('notes', notes || (jobStatus === 'Completed' ? 'Perbaikan selesai dilakukan oleh teknisi.' : 'Perbaikan gagal, aset tidak dapat diperbaiki.'));
-      formData.append('assetCondition', jobStatus === 'Completed' ? 'Baik' : 'Rusak');
-      if (photoFile) {
-        formData.append('image', photoFile);
-      }
-
-      await api.put(`/repairs/${selectedItem.id}`, formData, true);
+      await api.put(`/repairs/${selectedItem.id}`, {
+        status: 'Selesai',
+        notes: notes || (jobStatus === 'Completed' ? 'Perbaikan selesai dilakukan oleh teknisi.' : 'Perbaikan gagal, aset tidak dapat diperbaiki.'),
+        assetCondition: jobStatus === 'Completed' ? 'Baik' : 'Rusak',
+      });
 
       setToastMsg(jobStatus === 'Completed'
         ? `Tugas perbaikan ${selectedItem.id} berhasil diselesaikan!`
@@ -69,7 +64,6 @@ const TechnicianRepairs = () => {
 
       setView('list');
       setNotes('');
-      setPhotoFile(null);
       setSelectedItem(null);
       fetchRepairs();
     } catch (err) {
@@ -303,40 +297,6 @@ const TechnicianRepairs = () => {
           ></textarea>
         </div>
 
-        <div>
-          <label className="text-xs font-extrabold block mb-2 text-slate-900 dark:text-white">FOTO BUKTI SELESAI (OPSIONAL)</label>
-          <label className="w-full h-[120px] bg-white dark:bg-slate-700 rounded-2xl flex flex-col items-center justify-center text-slate-400 dark:text-slate-300 border-2 border-dashed border-slate-300 dark:border-slate-500 cursor-pointer">
-            <input
-              type="file"
-              accept="image/*"
-              className="hidden"
-              onChange={(e) => {
-                const file = e.target.files[0];
-                if (file) setPhotoFile(file);
-              }}
-            />
-            {photoFile ? (
-              <>
-                <CheckCircle size={24} className="mb-1 text-green-500" />
-                <span className="text-sm font-semibold text-green-600 dark:text-green-400">{photoFile.name}</span>
-              </>
-            ) : (
-              <>
-                <ImageIcon size={36} className="mb-2" />
-                <span className="text-sm font-semibold">Tap untuk ambil foto</span>
-              </>
-            )}
-          </label>
-          {photoFile && (
-            <button
-              type="button"
-              className="text-xs text-red-500 mt-1 bg-transparent border-none cursor-pointer"
-              onClick={() => setPhotoFile(null)}
-            >
-              Hapus foto
-            </button>
-          )}
-        </div>
       </div>
 
       <button
@@ -355,7 +315,7 @@ const TechnicianRepairs = () => {
 
   return (
     <>
-      {showToast && <Toast message={toastMsg || "Foto terlampir."} onClose={() => setShowToast(false)} />}
+      {showToast && <Toast message={toastMsg} onClose={() => setShowToast(false)} />}
       <style>{`
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideInRight { from { transform: translateX(20px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
