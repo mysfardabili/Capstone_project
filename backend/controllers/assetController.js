@@ -183,7 +183,11 @@ export const createAsset = async (req, res) => {
 
     res.status(201).json(newAsset);
   } catch (error) {
-    res.status(500).json({ message: 'Gagal membuat aset baru', error: error.message });
+    console.error('[AssetController] Error creating asset:', error);
+    if (error.errors) {
+      error.errors.forEach(e => console.error(`  Field: ${e.path}, Value: ${e.value}, Message: ${e.message}`));
+    }
+    res.status(500).json({ message: `Gagal membuat aset baru: ${error.message}`, details: error.errors ? error.errors.map(e => e.message) : [] });
   }
 };
 
