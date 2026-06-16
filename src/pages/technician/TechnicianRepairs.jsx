@@ -14,6 +14,7 @@ const TechnicianRepairs = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [notes, setNotes] = useState('');
   const [jobStatus, setJobStatus] = useState('Completed');
+  const [photoFile, setPhotoFile] = useState(null);
 
   const fetchRepairs = async () => {
     try {
@@ -50,21 +51,25 @@ const TechnicianRepairs = () => {
     setIsLoading(true);
 
     try {
-      const statusToSend = 'Selesai';
-      await api.put(`/repairs/${selectedItem.id}`, {
-        status: statusToSend,
-        notes: notes || (jobStatus === 'Completed' ? 'Perbaikan selesai dilakukan oleh teknisi.' : 'Perbaikan gagal, aset diafkir.'),
-        assetCondition: jobStatus === 'Completed' ? 'Baik' : 'Rusak',
-      });
+      const formData = new FormData();
+      formData.append('status', 'Selesai');
+      formData.append('notes', notes || (jobStatus === 'Completed' ? 'Perbaikan selesai dilakukan oleh teknisi.' : 'Perbaikan gagal, aset tidak dapat diperbaiki.'));
+      formData.append('assetCondition', jobStatus === 'Completed' ? 'Baik' : 'Rusak');
+      if (photoFile) {
+        formData.append('image', photoFile);
+      }
+
+      await api.put(`/repairs/${selectedItem.id}`, formData, true);
 
       setToastMsg(jobStatus === 'Completed'
         ? `Tugas perbaikan ${selectedItem.id} berhasil diselesaikan!`
-        : `Tugas perbaikan ${selectedItem.id} selesai dengan kondisi afkir.`
+        : `Tugas perbaikan ${selectedItem.id} selesai dengan kondisi gagal.`
       );
       setShowToast(true);
 
       setView('list');
       setNotes('');
+      setPhotoFile(null);
       setSelectedItem(null);
       fetchRepairs();
     } catch (err) {
@@ -263,7 +268,7 @@ const TechnicianRepairs = () => {
               />
               <div className={`border-2 rounded-2xl p-4 text-center transition-all duration-200 h-full flex flex-col items-center justify-center gap-2 ${jobStatus === 'Rejected' ? 'bg-red-50 dark:bg-red-900/30 border-red-500 text-red-700 dark:text-red-400' : 'bg-slate-50 dark:bg-slate-700 border-slate-200 dark:border-slate-600 text-slate-500 dark:text-slate-400'}`}>
                 <AlertTriangle size={28} />
-                <span className="font-bold text-sm">Afkir</span>
+                <span className="font-bold text-sm">Gagal</span>
               </div>
             </label>
           </div>
@@ -282,18 +287,50 @@ const TechnicianRepairs = () => {
         <div>
           <label className="text-xs font-extrabold block mb-2 text-slate-900 dark:text-white">FOTO BUKTI SELESAI (OPSIONAL)</label>
           <label className="w-full h-[120px] bg-white dark:bg-slate-700 rounded-2xl flex flex-col items-center justify-center text-slate-400 dark:text-slate-300 border-2 border-dashed border-slate-300 dark:border-slate-500 cursor-pointer">
-            <input type="file" accept="image/*" className="hidden" onChange={() => setShowToast(true)} />
-            <ImageIcon size={36} className="mb-2" />
-            <span className="text-sm font-semibold">Tap untuk ambil foto</span>
+            <input
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={(e) => {
+                const file = e.target.files[0];
+                if (file) setPhotoFile(file);
+              }}
+            />
+            {photoFile ? (
+              <>
+                <CheckCircle size={24} className="mb-1 text-green-500" />
+                <span className="text-sm font-semibold text-green-600 dark:text-green-400">{photoFile.name}</span>
+              </>
+            ) : (
+              <>
+                <ImageIcon size={36} className="mb-2" />
+                <span className="text-sm font-semibold">Tap untuk ambil foto</span>
+              </>
+            )}
           </label>
+          {photoFile && (
+            <button
+              type="button"
+              className="text-xs text-red-500 mt-1 bg-transparent border-none cursor-pointer"
+              onClick={() => setPhotoFile(null)}
+            >
+              Hapus foto
+            </button>
+          )}
         </div>
       </div>
 
-      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50" onClick={handleCompleteTask}>
-        <button className="w-14 h-14 rounded-full bg-gradient-to-br from-orange-500 to-orange-600 border-none shadow-[0_8px_25px_rgba(249,115,22,0.4)] cursor-pointer flex items-center justify-center hover:scale-105 transition-transform active:scale-95">
-          <CheckCircle size={28} color="white" />
-        </button>
-      </div>
+      <button
+        onClick={handleCompleteTask}
+        disabled={isLoading}
+        className="w-full p-4 rounded-2xl font-bold text-base border-none cursor-pointer text-center transition-all duration-200 active:scale-[0.98] font-inherit bg-gradient-to-br from-orange-500 to-orange-600 text-white shadow-[0_8px_20px_rgba(249,115,22,0.3)] disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-4"
+      >
+        {isLoading ? (
+          <><Loader2 size={20} className="animate-spin" /> Mengirim...</>
+        ) : (
+          <><CheckCircle size={20} /> Kirim Laporan</>
+        )}
+      </button>
     </div>
   );
 
