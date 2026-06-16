@@ -136,14 +136,14 @@ const AddRepair = () => {
   return (
     <div className="flex flex-col gap-6 h-full">
       {showToast && <Toast message="Laporan kerusakan berhasil dikirim!" onClose={() => setShowToast(false)} />}
-      <div className="flex justify-between items-center" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+      <div className="flex items-center gap-4">
         <button className="bg-transparent text-text-main border border-gray-200 dark:border-gray-600 px-5 py-[0.6rem] rounded-custom-md font-semibold text-sm inline-flex items-center gap-2 no-underline hover:bg-gray-100 dark:hover:bg-gray-700 transition-all" onClick={() => navigate(-1)}><ArrowLeft size={24} /></button>
-        <h1 className="text-2xl font-bold text-text-main" style={{ margin: 0 }}>Form Pelaporan Kerusakan</h1>
+        <h1 className="text-2xl font-bold text-text-main m-0">Form Pelaporan Kerusakan</h1>
       </div>
 
       <div className="bg-surface p-8 rounded-xl shadow-custom-sm border border-border max-w-[800px] border-t-4 border-t-red-500">
         {errorMsg && (
-          <div className="text-red-500 bg-red-100 p-3 rounded-[10px] mb-6 text-sm font-medium">
+          <div className="text-red-500 bg-red-100 dark:bg-red-900/30 p-3 rounded-[10px] mb-6 text-sm font-medium">
             {errorMsg}
           </div>
         )}
@@ -152,21 +152,19 @@ const AddRepair = () => {
           <div className="flex flex-col md:flex-row gap-6 mb-6">
             <div className="flex flex-col gap-2 flex-1">
               <label className="text-sm font-semibold text-text-main">ID Aset / Scan QR</label>
-              <div style={{ display: 'flex', gap: '0.5rem' }}>
+              <div className="flex gap-2">
                 <input
                   type="text"
                   name="assetId"
-                  className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-surface text-text-main transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]"
+                  className="flex-1 px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-surface text-text-main transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]"
                   placeholder="Contoh: AST-002"
                   required
-                  style={{ flex: 1 }}
                   value={assetId}
                   onChange={(e) => setAssetId(e.target.value)}
                 />
                 <button
                   type="button"
-                  className="bg-transparent text-text-main border border-gray-200 dark:border-gray-600 px-5 py-[0.6rem] rounded-custom-md font-semibold text-sm inline-flex items-center gap-2 no-underline hover:bg-gray-100 dark:hover:bg-gray-700 transition-all"
-                  style={{ padding: '0 1rem' }}
+                  className="bg-transparent text-text-main border border-gray-200 dark:border-gray-600 px-4 rounded-custom-md font-semibold text-sm inline-flex items-center no-underline hover:bg-gray-100 dark:hover:bg-gray-700 transition-all"
                   title="Scan QR Code"
                   onClick={startScanner}
                 >
@@ -198,8 +196,7 @@ const AddRepair = () => {
               type="file"
               name="image"
               accept="image/*"
-              className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm outline-none bg-surface text-text-main transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)]"
-              style={{ padding: '0.5rem', background: '#f8fafc' }}
+              className="file:mr-4 file:py-2 file:px-4 file:rounded-custom-md file:border-0 file:text-sm file:font-semibold file:bg-orange-50 dark:file:bg-orange-900/30 file:text-orange-700 dark:file:text-orange-400 hover:file:bg-orange-100 dark:hover:file:bg-orange-900/50 w-full px-4 py-[0.6rem] border border-gray-200 dark:border-gray-600 rounded-custom-md text-sm bg-surface text-text-main transition-all focus:border-orange-500 focus:shadow-[0_0_0_3px_rgba(249,115,22,0.2)] file:cursor-pointer cursor-pointer"
             />
           </div>
 
@@ -227,7 +224,7 @@ const AddRepair = () => {
             <h3 className="m-0 mb-4 text-text-main">Scan QR Code Aset</h3>
 
             {cameraError ? (
-              <div className="text-red-500 bg-red-100 p-3 rounded-[10px] text-sm font-medium mb-4">
+              <div className="text-red-500 bg-red-100 dark:bg-red-900/30 p-3 rounded-[10px] text-sm font-medium mb-4">
                 {cameraError}
               </div>
             ) : (
